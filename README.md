@@ -1,2 +1,13 @@
-# SciWithMe
-c2c scientific announcements
+# Backend
+
+```
+cd api
+node server.js
+```
+
+# Frontend
+
+```
+cd web
+npm run dev
+```
