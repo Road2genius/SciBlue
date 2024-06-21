@@ -2,7 +2,7 @@
 
 ```
 cd api
-node server.js
+npm run dev
 ```
 
 # Frontend
