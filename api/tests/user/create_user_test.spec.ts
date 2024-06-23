@@ -6,14 +6,11 @@ import {
   ERROR_MESSAGES,
   HTTP_STATUS_CODES,
 } from "../../src/constants/error/errorCodes";
+import { describe, expect, it, afterAll } from '@jest/globals';
 import { createUserFixture, validUserData } from "./fixtures/user";
 
 // POST /api/users
 describe("Create a user", () => {
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
-
   afterAll(async () => {
     await mongoose.connection.close();
   });

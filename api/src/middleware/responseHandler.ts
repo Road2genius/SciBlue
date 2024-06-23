@@ -30,8 +30,6 @@ export const errorHandler = (
   const message = err.message || ERROR_MESSAGES[errorCode];
   const details = err.details || [];
 
-  console.error(`Error: ${message}, Code: ${errorCode}, Status: ${statusCode}`);
-
   res.status(statusCode).json({
     code: errorCode,
     message: message,

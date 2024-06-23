@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import User, { IUser } from "../../../src/models/user/User";
 
 export const validUserData: Partial<IUser> = {
@@ -27,8 +28,10 @@ export const anotherValidUserData: Partial<IUser> = {
 };
 
 // Function to create a user in the database
-export const createUserFixture = async (userData: Partial<IUser>) => {
-  const user = new User(userData);
+export const createUserFixture = async (
+  userData: Partial<IUser>
+): Promise<IUser> => {
+  const user: IUser = new User(userData);
   await user.save();
   return user;
 };

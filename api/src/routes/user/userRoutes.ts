@@ -1,8 +1,13 @@
 import express from "express";
-import { createUser, deleteUser } from "../../controllers/user/userController";
+import {
+  createUser,
+  deleteUser,
+  updateUser,
+} from "../../controllers/user/userController";
 import {
   checkUserExists,
-  userValidationRules,
+  createUserValidationRules,
+  updateUserValidationRules,
   validate,
 } from "../../middleware/validateUser";
 
@@ -11,11 +16,12 @@ const router = express.Router();
 // user
 router.post(
   "/users",
-  userValidationRules,
+  createUserValidationRules,
   validate,
   checkUserExists,
   createUser
 );
 router.delete("/users/:id", deleteUser);
+router.patch("/users/:id", updateUserValidationRules, validate, updateUser);
 
 export default router;

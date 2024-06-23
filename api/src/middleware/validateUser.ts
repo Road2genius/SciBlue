@@ -9,36 +9,50 @@ import {
 import { CustomError } from "../types/error/customError";
 import { isStrongPassword, isValidEmail } from "../utils/validators";
 
-// Validation rules
-export const userValidationRules = [
-  body("firstName").notEmpty().withMessage("First Name is required"),
-  body("lastName").notEmpty().withMessage("Last Name is required"),
-  body("email")
-    .custom((value) => isValidEmail(value))
-    .withMessage("Invalid email format"),
-  body("password")
-    .notEmpty()
-    .withMessage("Password is required")
-    .custom((value) => isStrongPassword(value))
-    .withMessage(
-      "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character (@, $, !, %, *, ?, &, #)"
-    ),
-  body("typeOfStructure")
-    .isIn([
-      "academic laboratory",
-      "academic technology platform",
-      "cro and private technology platform",
-      "corporation",
-      "others",
-    ])
-    .withMessage("Valid Type of Structure is required"),
-  body("laboratory").notEmpty().withMessage("Laboratory is required"),
-  body("institution").notEmpty().withMessage("Institution is required"),
-  body("address").notEmpty().withMessage("Address is required"),
-  body("city").notEmpty().withMessage("City is required"),
-  body("country").notEmpty().withMessage("Country is required"),
-];
-
+// Validation user rules
+const userValidationRules = (isUpdate = false) => {
+  return [
+    body('firstName')
+      .if((value, { req }) => !isUpdate || req.body.firstName !== undefined)
+      .notEmpty().withMessage('First Name is required'),
+    body('lastName')
+      .if((value, { req }) => !isUpdate || req.body.lastName !== undefined)
+      .notEmpty().withMessage('Last Name is required'),
+    body('email')
+      .if((value, { req }) => !isUpdate || req.body.email !== undefined)
+      .custom((value) => isValidEmail(value)).withMessage('Invalid email format'),
+    body('password')
+      .if((value, { req }) => !isUpdate || req.body.password !== undefined)
+      .notEmpty().withMessage('Password is required')
+      .custom((value) => isStrongPassword(value)).withMessage(
+        'Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character (@, $, !, %, *, ?, &, #)'
+      ),
+    body('typeOfStructure')
+      .if((value, { req }) => !isUpdate || req.body.typeOfStructure !== undefined)
+      .isIn([
+        'academic laboratory',
+        'academic technology platform',
+        'cro and private technology platform',
+        'corporation',
+        'others'
+      ]).withMessage('Valid Type of Structure is required'),
+    body('laboratory')
+      .if((value, { req }) => !isUpdate || req.body.laboratory !== undefined)
+      .notEmpty().withMessage('Laboratory is required'),
+    body('institution')
+      .if((value, { req }) => !isUpdate || req.body.institution !== undefined)
+      .notEmpty().withMessage('Institution is required'),
+    body('address')
+      .if((value, { req }) => !isUpdate || req.body.address !== undefined)
+      .notEmpty().withMessage('Address is required'),
+    body('city')
+      .if((value, { req }) => !isUpdate || req.body.city !== undefined)
+      .notEmpty().withMessage('City is required'),
+    body('country')
+      .if((value, { req }) => !isUpdate || req.body.country !== undefined)
+      .notEmpty().withMessage('Country is required'),
+  ];
+};
 // Middleware to check for validation errors
 export const validate = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
@@ -72,3 +86,6 @@ export const checkUserExists = async (
   }
   next();
 };
+
+export const createUserValidationRules = userValidationRules();
+export const updateUserValidationRules = userValidationRules(true);
