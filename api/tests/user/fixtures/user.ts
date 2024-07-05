@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import User, { IUser } from "../../../src/models/user/User";
 
 export const validUserData: Partial<IUser> = {
@@ -6,8 +5,8 @@ export const validUserData: Partial<IUser> = {
   lastName: "Doe",
   email: "john.doe@example.com",
   password: "hashedPassword123!",
-  typeOfStructure: "academic laboratory",
-  laboratory: "Lab Name",
+  structure_name: "test",
+  typeOfActor: "academic laboratory",
   institution: "Institution Name",
   address: "1234 Street Name",
   city: "City Name",
@@ -19,8 +18,8 @@ export const anotherValidUserData: Partial<IUser> = {
   lastName: "Doe",
   email: "jane.doe@example.com",
   password: "hashedpassword123",
-  typeOfStructure: "corporation",
-  laboratory: "Another Lab Name",
+  structure_name: "test",
+  typeOfActor: "corporation",
   institution: "Another Institution Name",
   address: "5678 Another Street Name",
   city: "Another City Name",

@@ -12,45 +12,48 @@ import { isStrongPassword, isValidEmail } from "../utils/validators";
 // Validation user rules
 const userValidationRules = (isUpdate = false) => {
   return [
-    body('firstName')
+    body("firstName")
       .if((value, { req }) => !isUpdate || req.body.firstName !== undefined)
-      .notEmpty().withMessage('First Name is required'),
-    body('lastName')
+      .notEmpty()
+      .withMessage("First Name is required"),
+    body("lastName")
       .if((value, { req }) => !isUpdate || req.body.lastName !== undefined)
-      .notEmpty().withMessage('Last Name is required'),
-    body('email')
+      .notEmpty()
+      .withMessage("Last Name is required"),
+    body("email")
       .if((value, { req }) => !isUpdate || req.body.email !== undefined)
-      .custom((value) => isValidEmail(value)).withMessage('Invalid email format'),
-    body('password')
+      .custom((value) => isValidEmail(value))
+      .withMessage("Invalid email format"),
+    body("password")
       .if((value, { req }) => !isUpdate || req.body.password !== undefined)
-      .notEmpty().withMessage('Password is required')
-      .custom((value) => isStrongPassword(value)).withMessage(
-        'Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character (@, $, !, %, *, ?, &, #)'
+      .notEmpty()
+      .withMessage("Password is required")
+      .custom((value) => isStrongPassword(value))
+      .withMessage(
+        "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character (@, $, !, %, *, ?, &, #)"
       ),
-    body('typeOfStructure')
-      .if((value, { req }) => !isUpdate || req.body.typeOfStructure !== undefined)
+    body("typeOfActor")
+      .if((value, { req }) => !isUpdate || req.body.typeOfActor !== undefined)
       .isIn([
-        'academic laboratory',
-        'academic technology platform',
-        'cro and private technology platform',
-        'corporation',
-        'others'
-      ]).withMessage('Valid Type of Structure is required'),
-    body('laboratory')
-      .if((value, { req }) => !isUpdate || req.body.laboratory !== undefined)
-      .notEmpty().withMessage('Laboratory is required'),
-    body('institution')
-      .if((value, { req }) => !isUpdate || req.body.institution !== undefined)
-      .notEmpty().withMessage('Institution is required'),
-    body('address')
+        "academic laboratory",
+        "academic technology platform",
+        "cro and private technology platform",
+        "corporation",
+        "others",
+      ])
+      .withMessage("Valid Type of Actor is required"),
+    body("address")
       .if((value, { req }) => !isUpdate || req.body.address !== undefined)
-      .notEmpty().withMessage('Address is required'),
-    body('city')
+      .notEmpty()
+      .withMessage("Address is required"),
+    body("city")
       .if((value, { req }) => !isUpdate || req.body.city !== undefined)
-      .notEmpty().withMessage('City is required'),
-    body('country')
+      .notEmpty()
+      .withMessage("City is required"),
+    body("country")
       .if((value, { req }) => !isUpdate || req.body.country !== undefined)
-      .notEmpty().withMessage('Country is required'),
+      .notEmpty()
+      .withMessage("Country is required"),
   ];
 };
 // Middleware to check for validation errors
