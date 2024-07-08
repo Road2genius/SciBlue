@@ -16,24 +16,21 @@ import {
 import React, { useState } from "react";
 
 const Navbar: React.FC = () => {
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const buttons: {
     name: string;
     onClick: () => void;
   }[] = [
     { name: "Home", onClick: () => console.log("Home") },
-    { name: "Why SciWithMe?", onClick: () => console.log("Why SciWithMe?") },
-    {
-      name: "Send your feedback",
-      onClick: () => console.log("Send your feedback"),
-    },
-    { name: "Log in", onClick: () => console.log("Log in") },
+    { name: "Discussions", onClick: () => console.log("Discussions") },
+    { name: "Request", onClick: () => console.log("Request") },
+    { name: "Community", onClick: () => console.log("Community") },
+    { name: "Send feedback", onClick: () => console.log("Send feedback") },
   ];
 
   const toggleDrawer =
-    (open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent): void => {
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
       if (
         event.type === "keydown" &&
         ((event as React.KeyboardEvent).key === "Tab" ||
@@ -46,19 +43,30 @@ const Navbar: React.FC = () => {
 
   const list: JSX.Element = (
     <Box
-      sx={{
-        width: 250,
-        backgroundColor: "#CADEE7",
-        height: "100%",
-      }}
+      display="flex"
+      flexDirection="column"
+      sx={{ width: 250 }}
+      role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
     >
+      <Typography
+        variant="h6"
+        sx={{
+          flexGrow: 1,
+          color: "#00796b",
+          fontWeight: "bold",
+          marginLeft: "30px",
+        }}
+      >
+        SciForEarth
+      </Typography>
+
       <List>
-        {buttons.map((buttonLabel, index) => (
-          <ListItem key={index}>
-            <ListItemButton onClick={buttonLabel.onClick}>
-              <ListItemText primary={buttonLabel.name} />
+        {buttons.map((button, index) => (
+          <ListItem key={index} onClick={button.onClick}>
+            <ListItemButton>
+              <ListItemText primary={button.name} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -69,41 +77,54 @@ const Navbar: React.FC = () => {
   return (
     <AppBar
       position="static"
-      sx={{ backgroundColor: "#CADEE7", boxShadow: "none" }}
+      color="default"
+      sx={{ borderBottom: "1px solid #e0e0e0" }}
     >
       <Container maxWidth="xl">
         <Toolbar>
-          <Box display="flex" flexDirection="column">
-            <Typography variant="h5" color="#305B8D" fontWeight={800}>
-              SciWithMe
-            </Typography>
-            <Typography variant="body1" color="#464D49">
-              Accelerate Research Through Collaboration
-            </Typography>
-          </Box>
-
-          <Box
-            sx={{
-              display: { xs: "none", md: "flex" },
-              ml: "auto",
-            }}
+          <Typography
+            variant="h6"
+            sx={{ flexGrow: 1, color: "#00796b", fontWeight: "bold" }}
           >
-            {buttons.map((buttonLabel) => (
+            SciForEarth
+          </Typography>
+
+          <Box sx={{ display: { xs: "none", md: "flex" }, flexGrow: 1 }}>
+            {buttons.map((button) => (
               <Button
-                key={buttonLabel.name}
+                key={button.name}
                 color="inherit"
-                onClick={buttonLabel.onClick}
-                sx={{ textTransform: "none", color: "#000", fontSize: "16px" }}
+                onClick={button.onClick}
+                sx={{ textTransform: "none", mx: 1 }}
               >
-                {buttonLabel.name}
+                {button.name}
               </Button>
             ))}
           </Box>
 
-          <Box sx={{ display: { xs: "flex", md: "none" }, ml: "auto" }}>
+          <Button
+            variant="outlined"
+            sx={{
+              display: { xs: "none", md: "block" },
+              textTransform: "none",
+              color: "#000",
+              borderRadius: "10px",
+              borderColor: "#000",
+              "&:hover": {
+                borderColor: "#00796b",
+                backgroundColor: "#00796b",
+                color: "#fff",
+              },
+            }}
+          >
+            Login & Signup
+          </Button>
+
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
+              color="inherit"
               aria-label="open drawer"
-              edge="start"
+              edge="end"
               onClick={toggleDrawer(true)}
             >
               <MenuIcon />
