@@ -1,8 +1,3 @@
-import { Document } from "mongoose";
-
-export const convertToPlainObject = <T>(data: T): T | object => {
-  if (data && (data as unknown as Document).toObject) {
-    return (data as unknown as Document).toObject();
-  }
-  return data;
+export const convertToPlainObject = (data: any) => {
+  return JSON.parse(JSON.stringify(data));
 };

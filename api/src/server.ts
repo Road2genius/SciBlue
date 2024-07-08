@@ -1,9 +1,10 @@
 import express, { ErrorRequestHandler } from "express";
 import connectDB from "./config/db";
 import userRoutes from "./routes/user/userRoutes";
+import authRoutes from "./routes/auth/authRoutes";
 import cors from "cors";
 import { errorHandler } from "./middleware/responseHandler";
-import { CustomError } from "./types/error/customError";
+import bodyParser from "body-parser";
 
 const app = express();
 
@@ -15,9 +16,11 @@ if (process.env.NODE_ENV !== "test") {
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
 
 // Routes
 app.use("/api", userRoutes);
+app.use("/api", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("");

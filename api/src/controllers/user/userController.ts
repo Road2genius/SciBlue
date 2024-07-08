@@ -32,29 +32,37 @@ export const createUser = async (
 };
 
 // getUserById requests the server to get a user
-// This is not and endpoint
-export const getUserById = async (userId: string): Promise<IUser> => {
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    const error: CustomError = new Error(
-      ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]
-    );
-    error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
-    error.code = ERROR_CODES.VALIDATION_ERROR;
-    throw error;
+export const getUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const userId: string = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      const error: CustomError = new Error(
+        ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]
+      );
+      error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
+      error.code = ERROR_CODES.VALIDATION_ERROR;
+      throw error;
+    }
+
+    const user: IUser | null = await User.findById(userId);
+
+    if (!user) {
+      const error: CustomError = new Error(
+        ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]
+      );
+      error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
+      error.code = ERROR_CODES.USER_NOT_FOUND;
+      throw error;
+    }
+    successHandler<IUser>(req, res, user, HTTP_STATUS_CODES.OK);
+  } catch (error) {
+    next(error);
   }
-
-  const user: IUser | null = await User.findById(userId);
-
-  if (!user) {
-    const error: CustomError = new Error(
-      ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]
-    );
-    error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
-    error.code = ERROR_CODES.USER_NOT_FOUND;
-    throw error;
-  }
-
-  return user;
 };
 
 // deleteUser requests the server to delete a user

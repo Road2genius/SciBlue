@@ -52,7 +52,7 @@ describe("Create a user", () => {
       ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]
     );
     expect(response.body.details).toContain("Last Name is required");
-    expect(response.body.details).toContain("Invalid email format");
+    expect(response.body.details).toContain("Email is required");
     expect(response.body.details).toContain("Password is required");
   });
 

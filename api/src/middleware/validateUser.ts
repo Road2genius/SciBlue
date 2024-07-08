@@ -1,4 +1,4 @@
-import { body, validationResult } from "express-validator";
+import { body, ValidationChain, validationResult } from "express-validator";
 import User from "../models/user/User";
 import { Request, Response, NextFunction } from "express";
 import {
@@ -9,53 +9,77 @@ import {
 import { CustomError } from "../types/error/customError";
 import { isStrongPassword, isValidEmail } from "../utils/validators";
 
-// Validation user rules
-const userValidationRules = (isUpdate = false) => {
-  return [
-    body("firstName")
-      .if((value, { req }) => !isUpdate || req.body.firstName !== undefined)
-      .notEmpty()
-      .withMessage("First Name is required"),
-    body("lastName")
-      .if((value, { req }) => !isUpdate || req.body.lastName !== undefined)
-      .notEmpty()
-      .withMessage("Last Name is required"),
-    body("email")
-      .if((value, { req }) => !isUpdate || req.body.email !== undefined)
-      .custom((value) => isValidEmail(value))
-      .withMessage("Invalid email format"),
-    body("password")
-      .if((value, { req }) => !isUpdate || req.body.password !== undefined)
-      .notEmpty()
-      .withMessage("Password is required")
-      .custom((value) => isStrongPassword(value))
-      .withMessage(
-        "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character (@, $, !, %, *, ?, &, #)"
-      ),
-    body("typeOfActor")
-      .if((value, { req }) => !isUpdate || req.body.typeOfActor !== undefined)
-      .isIn([
-        "academic laboratory",
-        "academic technology platform",
-        "cro and private technology platform",
-        "corporation",
-        "others",
-      ])
-      .withMessage("Valid Type of Actor is required"),
-    body("address")
-      .if((value, { req }) => !isUpdate || req.body.address !== undefined)
-      .notEmpty()
-      .withMessage("Address is required"),
-    body("city")
-      .if((value, { req }) => !isUpdate || req.body.city !== undefined)
-      .notEmpty()
-      .withMessage("City is required"),
-    body("country")
-      .if((value, { req }) => !isUpdate || req.body.country !== undefined)
-      .notEmpty()
-      .withMessage("Country is required"),
-  ];
-};
+export const createUserValidationRules = (): ValidationChain[] => [
+  body("firstName").notEmpty().withMessage("First Name is required"),
+  body("lastName").notEmpty().withMessage("Last Name is required"),
+  body("email")
+    .notEmpty()
+    .withMessage("Email is required")
+    .bail()
+    .custom((value) => isValidEmail(value))
+    .withMessage("Invalid email format"),
+  body("password")
+    .notEmpty()
+    .withMessage("Password is required")
+    .bail()
+    .custom((value) => isStrongPassword(value))
+    .withMessage(
+      "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character (@, $, !, %, *, ?, &, #)"
+    ),
+  body("typeOfActor")
+    .notEmpty()
+    .withMessage("Type of Actor is required")
+    .bail()
+    .isIn([
+      "academic laboratory",
+      "academic technology platform",
+      "cro and private technology platform",
+      "corporation",
+      "others",
+    ])
+    .withMessage("Valid Type of Actor is required"),
+  body("address").notEmpty().withMessage("Address is required"),
+  body("city").notEmpty().withMessage("City is required"),
+  body("country").notEmpty().withMessage("Country is required"),
+];
+
+export const updateUserValidationRules = (): ValidationChain[] => [
+  body("firstName").optional().notEmpty().withMessage("First Name is required"),
+  body("lastName").optional().notEmpty().withMessage("Last Name is required"),
+  body("email")
+    .optional()
+    .notEmpty()
+    .withMessage("Email is required")
+    .bail()
+    .custom((value) => isValidEmail(value))
+    .withMessage("Invalid email format"),
+  body("password")
+    .optional()
+    .notEmpty()
+    .withMessage("Password is required")
+    .bail()
+    .custom((value) => isStrongPassword(value))
+    .withMessage(
+      "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character (@, $, !, %, *, ?, &, #)"
+    ),
+  body("typeOfActor")
+    .optional()
+    .notEmpty()
+    .withMessage("Type of Actor is required")
+    .bail()
+    .isIn([
+      "academic laboratory",
+      "academic technology platform",
+      "cro and private technology platform",
+      "corporation",
+      "others",
+    ])
+    .withMessage("Valid Type of Actor is required"),
+  body("address").optional().notEmpty().withMessage("Address is required"),
+  body("city").optional().notEmpty().withMessage("City is required"),
+  body("country").optional().notEmpty().withMessage("Country is required"),
+];
+
 // Middleware to check for validation errors
 export const validate = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
@@ -89,6 +113,3 @@ export const checkUserExists = async (
   }
   next();
 };
-
-export const createUserValidationRules = userValidationRules();
-export const updateUserValidationRules = userValidationRules(true);

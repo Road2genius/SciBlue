@@ -2,6 +2,7 @@ import express from "express";
 import {
   createUser,
   deleteUser,
+  getUserById,
   updateUser,
 } from "../../controllers/user/userController";
 import {
@@ -10,18 +11,26 @@ import {
   updateUserValidationRules,
   validate,
 } from "../../middleware/validateUser";
+import { authenticateJWT } from "../../middleware/auth";
 
-const router = express.Router();
+const userRouter = express.Router();
 
 // user
-router.post(
+userRouter.post(
   "/users",
-  createUserValidationRules,
+  createUserValidationRules(),
   validate,
   checkUserExists,
   createUser
 );
-router.delete("/users/:id", deleteUser);
-router.patch("/users/:id", updateUserValidationRules, validate, updateUser);
+userRouter.get("/users/:id", authenticateJWT, getUserById);
+userRouter.delete("/users/:id", authenticateJWT, deleteUser);
+userRouter.patch(
+  "/users/:id",
+  authenticateJWT,
+  updateUserValidationRules(),
+  validate,
+  updateUser
+);
 
-export default router;
+export default userRouter;

@@ -6,14 +6,21 @@ import {
   ERROR_MESSAGES,
   HTTP_STATUS_CODES,
 } from "../../src/constants/error/errorCodes";
-import { createUserFixture, generateTestToken, validUserData } from "./fixtures/user";
+import {
+  describe,
+  expect,
+  it,
+  afterAll,
+  beforeEach,
+  afterEach,
+} from "@jest/globals";
 import User, { IUser } from "../../src/models/user/User";
-import { describe, expect, it, afterAll, beforeEach } from "@jest/globals";
+import { createUserFixture, generateTestToken, validUserData } from "./fixtures/user";
 
-// DELETE /api/users/:id
-describe("Delete a user", () => {
+// GET /api/users/:id
+describe("Get a user", () => {
   let userId: string;
-  let token: string;
+  let token: string
 
   beforeEach(async () => {
     await User.deleteMany({});
@@ -22,25 +29,29 @@ describe("Delete a user", () => {
     token = generateTestToken(user)
   });
 
+  afterEach(async () => {
+    await User.deleteMany({});
+  });
+
   afterAll(async () => {
     await mongoose.connection.close();
   });
 
-  it("should delete a user", async () => {
-    await request(app)
-      .delete(`/api/users/${userId}`)
+  it("should get a user", async () => {
+    const response = await request(app)
+      .get(`/api/users/${userId}`)
       .set("Authorization", `Bearer ${token}`)
       .expect(HTTP_STATUS_CODES.OK);
 
-    const user = await User.findById(userId);
-    expect(user).toBeNull();
+    expect(response.body.firstName).toBe(validUserData.firstName);
+    expect(response.body.lastName).toBe(validUserData.lastName);
   });
 
   it("should return not found if user does not exist", async () => {
     const nonExistentUserId = new mongoose.Types.ObjectId().toString();
 
     const response = await request(app)
-      .delete(`/api/users/${nonExistentUserId}`)
+      .get(`/api/users/${nonExistentUserId}`)
       .set("Authorization", `Bearer ${token}`)
       .expect(HTTP_STATUS_CODES.NOT_FOUND);
 
@@ -50,10 +61,8 @@ describe("Delete a user", () => {
   });
 
   it("should return validation error if user id is not an id", async () => {
-    const dummyId = "dummy"
-
     const response = await request(app)
-      .delete(`/api/users/${dummyId}`)
+      .get(`/api/users/dummy`)
       .set("Authorization", `Bearer ${token}`)
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
 
