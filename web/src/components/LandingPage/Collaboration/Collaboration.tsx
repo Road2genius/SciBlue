@@ -4,7 +4,7 @@ import map from "../../../assets/images/map.svg";
 
 const Collaboration: React.FC = () => {
   return (
-    <Box p={5}>
+    <Box my={10}>
       <Container maxWidth="xl" sx={{ mt: 4 }}>
         <Grid container spacing={4} alignItems="center">
           <Grid item xs={12} md={6} display="flex" flexDirection="column">
@@ -14,15 +14,16 @@ const Collaboration: React.FC = () => {
 
             <Typography variant="body1" paragraph>
               Here you can browse all the collaboration requests and discussions
-              posted in SciForEarth by various players in the environmental
-              field, such as other public research laboratories, NGO or other
-              public organizations.
+              posted in <br />
+              SciForEarth by various players in the environmental field, such as
+              other public
+              <br /> research laboratories, NGO or other public organizations.
             </Typography>
 
             <Typography variant="body1" paragraph>
               Find yourself the scientific project that motivates you to jump
-              in, or help other by taking part to open discussions and answering
-              questions.
+              in, or help other by
+              <br /> taking part to open discussions and answering questions.
             </Typography>
 
             <Box display="flex" justifyContent="center" mt={4}>

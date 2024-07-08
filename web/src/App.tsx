@@ -13,7 +13,11 @@ const Footer: React.LazyExoticComponent<React.FC<{}>> = lazy(
   () => import("./components/LandingPage/Footer/Footer")
 );
 const Home: React.LazyExoticComponent<React.FC<{}>> = lazy(
-  () => import("./components/LandingPage/Home")
+  () => import("./pages/Home")
+);
+
+const Login: React.LazyExoticComponent<React.FC<{}>> = lazy(
+  () => import("./pages/Login")
 );
 
 const MainLayout = (): JSX.Element => <Outlet />;
@@ -26,6 +30,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<MainLayout />} />
           <Route index element={<Home />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Suspense>
       <Footer />

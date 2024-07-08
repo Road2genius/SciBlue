@@ -7,7 +7,7 @@ const Header: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <Box p={2}>
+    <Box my={15}>
       <Container maxWidth="xl" sx={{ mt: 4 }}>
         <Typography
           variant="h3"
@@ -20,7 +20,7 @@ const Header: React.FC = () => {
           Accelerate change through independent scientific collaboration
         </Typography>
 
-        <Grid container spacing={4}>
+        <Grid container>
           <Grid item xs={12} md={6}>
             <Box
               display="flex"
@@ -36,21 +36,25 @@ const Header: React.FC = () => {
 
               <Typography variant="body1" fontWeight={400} paragraph>
                 SciFor Earth facilitates collaboration with independent
-                scientists for projects that respond to environmental crises.
+                scientists for projects
+                <br /> that respond to environmental crisis.
                 <br />
                 <br />
                 NGOs, academic independent researchers, or other actors such as
+                <br />
                 governmental agencies can <strong>ask a question</strong>, start
-                an <strong>open discussion</strong> or submit a{" "}
-                <strong>collaboration request</strong> (for a new project, a
-                single experiment to realize, a partnership for a funding, ...).
+                an <strong>open discussion</strong> or <br />
+                submit a <strong>collaboration request</strong> (for a new
+                project, a single experiment to <br />
+                realize, a partnership for a funding, ...).
                 <br />
                 <br />
                 Anyone with a <strong>
                   validated professional profile
                 </strong>{" "}
-                can respond and be advised when a relevant collaboration
-                request, discussion or question is submitted.
+                can respond and be advised
+                <br /> when a relevant collaboration request, discussion or
+                question is submitted.
               </Typography>
             </Box>
           </Grid>

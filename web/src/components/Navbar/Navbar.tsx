@@ -14,15 +14,17 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const navigate: NavigateFunction = useNavigate();
 
   const buttons: {
     name: string;
     onClick: () => void;
   }[] = [
-    { name: "Home", onClick: () => console.log("Home") },
+    { name: "Home", onClick: () => navigate("/") },
     { name: "Discussions", onClick: () => console.log("Discussions") },
     { name: "Request", onClick: () => console.log("Request") },
     { name: "Community", onClick: () => console.log("Community") },
@@ -84,7 +86,9 @@ const Navbar: React.FC = () => {
         <Toolbar>
           <Typography
             variant="h6"
-            sx={{ flexGrow: 1, color: "#00796b", fontWeight: "bold" }}
+            fontWeight={800}
+            sx={{ flexGrow: 1, color: "#00796b", cursor: "pointer" }}
+            onClick={() => navigate("/")}
           >
             SciForEarth
           </Typography>
@@ -116,6 +120,7 @@ const Navbar: React.FC = () => {
                 color: "#fff",
               },
             }}
+            onClick={() => navigate("/login")}
           >
             Login & Signup
           </Button>

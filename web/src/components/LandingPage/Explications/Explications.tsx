@@ -7,7 +7,7 @@ const Explications: React.FC = () => {
 
   return (
     <Box className={classes.root}>
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" sx={{ marginY: "40px" }}>
         <Grid container spacing={4}>
           <Grid
             item
@@ -48,8 +48,8 @@ const Explications: React.FC = () => {
                 paragraph
               >
                 You are a researcher and need to find a NGO or a private actor
-                to apply to a specific grant for projects linked to climate
-                change?
+                to apply to a specific grant for projects linked to <br />
+                climate change?
               </Typography>
 
               <Typography
@@ -59,7 +59,8 @@ const Explications: React.FC = () => {
                 paragraph
               >
                 You are an NGO and need an explanation about a scientific method
-                used to measure the decline of the bee population?
+                used to measure the decline of the bee <br />
+                population?
               </Typography>
 
               <Typography
@@ -69,7 +70,8 @@ const Explications: React.FC = () => {
                 mb={3}
               >
                 You are a researcher and need to find quickly a collaborator
-                with a specific skill that can conduct a one-time experiment?
+                with a specific skill that can conduct a one-time <br />
+                experiment?
               </Typography>
 
               <Typography
@@ -162,8 +164,8 @@ const Explications: React.FC = () => {
                 paragraph
               >
                 Your laboratory has a specific murine model or you are a flow
-                cytometry expert and are willing to be advised when a need is
-                posted?
+                cytometry expert and are willing to be
+                <br /> advised when a need is posted?
               </Typography>
 
               <Typography
