@@ -20,6 +20,10 @@ const Login: React.LazyExoticComponent<React.FC<{}>> = lazy(
   () => import("./pages/Login")
 );
 
+const Signup: React.LazyExoticComponent<React.FC<{}>> = lazy(
+  () => import("./pages/Signup")
+);
+
 const MainLayout = (): JSX.Element => <Outlet />;
 
 const App: React.FC = () => {
@@ -31,6 +35,7 @@ const App: React.FC = () => {
           <Route path="/" element={<MainLayout />} />
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </Suspense>
       <Footer />

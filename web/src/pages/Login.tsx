@@ -37,7 +37,7 @@ const LoginPage: React.FC = () => {
       </Link>
 
       <Box display="flex" justifyContent="flex-end" alignItems="center" mt={4}>
-        <Link href="#" color="#197278">
+        <Link href="/signup" color="#197278">
           Sign up
         </Link>
 
