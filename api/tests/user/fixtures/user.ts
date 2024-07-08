@@ -28,11 +28,11 @@ export const anotherValidUserData: Partial<IUser> = {
   country: "Another Country Name",
 };
 
-// Function to create a user in the database
+// createUserFixture create a user for testing environment
 export const createUserFixture = async (
   userData: Partial<IUser>
 ): Promise<IUser> => {
-  const userCopy = { ...userData }; // Créez une copie de l'objet
+  const userCopy = { ...userData };
   if (userCopy.password) {
     const hashedPassword = await bcrypt.hash(userCopy.password, 10);
     userCopy.password = hashedPassword;
@@ -42,6 +42,7 @@ export const createUserFixture = async (
   return user;
 };
 
+// generateTestToken generate a token for testing environment
 export const generateTestToken = (user: IUser): string => {
   const token = jwt.sign({ userId: user._id }, "your_jwt_secret_key", {
     expiresIn: "1h",

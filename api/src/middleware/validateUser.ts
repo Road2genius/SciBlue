@@ -9,7 +9,6 @@ import {
 import { CustomError } from "../types/error/customError";
 import { isStrongPassword, isValidEmail } from "../utils/validators";
 
-// Règles de validation pour la création d'utilisateur
 export const createUserValidationRules = (): ValidationChain[] => [
   body("firstName").notEmpty().withMessage("First Name is required"),
   body("lastName").notEmpty().withMessage("Last Name is required"),
@@ -44,7 +43,6 @@ export const createUserValidationRules = (): ValidationChain[] => [
   body("country").notEmpty().withMessage("Country is required"),
 ];
 
-// Règles de validation pour la mise à jour d'utilisateur
 export const updateUserValidationRules = (): ValidationChain[] => [
   body("firstName").optional().notEmpty().withMessage("First Name is required"),
   body("lastName").optional().notEmpty().withMessage("Last Name is required"),
