@@ -3,7 +3,11 @@ import mongoose from "mongoose";
 import app from "../../src/server";
 import { describe, expect, it, afterAll, beforeEach } from "@jest/globals";
 import User, { IUser } from "../../src/models/user/User";
-import { createUserFixture, validUserData } from "./fixtures/user";
+import {
+  createUserFixture,
+  generateTestToken,
+  validUserData,
+} from "./fixtures/user";
 import {
   ERROR_CODES,
   ERROR_MESSAGES,
@@ -13,11 +17,13 @@ import {
 // PATCH /api/users/:id
 describe("Update a user", () => {
   let userId: string;
+  let token: string;
 
   beforeEach(async () => {
     await User.deleteMany({});
     const user: IUser = await createUserFixture(validUserData);
     userId = user._id.toString();
+    token = generateTestToken(user);
   });
 
   afterAll(async () => {
@@ -29,6 +35,7 @@ describe("Update a user", () => {
 
     const response = await request(app)
       .patch(`/api/users/${userId}`)
+      .set("Authorization", `Bearer ${token}`)
       .send(updatedData)
       .expect(HTTP_STATUS_CODES.OK);
 
@@ -42,6 +49,7 @@ describe("Update a user", () => {
 
     const response = await request(app)
       .patch(`/api/users/${nonExistentUserId}`)
+      .set("Authorization", `Bearer ${token}`)
       .send(updatedData)
       .expect(HTTP_STATUS_CODES.NOT_FOUND);
 
@@ -56,6 +64,7 @@ describe("Update a user", () => {
 
     const response = await request(app)
       .patch(`/api/users/${dummyId}`)
+      .set("Authorization", `Bearer ${token}`)
       .send(updatedData)
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
 
@@ -68,6 +77,7 @@ describe("Update a user", () => {
     const updatedData = { password: "hashedpassword123" };
     const response = await request(app)
       .patch(`/api/users/${userId}`)
+      .set("Authorization", `Bearer ${token}`)
       .send(updatedData)
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
 
@@ -84,6 +94,7 @@ describe("Update a user", () => {
     const updatedData = { email: "john.doe@@example.com" };
     const response = await request(app)
       .patch(`/api/users/${userId}`)
+      .set("Authorization", `Bearer ${token}`)
       .send(updatedData)
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
 

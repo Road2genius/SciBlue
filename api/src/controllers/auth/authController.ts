@@ -1,0 +1,67 @@
+import { NextFunction, Request, Response } from "express";
+import bcrypt from "bcrypt";
+import User, { IUser } from "../../models/user/User";
+import {
+  ERROR_CODES,
+  ERROR_MESSAGES,
+  HTTP_STATUS_CODES,
+} from "../../constants/error/errorCodes";
+import { CustomError } from "../../types/error/customError";
+import jwt from "jsonwebtoken";
+import { successHandler } from "../../middleware/responseHandler";
+
+export const loginUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      const error: CustomError = new Error(
+        ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]
+      );
+      error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
+      error.code = ERROR_CODES.VALIDATION_ERROR;
+      throw error;
+    }
+
+    const user: IUser | null = await User.findOne({ email });
+
+    if (!user) {
+      const error: CustomError = new Error(
+        ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]
+      );
+      error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
+      error.code = ERROR_CODES.USER_NOT_FOUND;
+      throw error;
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      const error: CustomError = new Error(
+        ERROR_MESSAGES[ERROR_CODES.WRONG_PASSWORD]
+      );
+      error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
+      error.code = ERROR_CODES.WRONG_PASSWORD;
+      throw error;
+    }
+
+    const token = jwt.sign({ userId: user._id }, "your_jwt_secret_key", {
+      expiresIn: "1h",
+    });
+
+    successHandler<{ token: string }>(
+      req,
+      res,
+      {
+        token,
+      },
+      HTTP_STATUS_CODES.OK
+    );
+  } catch (error) {
+    next(error);
+  }
+};
