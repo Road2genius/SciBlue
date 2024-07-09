@@ -1,27 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import User, { IUser } from "../../models/user/User";
-import {
-  ERROR_CODES,
-  ERROR_MESSAGES,
-  HTTP_STATUS_CODES,
-} from "../../constants/error/errorCodes";
+import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../constants/error/errorCodes";
 import { CustomError } from "../../types/error/customError";
 import jwt from "jsonwebtoken";
 import { successHandler } from "../../middleware/responseHandler";
+import { sendEmail } from "../../config/email";
+import NodeCache from "node-cache";
+import cache from "../../middleware/auth";
 
-export const loginUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const loginUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      const error: CustomError = new Error(
-        ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]
-      );
+      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
       error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
       error.code = ERROR_CODES.VALIDATION_ERROR;
       throw error;
@@ -30,9 +24,7 @@ export const loginUser = async (
     const user: IUser | null = await User.findOne({ email });
 
     if (!user) {
-      const error: CustomError = new Error(
-        ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]
-      );
+      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
       error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
       error.code = ERROR_CODES.USER_NOT_FOUND;
       throw error;
@@ -41,9 +33,7 @@ export const loginUser = async (
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      const error: CustomError = new Error(
-        ERROR_MESSAGES[ERROR_CODES.WRONG_PASSWORD]
-      );
+      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.WRONG_PASSWORD]);
       error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
       error.code = ERROR_CODES.WRONG_PASSWORD;
       throw error;
@@ -58,6 +48,102 @@ export const loginUser = async (
       res,
       {
         token,
+      },
+      HTTP_STATUS_CODES.OK
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const requestPasswordReset = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    // const cache = new NodeCache({ stdTTL: 3600 });
+
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
+      error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
+      error.code = ERROR_CODES.USER_NOT_FOUND;
+      throw error;
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+
+    cache.set(email, token);
+
+    const resetUrl = `${process.env.BASE_URL}/reset-password?token=${token}`;
+    const message = `You requested a password reset. Click this link to reset your password: ${resetUrl}`;
+    await sendEmail(user.email, "Password Reset Request", message);
+
+    successHandler<{ message: string }>(
+      req,
+      res,
+      {
+        message: "Email sent",
+      },
+      HTTP_STATUS_CODES.OK
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    // const cache = new NodeCache({ stdTTL: 3600 });
+
+    const { token, newPassword } = req.body;
+    const email = req.query.email as string | undefined;
+
+    if (!email) {
+      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
+      error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
+      error.code = ERROR_CODES.VALIDATION_ERROR;
+      error.message = "Email is required";
+      throw error;
+    }
+
+    if (!newPassword) {
+      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
+      error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
+      error.code = ERROR_CODES.VALIDATION_ERROR;
+      error.message = "Password is required";
+      throw error;
+    }
+
+    const cachedToken = cache.get(email) as string | undefined;
+
+    if (!cachedToken || cachedToken !== token) {
+      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
+      error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
+      error.code = ERROR_CODES.VALIDATION_ERROR;
+      error.message = "Invalid or expired token";
+      throw error;
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
+      error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
+      error.code = ERROR_CODES.USER_NOT_FOUND;
+      throw error;
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    cache.del(email);
+
+    successHandler<{ message: string }>(
+      req,
+      res,
+      {
+        message: "Password reset successfully",
       },
       HTTP_STATUS_CODES.OK
     );

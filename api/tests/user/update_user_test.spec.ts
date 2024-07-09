@@ -3,16 +3,8 @@ import mongoose from "mongoose";
 import app from "../../src/server";
 import { describe, expect, it, afterAll, beforeEach } from "@jest/globals";
 import User, { IUser } from "../../src/models/user/User";
-import {
-  createUserFixture,
-  generateTestToken,
-  validUserData,
-} from "./fixtures/user";
-import {
-  ERROR_CODES,
-  ERROR_MESSAGES,
-  HTTP_STATUS_CODES,
-} from "../../src/constants/error/errorCodes";
+import { createUserFixture, generateTestToken, validUserData } from "./fixtures/user";
+import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
 
 // PATCH /api/users/:id
 describe("Update a user", () => {
@@ -39,8 +31,8 @@ describe("Update a user", () => {
       .send(updatedData)
       .expect(HTTP_STATUS_CODES.OK);
 
-    expect(response.body.firstName).toBe(updatedData.firstName);
-    expect(response.body.lastName).toBe(updatedData.lastName);
+    expect(response.body.data.firstName).toBe(updatedData.firstName);
+    expect(response.body.data.lastName).toBe(updatedData.lastName);
   });
 
   it("should return not found error if user doest not exist", async () => {
@@ -53,9 +45,7 @@ describe("Update a user", () => {
       .send(updatedData)
       .expect(HTTP_STATUS_CODES.NOT_FOUND);
 
-    expect(response.body.message).toBe(
-      ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]
-    );
+    expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
   });
 
   it("should return validation error if user id is not an id", async () => {
@@ -68,9 +58,7 @@ describe("Update a user", () => {
       .send(updatedData)
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
 
-    expect(response.body.message).toBe(
-      ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]
-    );
+    expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
   });
 
   it("should not update a user with weak password", async () => {
@@ -82,9 +70,7 @@ describe("Update a user", () => {
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
 
     expect(response.body.code).toBe(ERROR_CODES.VALIDATION_ERROR);
-    expect(response.body.message).toBe(
-      ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]
-    );
+    expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
     expect(response.body.details).toContain(
       "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character (@, $, !, %, *, ?, &, #)"
     );

@@ -1,35 +1,60 @@
-export const TYPE_OF_ACTOR = [
-  "academic laboratory",
-  "academic technology platform",
-  "cro and private technology platform",
-  "corporation",
-  "government, non-profit organization, NGO, fundations",
-] as const;
+export enum OrganizationAffiliated {
+  AcademicLaboratoryAndInstitute = "Academic laboratory and institute",
+  AcademicTechnologyPlatform = "Academic technology platform",
+  NgoNonProfitOrganizationFoundation = "NGO, non-profit organization, foundation",
+  Government = "Government",
+  CroAndPrivateTechnologyPlatform = "CRO and private technology platform",
+  Corporation = "Corporation",
+  Freelancer = "Freelancer",
+}
 
-export const TYPE_OF_COLLABORATION = [
-  "Partnership for a grant",
-  "Direct funding",
-  "Expert analysis/bibliographic research",
-  "Communication campaign",
-  "Experiment conducting",
-] as const;
+export enum TypeOfCollaboration {
+  PartnershipForGrant = "Partnership for a grant",
+  DirectFunding = "Direct funding",
+  ExpertAnalysis = "Expert analysis/bibliographic research",
+  CommunicationCampaign = "Communication campaign",
+  ExperimentConducting = "Experiment conducting",
+}
 
-export const TYPE_OF_STRUCTURE = [
-  "Academic laboratory (including institutes, joint research units, ...)",
-  "Academic technology platform",
-  "CRO and private technology platform",
-  "Corporation",
-  "Government, non-profit organization, NGO, foundations",
-] as const;
+export enum TypeOfOrganization {
+  AcademicLaboratory = "Academic laboratory (including institutes, joint research units, ...)",
+  AcademicTechnologyPlatform = "Academic technology platform",
+  CroAndPrivateTechnologyPlatform = "CRO and private technology platform",
+  Corporation = "Corporation",
+  GovernmentNonProfitNgo = "Government, non-profit organization, NGO, foundations",
+}
 
-export const PROJECT_PROGRESS_STATUS = [
-  "Not funded",
-  "Funded but not started",
-  "Ongoing",
-  "Nearing completion, i.e. manuscript being written or under review",
-] as const;
+export enum ProjectProgressStatus {
+  NotFunded = "Not funded",
+  FundedButNotStarted = "Funded but not started",
+  Ongoing = "Ongoing",
+  NearingCompletion = "Nearing completion, i.e. manuscript being written or under review",
+}
 
-export const PROJECT_DURATION = [
-  "Long-term collaboration",
-  "Short term or one time experiment",
-] as const;
+export enum CollaborationDuration {
+  LongTermCollaboration = "Long-term collaboration",
+  ShortTermOrOneTimeExperiment = "Short term or one time experiment",
+}
+
+export enum FieldsProfessionalActivity {
+  ClimateChange = "Climate change",
+  Pollution = "Pollution",
+  Biodiversity = "Biodiversity",
+  RenewableEnergy = "Renewable energy",
+  AgriFood = "Agri-food",
+  AquaticEcosystems = "Aquatic ecosystems",
+  Transportation = "Transportation",
+  ChemicalScience = "Chemical science",
+  PopulationMovement = "Population movement",
+}
+
+export function getEnumValues<T extends { [key: string]: string | number }>(enumObj: T): string[] {
+  return Object.values(enumObj).filter((value) => typeof value === "string") as string[];
+}
+
+export function isValidEnumOrCustomString<T extends { [key: string]: string | number }>(enumObj: T) {
+  const enumValues = getEnumValues(enumObj);
+  return (value: string): boolean => {
+    return enumValues.includes(value) || typeof value === "string";
+  };
+}

@@ -1,50 +1,41 @@
 import mongoose, { Document, Schema } from "mongoose";
 import {
-  PROJECT_DURATION,
-  PROJECT_PROGRESS_STATUS,
-  TYPE_OF_ACTOR,
-  TYPE_OF_COLLABORATION,
-  TYPE_OF_STRUCTURE,
+  CollaborationDuration,
+  FieldsProfessionalActivity,
+  isValidEnumOrCustomString,
+  OrganizationAffiliated,
+  ProjectProgressStatus,
+  TypeOfCollaboration,
+  TypeOfOrganization,
+  getEnumValues
 } from "../constants/user";
-
-type TypeOfActor = (typeof TYPE_OF_ACTOR)[number];
-type TypeOfCollaboration = (typeof TYPE_OF_COLLABORATION)[number];
-type TypeOfStructure = (typeof TYPE_OF_STRUCTURE)[number];
-type ProjectProgressStatus = (typeof PROJECT_PROGRESS_STATUS)[number];
-type ProjectDuration = (typeof PROJECT_DURATION)[number];
-
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
   firstName: string;
   lastName: string;
   email: string;
   password: string;
-  typeOfActor: TypeOfActor;
-  structure_name: string;
+  organizationAffiliated: OrganizationAffiliated[];
+  organizationName: string;
   institution: string;
   address: string;
   city: string;
   country: string;
   description: string;
-  field_of_application: string[];
-  research_specifity: {
-    research_activity: boolean;
-    research_topic_organization: string;
-    research_topic_keywords: string[];
-  };
-  skills_or_technical: {
-    technical_approach: string[];
-    specific_technics_name: string[];
+  keywordsActivity: string[];
+  fieldsProfessionalActivity: (FieldsProfessionalActivity | string)[];
+  skillsOrTechnical: {
+    specificTechnicsNames: string[];
+    equipment: string[];
     models: string[];
-    specific_products: string[];
-    specific_material: string[];
-    other_skills: string[];
+    chemicalAndBiologicalProducts: string[];
+    otherSkills: string[];
   };
-  kind_of_collaboration_wanted: {
-    type_of_collaboration: TypeOfCollaboration[];
-    type_of_structure: TypeOfStructure[];
-    project_progress_status: ProjectProgressStatus[];
-    project_duration: ProjectDuration[];
+  kindOfCollaborationWanted: {
+    typeOfCollaboration: TypeOfCollaboration[];
+    typeOfOrganization: TypeOfOrganization[];
+    projectProgressStatus: ProjectProgressStatus[];
+    collaborationDuration: CollaborationDuration[];
   };
   createdAt?: Date;
   updatedAt?: Date;
@@ -56,47 +47,47 @@ const userSchema: Schema = new Schema(
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    typeOfActor: {
-      type: String,
-      required: true,
-      enum: TYPE_OF_ACTOR,
+    organizationAffiliated: {
+      type: [{ type: String, enum: OrganizationAffiliated }],
+      required: true
     },
-    structure_name: { type: String, required: true },
+    organizationName: { type: String, required: true },
     institution: { type: String, required: true },
     address: { type: String, required: true },
     city: { type: String, required: true },
     country: { type: String, required: true },
     description: { type: String },
-    field_of_application: { type: [String] },
-    research_specifity: {
-      research_topic_organization: { type: String },
-      research_topic_keywords: { type: [String] },
-      research_activity: { type: Boolean },
+    keywordsActivity: { type: [String] },
+    fieldsProfessionalActivity: {
+      type: [String],
+      validate: {
+        validator: (values: string[]) => values.every(isValidEnumOrCustomString(FieldsProfessionalActivity)),
+        message: (props: { value: string[] }) => `${props.value} is not a valid research specificity!`,
+      },
     },
-    skills_or_technical: {
-      technical_approach: { type: [String] },
-      specific_technics_name: { type: [String] },
+    skillsOrTechnical: {
+      specificTechnicsNames: { type: [String] },
+      equipment: { type: [String] },
       models: { type: [String] },
-      specific_products: { type: [String] },
-      specific_material: { type: [String] },
-      other_skills: { type: [String] },
+      chemicalAndBiologicalProducts: { type: [String] },
+      otherSkills: { type: [String] },
     },
-    kind_of_collaboration_wanted: {
-      type_of_collaboration: {
+    kindOfCollaborationWanted: {
+      typeOfCollaboration: {
         type: [String],
-        enum: TYPE_OF_COLLABORATION,
+        enum: TypeOfCollaboration,
       },
-      type_of_structure: {
+      typeOfOrganization: {
         type: [String],
-        enum: TYPE_OF_STRUCTURE,
+        enum: TypeOfOrganization,
       },
-      project_progress_status: {
+      projectProgressStatus: {
         type: [String],
-        enum: PROJECT_PROGRESS_STATUS,
+        enum: ProjectProgressStatus,
       },
-      project_duration: {
+      collaborationDuration: {
         type: [String],
-        enum: PROJECT_DURATION,
+        enum: CollaborationDuration,
       },
     },
   },

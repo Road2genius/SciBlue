@@ -1,11 +1,7 @@
 import request from "supertest";
 import app from "../../src/server";
 import mongoose from "mongoose";
-import {
-  ERROR_CODES,
-  ERROR_MESSAGES,
-  HTTP_STATUS_CODES,
-} from "../../src/constants/error/errorCodes";
+import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
 import { createUserFixture, generateTestToken, validUserData } from "./fixtures/user";
 import User, { IUser } from "../../src/models/user/User";
 import { describe, expect, it, afterAll, beforeEach } from "@jest/globals";
@@ -19,7 +15,7 @@ describe("Delete a user", () => {
     await User.deleteMany({});
     const user: IUser = await createUserFixture(validUserData);
     userId = user._id.toString();
-    token = generateTestToken(user)
+    token = generateTestToken(user);
   });
 
   afterAll(async () => {
@@ -44,21 +40,17 @@ describe("Delete a user", () => {
       .set("Authorization", `Bearer ${token}`)
       .expect(HTTP_STATUS_CODES.NOT_FOUND);
 
-    expect(response.body.message).toBe(
-      ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]
-    );
+    expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
   });
 
   it("should return validation error if user id is not an id", async () => {
-    const dummyId = "dummy"
+    const dummyId = "dummy";
 
     const response = await request(app)
       .delete(`/api/users/${dummyId}`)
       .set("Authorization", `Bearer ${token}`)
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
 
-    expect(response.body.message).toBe(
-      ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]
-    );
+    expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
   });
 });
