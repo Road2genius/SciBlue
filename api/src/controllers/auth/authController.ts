@@ -7,7 +7,6 @@ import { CustomError } from "../../types/error/customError";
 import jwt from "jsonwebtoken";
 import { successHandler } from "../../middleware/responseHandler";
 import { sendEmail } from "../../config/email";
-import NodeCache from "node-cache";
 import cache from "../../middleware/auth";
 
 export const loginUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -58,8 +57,6 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
 
 export const requestPasswordReset = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    // const cache = new NodeCache({ stdTTL: 3600 });
-
     const { email } = req.body;
     const user = await User.findOne({ email });
 
@@ -93,8 +90,6 @@ export const requestPasswordReset = async (req: Request, res: Response, next: Ne
 
 export const resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    // const cache = new NodeCache({ stdTTL: 3600 });
-
     const { token, newPassword } = req.body;
     const email = req.query.email as string | undefined;
 

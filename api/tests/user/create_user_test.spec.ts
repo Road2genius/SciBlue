@@ -26,17 +26,14 @@ describe("Create a user", () => {
   it("should not create a user with an existing email", async () => {
     await createUserFixture(validUserData);
 
-    const response = await request(app).post("/api/users").send(validUserData).expect(HTTP_STATUS_CODES.BAD_REQUEST);
+    const response = await request(app).post(url).send(validUserData).expect(HTTP_STATUS_CODES.BAD_REQUEST);
 
     expect(response.body.code).toBe(ERROR_CODES.USER_ALREADY_EXISTS);
     expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.USER_ALREADY_EXISTS]);
   });
 
   it("should not create a user with missing fields", async () => {
-    const response = await request(app)
-      .post("/api/users")
-      .send({ firstName: "Jane" })
-      .expect(HTTP_STATUS_CODES.BAD_REQUEST);
+    const response = await request(app).post(url).send({ firstName: "Jane" }).expect(HTTP_STATUS_CODES.BAD_REQUEST);
 
     expect(response.body.code).toBe(ERROR_CODES.VALIDATION_ERROR);
     expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
@@ -47,7 +44,7 @@ describe("Create a user", () => {
 
   it("should not create a user with weak password", async () => {
     const response = await request(app)
-      .post("/api/users")
+      .post(url)
       .send({ ...validUserData, password: "hashedpassword123" })
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
 
@@ -60,7 +57,7 @@ describe("Create a user", () => {
 
   it("should not create a user with invalid email format", async () => {
     const response = await request(app)
-      .post("/api/users")
+      .post(url)
       .send({ ...validUserData, email: "john.doe@@example.com" })
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
 

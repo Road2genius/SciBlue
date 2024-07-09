@@ -29,8 +29,6 @@ describe("Get Users List", () => {
 
     const response = await request(app).get(url).expect(HTTP_STATUS_CODES.OK);
 
-    console.log("response", response.body);
-
     expect(response.body.data.length).toBeGreaterThan(0);
     expect(response.body.data[0]).toHaveProperty("email", validUserData.email);
     expect(response.body.data[1]).toHaveProperty("email", anotherValidUserData.email);

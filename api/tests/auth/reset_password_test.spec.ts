@@ -10,23 +10,21 @@ import { createUserFixture, validUserData } from "../user/fixtures/user";
 import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
 import cache from "../../src/middleware/auth";
 
-// const cache = new NodeCache({ stdTTL: 3600 });
-
-beforeEach(async () => {
-  await User.deleteMany({});
-  await createUserFixture(validUserData);
-});
-
-afterEach(async () => {
-  await User.deleteMany({});
-});
-
-afterAll(async () => {
-  await mongoose.connection.close();
-});
-
 // POST /api/reset-password
 describe("Auth reset password", () => {
+  beforeEach(async () => {
+    await User.deleteMany({});
+    await createUserFixture(validUserData);
+  });
+
+  afterEach(async () => {
+    await User.deleteMany({});
+  });
+
+  afterAll(async () => {
+    await mongoose.connection.close();
+  });
+
   const url: string = BASE_ROUTE + "/" + ENDPOINT.AUTH.RESET_PASSWORD_PATH;
   const token = "valid-reset-token";
   const newPassword = "NewStrongPassword123!";
