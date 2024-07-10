@@ -10,6 +10,7 @@ import { makeStyles } from "@mui/styles";
 import React from "react";
 import {
   CollaborationDuration,
+  FieldsProfessionalActivity,
   OrganizationAffiliated,
   ProjectProgressStatus,
   TypeOfCollaboration,
@@ -17,14 +18,6 @@ import {
 } from "../../../shared-types/user";
 import KeywordInput from "../components/KeywordInput/KeywordInput";
 import TagInput from "../components/TagInput/TagInput";
-import {
-  chipData,
-  chipDataCollaboration,
-  chipDataCollaborationDuration,
-  chipDataOrganization,
-  chipDataStatus,
-  defaultTags,
-} from "../data/chipData";
 import useSignupForm from "../hooks/useSignupForm";
 
 const Signup: React.FC = () => {
@@ -107,7 +100,7 @@ const Signup: React.FC = () => {
         </Typography>
 
         <Box className={classes.chipContainer}>
-          {chipData.map((label) => (
+          {Object.values(OrganizationAffiliated).map((label) => (
             <Chip
               key={label}
               label={label}
@@ -222,16 +215,15 @@ const Signup: React.FC = () => {
         <TagInput
           label="Which field(s) might your professional activity be relevant to?"
           placeholder="+ add your tag"
-          defaultTags={defaultTags}
           tags={user.fieldsProfessionalActivity}
           setTags={(newTags) =>
             handleChange("fieldsProfessionalActivity", newTags)
           }
+          nonDeletableTags={Object.values(FieldsProfessionalActivity)}
         />
         <TagInput
           label="Methods and specific techniques"
           placeholder="+ add a method or a precise technique (e.g imaging, computational models and simulation, ...)"
-          defaultTags={[]}
           tags={user.skillsOrTechnical.specificTechnicsNames}
           setTags={(newTags) =>
             handleNestedChange(
@@ -244,7 +236,6 @@ const Signup: React.FC = () => {
         <TagInput
           label="Equipment"
           placeholder="+ add a particular equipment (e.g. UHPLC system, ...)"
-          defaultTags={[]}
           tags={user.skillsOrTechnical.equipment}
           setTags={(newTags) =>
             handleNestedChange("skillsOrTechnical", "equipment", newTags)
@@ -253,7 +244,6 @@ const Signup: React.FC = () => {
         <TagInput
           label="Models"
           placeholder="+ add a model (e.g. particular mouse model, ...)"
-          defaultTags={[]}
           tags={user.skillsOrTechnical.models}
           setTags={(newTags) =>
             handleNestedChange("skillsOrTechnical", "models", newTags)
@@ -262,7 +252,6 @@ const Signup: React.FC = () => {
         <TagInput
           label="Chemical and biological products"
           placeholder="+ add a product (e.g. antibodies, cells, small molecules, ...)"
-          defaultTags={[]}
           tags={user.skillsOrTechnical.chemicalAndBiologicalProducts}
           setTags={(newTags) =>
             handleNestedChange(
@@ -275,7 +264,6 @@ const Signup: React.FC = () => {
         <TagInput
           label="Any other skill that you would like to mention"
           placeholder="+ add a skill"
-          defaultTags={[]}
           tags={user.skillsOrTechnical.otherSkills}
           setTags={(newTags) =>
             handleNestedChange("skillsOrTechnical", "otherSkills", newTags)
@@ -301,7 +289,7 @@ const Signup: React.FC = () => {
         </Typography>
 
         <Box className={classes.chipContainer}>
-          {chipDataCollaboration.map((collaboration) => (
+          {Object.values(TypeOfCollaboration).map((collaboration) => (
             <Chip
               key={collaboration}
               label={collaboration}
@@ -344,7 +332,7 @@ const Signup: React.FC = () => {
         </Typography>
 
         <Box className={classes.chipContainer}>
-          {chipDataOrganization.map((organization) => (
+          {Object.values(TypeOfOrganization).map((organization) => (
             <Chip
               key={organization}
               label={organization}
@@ -387,7 +375,7 @@ const Signup: React.FC = () => {
         </Typography>
 
         <Box className={classes.chipContainer}>
-          {chipDataStatus.map((status) => (
+          {Object.values(ProjectProgressStatus).map((status) => (
             <Chip
               key={status}
               label={status}
@@ -430,7 +418,7 @@ const Signup: React.FC = () => {
         </Typography>
 
         <Box className={classes.chipContainer}>
-          {chipDataCollaborationDuration.map((collabDuration) => (
+          {Object.values(CollaborationDuration).map((collabDuration) => (
             <Chip
               key={collabDuration}
               label={collabDuration}

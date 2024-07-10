@@ -1,7 +1,7 @@
 export type TagInputProps = {
   label: string;
   placeholder: string;
-  defaultTags: string[];
   tags: string[];
+  nonDeletableTags?: string[];
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
 };

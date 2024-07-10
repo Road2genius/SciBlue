@@ -6,9 +6,9 @@ import { TagInputProps } from "../../types/tagInput.type";
 const TagInput: React.FC<TagInputProps> = ({
   label,
   placeholder,
-  defaultTags,
   tags,
   setTags,
+  nonDeletableTags = [],
 }) => {
   const classes = useStyles();
   const [tag, setTag] = useState<string>("");
@@ -20,8 +20,11 @@ const TagInput: React.FC<TagInputProps> = ({
     }
   };
 
-  const handleDeleteTag = (tagToDelete: string) => (): void =>
-    setTags(tags.filter((tag) => tag !== tagToDelete));
+  const handleDeleteTag = (tagToDelete: string) => (): void => {
+    if (!nonDeletableTags.includes(tagToDelete)) {
+      setTags(tags.filter((tag) => tag !== tagToDelete));
+    }
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent): void => {
     if (event.key === "Enter") {
@@ -33,13 +36,10 @@ const TagInput: React.FC<TagInputProps> = ({
     <Box>
       <Typography variant="h6">{label}</Typography>
       <Box className={classes.chipContainer}>
-        {tags.map((tag, index) => (
+        {nonDeletableTags.map((tag, index) => (
           <Chip
             key={index}
             label={tag}
-            onDelete={
-              defaultTags.includes(tag) ? undefined : handleDeleteTag(tag)
-            }
             sx={{
               backgroundColor: "#fff",
               border: "1px solid black",
@@ -50,7 +50,21 @@ const TagInput: React.FC<TagInputProps> = ({
             }}
           />
         ))}
-
+        {tags.map((tag, index) => (
+          <Chip
+            key={index}
+            label={tag}
+            onDelete={handleDeleteTag(tag)}
+            sx={{
+              backgroundColor: "#fff",
+              border: "1px solid black",
+              borderRadius: "8px",
+              "&:hover": {
+                backgroundColor: "#C8E6C9",
+              },
+            }}
+          />
+        ))}
         <TextField
           label={placeholder}
           variant="outlined"
@@ -59,7 +73,6 @@ const TagInput: React.FC<TagInputProps> = ({
           onChange={(e) => setTag(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-
         <Button
           variant="outlined"
           onClick={handleAddPersonnalisedTag}
