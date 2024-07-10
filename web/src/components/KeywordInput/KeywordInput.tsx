@@ -1,8 +1,15 @@
 import { Box, Button, Chip, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 
-const KeywordInput: React.FC = () => {
-  const [keywords, setKeywords] = useState<string[]>([]);
+interface KeywordInputProps {
+  keywords: string[];
+  setKeywords: (keywords: string[]) => void;
+}
+
+const KeywordInput: React.FC<KeywordInputProps> = ({
+  keywords,
+  setKeywords,
+}) => {
   const [keyword, setKeyword] = useState<string>("");
 
   const handleAddKeyword = (): void => {

@@ -7,7 +7,14 @@ import {
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React, { useState } from "react";
+import React from "react";
+import {
+  CollaborationDuration,
+  OrganizationAffiliated,
+  ProjectProgressStatus,
+  TypeOfCollaboration,
+  TypeOfOrganization,
+} from "../../../shared-types/user";
 import KeywordInput from "../components/KeywordInput/KeywordInput";
 import TagInput from "../components/TagInput/TagInput";
 import {
@@ -18,39 +25,11 @@ import {
   chipDataStatus,
   defaultTags,
 } from "../data/chipData";
-import { formData } from "../types/formData.type";
+import useSignupForm from "../hooks/useSignupForm";
 
 const Signup: React.FC = () => {
   const classes = useStyles();
-  const [selectedChips, setSelectedChips] = useState<string[]>([]);
-  const [formState, setFormState] = useState<formData>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    organizationName: "",
-    institution: "",
-    address: "",
-    city: "",
-    country: "",
-    professionalActivity: "",
-  });
-
-  const handleChipClick = (label: string): void => {
-    setSelectedChips((prevSelected) =>
-      prevSelected.includes(label)
-        ? prevSelected.filter((chip) => chip !== label)
-        : [...prevSelected, label]
-    );
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setFormState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const { user, handleChange, handleNestedChange } = useSignupForm();
 
   return (
     <>
@@ -72,13 +51,12 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
-          name="firstName"
           placeholder="Enter first name"
           variant="outlined"
           type="text"
+          value={user.firstName}
+          onChange={(e) => handleChange("firstName", e.target.value)}
           sx={{ marginBottom: "20px" }}
-          value={formState.firstName}
-          onChange={handleInputChange}
         />
 
         <Typography variant="body1" fontWeight={600}>
@@ -86,13 +64,12 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
-          name="lastName"
           placeholder="Enter last name"
           type="text"
           variant="outlined"
+          value={user.lastName}
+          onChange={(e) => handleChange("lastName", e.target.value)}
           sx={{ marginBottom: "20px" }}
-          value={formState.lastName}
-          onChange={handleInputChange}
         />
 
         <Typography variant="body1" fontWeight={600}>
@@ -100,13 +77,12 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
-          name="email"
           placeholder="Enter mail address"
           type="email"
           variant="outlined"
+          value={user.email}
+          onChange={(e) => handleChange("email", e.target.value)}
           sx={{ marginBottom: "20px" }}
-          value={formState.email}
-          onChange={handleInputChange}
         />
 
         <Typography variant="body1" fontWeight={600}>
@@ -114,13 +90,12 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
-          name="password"
           placeholder="Enter password"
           type="password"
           variant="outlined"
+          value={user.password}
+          onChange={(e) => handleChange("password", e.target.value)}
           sx={{ marginBottom: "20px" }}
-          value={formState.password}
-          onChange={handleInputChange}
         />
 
         <Typography variant="h5" fontWeight={600} mt={4}>
@@ -136,12 +111,23 @@ const Signup: React.FC = () => {
             <Chip
               key={label}
               label={label}
-              onClick={() => handleChipClick(label)}
+              onClick={() =>
+                handleChange("organizationAffiliated", [
+                  ...user.organizationAffiliated,
+                  label,
+                ])
+              }
               sx={{
-                backgroundColor: selectedChips.includes(label)
+                backgroundColor: user.organizationAffiliated.includes(
+                  label as OrganizationAffiliated
+                )
                   ? "#C8E6C9"
                   : "transparent",
-                color: selectedChips.includes(label) ? "#000" : "",
+                color: user.organizationAffiliated.includes(
+                  label as OrganizationAffiliated
+                )
+                  ? "#000"
+                  : "",
                 border: "1px solid black",
                 borderRadius: "8px",
                 "&:hover": {
@@ -158,12 +144,11 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
-          name="organizationName"
           type="text"
           variant="outlined"
+          value={user.organizationName}
+          onChange={(e) => handleChange("organizationName", e.target.value)}
           sx={{ marginBottom: "20px" }}
-          value={formState.organizationName}
-          onChange={handleInputChange}
         />
 
         <Typography variant="body1" fontWeight={600}>
@@ -171,12 +156,11 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
-          name="institution"
           type="text"
           variant="outlined"
+          value={user.institution}
+          onChange={(e) => handleChange("institution", e.target.value)}
           sx={{ marginBottom: "20px" }}
-          value={formState.institution}
-          onChange={handleInputChange}
         />
 
         <Typography variant="body1" fontWeight={600}>
@@ -184,12 +168,11 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
-          name="address"
           type="text"
           variant="outlined"
+          value={user.address}
+          onChange={(e) => handleChange("address", e.target.value)}
           sx={{ marginBottom: "20px" }}
-          value={formState.address}
-          onChange={handleInputChange}
         />
 
         <Typography variant="body1" fontWeight={600}>
@@ -197,12 +180,11 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
-          name="city"
           type="text"
           variant="outlined"
+          value={user.city}
+          onChange={(e) => handleChange("city", e.target.value)}
           sx={{ marginBottom: "20px" }}
-          value={formState.city}
-          onChange={handleInputChange}
         />
 
         <Typography variant="body1" fontWeight={600}>
@@ -210,12 +192,11 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
-          name="country"
           type="text"
           variant="outlined"
+          value={user.country}
+          onChange={(e) => handleChange("country", e.target.value)}
           sx={{ marginBottom: "20px" }}
-          value={formState.country}
-          onChange={handleInputChange}
         />
 
         <Typography variant="body1" fontWeight={600}>
@@ -224,45 +205,81 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
-          name="professionalActivity"
           type="text"
           variant="outlined"
+          value={user.description}
+          onChange={(e) => handleChange("description", e.target.value)}
           sx={{ marginBottom: "20px" }}
-          value={formState.professionalActivity}
-          onChange={handleInputChange}
         />
 
-        <KeywordInput />
+        <KeywordInput
+          keywords={user.keywordsActivity}
+          setKeywords={(newKeywords) =>
+            handleChange("keywordsActivity", newKeywords)
+          }
+        />
 
         <TagInput
           label="Which field(s) might your professional activity be relevant to?"
           placeholder="+ add your tag"
           defaultTags={defaultTags}
+          tags={user.fieldsProfessionalActivity}
+          setTags={(newTags) =>
+            handleChange("fieldsProfessionalActivity", newTags)
+          }
         />
         <TagInput
           label="Methods and specific techniques"
           placeholder="+ add a method or a precise technique (e.g imaging, computational models and simulation, ...)"
           defaultTags={[]}
+          tags={user.skillsOrTechnical.specificTechnicsNames}
+          setTags={(newTags) =>
+            handleNestedChange(
+              "skillsOrTechnical",
+              "specificTechnicsNames",
+              newTags
+            )
+          }
         />
         <TagInput
           label="Equipment"
           placeholder="+ add a particular equipment (e.g. UHPLC system, ...)"
           defaultTags={[]}
+          tags={user.skillsOrTechnical.equipment}
+          setTags={(newTags) =>
+            handleNestedChange("skillsOrTechnical", "equipment", newTags)
+          }
         />
         <TagInput
           label="Models"
           placeholder="+ add a model (e.g. particular mouse model, ...)"
           defaultTags={[]}
+          tags={user.skillsOrTechnical.models}
+          setTags={(newTags) =>
+            handleNestedChange("skillsOrTechnical", "models", newTags)
+          }
         />
         <TagInput
           label="Chemical and biological products"
           placeholder="+ add a product (e.g. antibodies, cells, small molecules, ...)"
           defaultTags={[]}
+          tags={user.skillsOrTechnical.chemicalAndBiologicalProducts}
+          setTags={(newTags) =>
+            handleNestedChange(
+              "skillsOrTechnical",
+              "chemicalAndBiologicalProducts",
+              newTags
+            )
+          }
         />
         <TagInput
           label="Any other skill that you would like to mention"
           placeholder="+ add a skill"
           defaultTags={[]}
+          tags={user.skillsOrTechnical.otherSkills}
+          setTags={(newTags) =>
+            handleNestedChange("skillsOrTechnical", "otherSkills", newTags)
+          }
         />
       </Box>
 
@@ -288,12 +305,29 @@ const Signup: React.FC = () => {
             <Chip
               key={collaboration}
               label={collaboration}
-              onClick={() => handleChipClick(collaboration)}
+              onClick={() =>
+                handleNestedChange(
+                  "kindOfCollaborationWanted",
+                  "typeOfCollaboration",
+                  [
+                    ...user.kindOfCollaborationWanted.typeOfCollaboration,
+                    collaboration,
+                  ]
+                )
+              }
               sx={{
-                backgroundColor: selectedChips.includes(collaboration)
-                  ? "#C8E6C9"
-                  : "transparent",
-                color: selectedChips.includes(collaboration) ? "#000" : "",
+                backgroundColor:
+                  user.kindOfCollaborationWanted.typeOfCollaboration.includes(
+                    collaboration as TypeOfCollaboration
+                  )
+                    ? "#C8E6C9"
+                    : "transparent",
+                color:
+                  user.kindOfCollaborationWanted.typeOfCollaboration.includes(
+                    collaboration as TypeOfCollaboration
+                  )
+                    ? "#000"
+                    : "",
                 border: "1px solid black",
                 borderRadius: "8px",
                 "&:hover": {
@@ -314,12 +348,29 @@ const Signup: React.FC = () => {
             <Chip
               key={organization}
               label={organization}
-              onClick={() => handleChipClick(organization)}
+              onClick={() =>
+                handleNestedChange(
+                  "kindOfCollaborationWanted",
+                  "typeOfOrganization",
+                  [
+                    ...user.kindOfCollaborationWanted.typeOfOrganization,
+                    organization,
+                  ]
+                )
+              }
               sx={{
-                backgroundColor: selectedChips.includes(organization)
-                  ? "#C8E6C9"
-                  : "transparent",
-                color: selectedChips.includes(organization) ? "#000" : "",
+                backgroundColor:
+                  user.kindOfCollaborationWanted.typeOfOrganization.includes(
+                    organization as TypeOfOrganization
+                  )
+                    ? "#C8E6C9"
+                    : "transparent",
+                color:
+                  user.kindOfCollaborationWanted.typeOfOrganization.includes(
+                    organization as TypeOfOrganization
+                  )
+                    ? "#000"
+                    : "",
                 border: "1px solid black",
                 borderRadius: "8px",
                 "&:hover": {
@@ -340,12 +391,29 @@ const Signup: React.FC = () => {
             <Chip
               key={status}
               label={status}
-              onClick={() => handleChipClick(status)}
+              onClick={() =>
+                handleNestedChange(
+                  "kindOfCollaborationWanted",
+                  "projectProgressStatus",
+                  [
+                    ...user.kindOfCollaborationWanted.projectProgressStatus,
+                    status,
+                  ]
+                )
+              }
               sx={{
-                backgroundColor: selectedChips.includes(status)
-                  ? "#C8E6C9"
-                  : "transparent",
-                color: selectedChips.includes(status) ? "#000" : "",
+                backgroundColor:
+                  user.kindOfCollaborationWanted.projectProgressStatus.includes(
+                    status as ProjectProgressStatus
+                  )
+                    ? "#C8E6C9"
+                    : "transparent",
+                color:
+                  user.kindOfCollaborationWanted.projectProgressStatus.includes(
+                    status as ProjectProgressStatus
+                  )
+                    ? "#000"
+                    : "",
                 border: "1px solid black",
                 borderRadius: "8px",
                 "&:hover": {
@@ -366,12 +434,29 @@ const Signup: React.FC = () => {
             <Chip
               key={collabDuration}
               label={collabDuration}
-              onClick={() => handleChipClick(collabDuration)}
+              onClick={() =>
+                handleNestedChange(
+                  "kindOfCollaborationWanted",
+                  "collaborationDuration",
+                  [
+                    ...user.kindOfCollaborationWanted.collaborationDuration,
+                    collabDuration,
+                  ]
+                )
+              }
               sx={{
-                backgroundColor: selectedChips.includes(collabDuration)
-                  ? "#C8E6C9"
-                  : "transparent",
-                color: selectedChips.includes(collabDuration) ? "#000" : "",
+                backgroundColor:
+                  user.kindOfCollaborationWanted.collaborationDuration.includes(
+                    collabDuration as CollaborationDuration
+                  )
+                    ? "#C8E6C9"
+                    : "transparent",
+                color:
+                  user.kindOfCollaborationWanted.collaborationDuration.includes(
+                    collabDuration as CollaborationDuration
+                  )
+                    ? "#000"
+                    : "",
                 border: "1px solid black",
                 borderRadius: "8px",
                 "&:hover": {
@@ -398,7 +483,7 @@ const Signup: React.FC = () => {
             },
             alignSelf: "flex-end",
           }}
-          onClick={() => console.log("Validate", formState)}
+          onClick={() => console.log("Validate")}
         >
           Validate
         </Button>
