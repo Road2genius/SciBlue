@@ -1,6 +1,7 @@
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import ExplanationImage from "../../../assets/images/explanation.svg";
 
 const Explications: React.FC = () => {
   const classes = useStyles();
@@ -8,7 +9,7 @@ const Explications: React.FC = () => {
   return (
     <Box className={classes.root}>
       <Container maxWidth="xl" sx={{ marginY: "40px" }}>
-        <Grid container spacing={4}>
+        <Grid container>
           <Grid
             item
             xs={12}
@@ -20,15 +21,12 @@ const Explications: React.FC = () => {
             <Typography
               variant="h4"
               color="#CDE6D1"
-              sx={{
-                textShadow:
-                  "0px 0px 6px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25)",
-              }}
+              fontWeight={700}
+              className={classes.test}
             >
-              For who and for what ? Use cases
+              For who and for what ?<br /> Use cases
             </Typography>
           </Grid>
-
           <Grid item xs={12} md={8}>
             <Box>
               <Typography
@@ -40,7 +38,6 @@ const Explications: React.FC = () => {
                 You are an NGO and need to find an available and motivated
                 academic independent expert about air pollution?
               </Typography>
-
               <Typography
                 variant="body1"
                 color="#DAD7CD"
@@ -51,7 +48,6 @@ const Explications: React.FC = () => {
                 to apply to a specific grant for projects linked to <br />
                 climate change?
               </Typography>
-
               <Typography
                 variant="body1"
                 color="#DAD7CD"
@@ -59,10 +55,9 @@ const Explications: React.FC = () => {
                 paragraph
               >
                 You are an NGO and need an explanation about a scientific method
-                used to measure the decline of the bee <br />
-                population?
+                used to measure the decline of the bee
+                <br /> population?
               </Typography>
-
               <Typography
                 variant="body1"
                 color="#DAD7CD"
@@ -70,10 +65,9 @@ const Explications: React.FC = () => {
                 mb={3}
               >
                 You are a researcher and need to find quickly a collaborator
-                with a specific skill that can conduct a one-time <br />
-                experiment?
+                with a specific skill that can conduct a one-time
+                <br /> experiment?
               </Typography>
-
               <Typography
                 variant="body1"
                 color="#DAD7CD"
@@ -83,7 +77,6 @@ const Explications: React.FC = () => {
                 ... Whatever is your need, submit a collaboration request or
                 simply start an open discussion
               </Typography>
-
               <Box display="flex" justifyContent="center">
                 <Button
                   variant="contained"
@@ -102,7 +95,6 @@ const Explications: React.FC = () => {
                 >
                   Start a discussion
                 </Button>
-
                 <Button
                   variant="contained"
                   color="primary"
@@ -123,7 +115,6 @@ const Explications: React.FC = () => {
             </Box>
           </Grid>
         </Grid>
-
         <Grid container mt={10}>
           <Grid item xs={12} md={8}>
             <Box display="flex" flexDirection="column">
@@ -136,7 +127,6 @@ const Explications: React.FC = () => {
                 You are a researcher and your laboratory is open to work with
                 NGOs on a specific area?
               </Typography>
-
               <Typography
                 variant="body1"
                 color="#DAD7CD"
@@ -146,7 +136,6 @@ const Explications: React.FC = () => {
                 Your organization is open to fund academic research projects
                 linked to environmental crises?
               </Typography>
-
               <Typography
                 variant="body1"
                 color="#DAD7CD"
@@ -156,7 +145,6 @@ const Explications: React.FC = () => {
                 You are open to be contacted to be a partner to apply for a
                 grant on a new research project?
               </Typography>
-
               <Typography
                 variant="body1"
                 color="#DAD7CD"
@@ -167,7 +155,6 @@ const Explications: React.FC = () => {
                 cytometry expert and are willing to be
                 <br /> advised when a need is posted?
               </Typography>
-
               <Typography
                 variant="body1"
                 color="#DAD7CD"
@@ -178,7 +165,6 @@ const Explications: React.FC = () => {
                 be useful for any projects that <br /> responds to environmental
                 crisis?
               </Typography>
-
               <Typography
                 variant="body1"
                 color="#DAD7CD"
@@ -187,7 +173,6 @@ const Explications: React.FC = () => {
               >
                 ... Whatever is your case, create your profile
               </Typography>
-
               <Button
                 variant="contained"
                 color="primary"
@@ -208,10 +193,9 @@ const Explications: React.FC = () => {
               </Button>
             </Box>
           </Grid>
-
           <Grid item xs={12} md={4}>
             <Box>
-              <img src="https://placehold.co/400" alt="placeholder" />
+              <img src={ExplanationImage} alt="Explanation image" />
             </Box>
           </Grid>
         </Grid>
@@ -228,5 +212,11 @@ const useStyles = makeStyles({
     color: "#FFFFFF",
     padding: "40px 0",
     marginTop: "40px",
+  },
+  test: {
+    color: "#ecf0f1",
+    fontSize: "1.5em",
+    fontWeight: "600",
+    textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
   },
 });

@@ -3,7 +3,6 @@ import {
   AppBar,
   Box,
   Button,
-  Container,
   Drawer,
   IconButton,
   List,
@@ -63,7 +62,6 @@ const Navbar: React.FC = () => {
       >
         SciForEarth
       </Typography>
-
       <List>
         {buttons.map((button, index) => (
           <ListItem key={index} onClick={button.onClick}>
@@ -82,69 +80,59 @@ const Navbar: React.FC = () => {
       color="default"
       sx={{ borderBottom: "1px solid #e0e0e0" }}
     >
-      <Container maxWidth="xl">
-        <Toolbar>
-          <Typography
-            variant="h6"
-            fontWeight={800}
-            sx={{ flexGrow: 1, color: "#00796b", cursor: "pointer" }}
-            onClick={() => navigate("/")}
-          >
-            SciForEarth
-          </Typography>
-
-          <Box sx={{ display: { xs: "none", md: "flex" }, flexGrow: 1 }}>
-            {buttons.map((button) => (
-              <Button
-                key={button.name}
-                color="inherit"
-                onClick={button.onClick}
-                sx={{ textTransform: "none", mx: 1 }}
-              >
-                {button.name}
-              </Button>
-            ))}
-          </Box>
-
-          <Button
-            variant="outlined"
-            sx={{
-              display: { xs: "none", md: "block" },
-              textTransform: "none",
-              color: "#000",
-              borderRadius: "10px",
-              borderColor: "#000",
-              "&:hover": {
-                borderColor: "#00796b",
-                backgroundColor: "#00796b",
-                color: "#fff",
-              },
-            }}
-            onClick={() => navigate("/login")}
-          >
-            Login & Signup
-          </Button>
-
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
+      <Toolbar>
+        <Typography
+          variant="h6"
+          fontWeight={800}
+          sx={{ flexGrow: 1, color: "#00796b", cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        >
+          SciForEarth
+        </Typography>
+        <Box sx={{ display: { xs: "none", md: "flex" }, flexGrow: 1 }}>
+          {buttons.map((button) => (
+            <Button
+              key={button.name}
               color="inherit"
-              aria-label="open drawer"
-              edge="end"
-              onClick={toggleDrawer(true)}
+              onClick={button.onClick}
+              sx={{ textTransform: "none", mx: 1 }}
             >
-              <MenuIcon />
-            </IconButton>
-          </Box>
-
-          <Drawer
-            anchor="right"
-            open={drawerOpen}
-            onClose={toggleDrawer(false)}
+              {button.name}
+            </Button>
+          ))}
+        </Box>
+        <Button
+          variant="outlined"
+          sx={{
+            display: { xs: "none", md: "block" },
+            textTransform: "none",
+            color: "#000",
+            borderRadius: "10px",
+            borderColor: "#000",
+            "&:hover": {
+              borderColor: "#00796b",
+              backgroundColor: "#00796b",
+              color: "#fff",
+            },
+          }}
+          onClick={() => navigate("/login")}
+        >
+          Login & Signup
+        </Button>
+        <Box sx={{ display: { xs: "flex", md: "none" } }}>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="end"
+            onClick={toggleDrawer(true)}
           >
-            {list}
-          </Drawer>
-        </Toolbar>
-      </Container>
+            <MenuIcon />
+          </IconButton>
+        </Box>
+        <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+          {list}
+        </Drawer>
+      </Toolbar>
     </AppBar>
   );
 };

@@ -1,26 +1,24 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import SciCollabLogo from "../../../assets/images/sci-collab.svg";
+import HeaderImage from "../../../assets/images/header.svg";
 
 const Header: React.FC = () => {
   const classes = useStyles();
 
   return (
     <Box my={15}>
-      <Container maxWidth="xl" sx={{ mt: 4 }}>
+      <Container maxWidth="xl" sx={{ mt: 2 }}>
         <Typography
           variant="h3"
-          align="center"
           mb={8}
           gutterBottom
           color="#00796b"
-          fontWeight={700}
+          fontWeight={600}
         >
-          Accelerate change through independent scientific collaboration
+          Accelerate change through scientific collaboration
         </Typography>
-
-        <Grid container>
+        <Grid container gap={15}>
           <Grid item xs={12} md={6}>
             <Box
               display="flex"
@@ -29,9 +27,10 @@ const Header: React.FC = () => {
               height="100%"
             >
               <Typography variant="h5" fontWeight={600} paragraph>
-                We think that Science is essential to alert, <br /> comprehend,
-                explain and find solutions in response to <br /> the global
-                environmental crisis.
+                We think that Science is essential to measure, alert,
+                <br />
+                comprehend, explain and find solutions in response to <br />
+                the triple plantery crisis
               </Typography>
 
               <Typography variant="body1" fontWeight={400} paragraph>
@@ -58,8 +57,7 @@ const Header: React.FC = () => {
               </Typography>
             </Box>
           </Grid>
-
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={5}>
             <Box
               display="flex"
               flexDirection="column"
@@ -67,8 +65,8 @@ const Header: React.FC = () => {
               height="100%"
             >
               <img
-                src={SciCollabLogo}
-                alt="SciCollab"
+                src={HeaderImage}
+                alt="Header Image"
                 className={classes.headerImage}
               />
             </Box>

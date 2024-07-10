@@ -10,7 +10,6 @@ const LoginPage: React.FC = () => {
       <Typography variant="h4" fontWeight={700} color="#197278" mb={4}>
         Login
       </Typography>
-
       <Typography variant="body1" fontWeight={600}>
         Mail
       </Typography>
@@ -20,7 +19,6 @@ const LoginPage: React.FC = () => {
         variant="outlined"
         sx={{ marginBottom: "20px" }}
       />
-
       <Typography variant="body1" fontWeight={600}>
         Password
       </Typography>
@@ -31,16 +29,13 @@ const LoginPage: React.FC = () => {
         variant="outlined"
         sx={{ marginBottom: "20px" }}
       />
-
-      <Link href="#" color="#BCBDC7" alignSelf="flex-end">
+      <Link href="#" color="#BCBDC7" alignSelf="flex-end" fontWeight={700}>
         Forgot password?
       </Link>
-
       <Box display="flex" justifyContent="flex-end" alignItems="center" mt={4}>
-        <Link href="/signup" color="#197278">
+        <Link href="/signup" color="#197278" fontWeight={700}>
           Sign up
         </Link>
-
         <Button
           variant="contained"
           color="primary"
@@ -74,5 +69,6 @@ const useStyles = makeStyles({
     minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
+    padding: "20px",
   },
 });

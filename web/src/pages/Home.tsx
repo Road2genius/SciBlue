@@ -1,16 +1,16 @@
 import React from "react";
-import About from "../components/LandingPage/About/About";
-import Collaboration from "../components/LandingPage/Collaboration/Collaboration";
-import Explications from "../components/LandingPage/Explications/Explications";
+import AboutUs from "../components/LandingPage/AboutUs/AboutUs";
+import Features from "../components/LandingPage/Features/Features";
+import Explanations from "../components/LandingPage/Explanations/Explanations";
 import Header from "../components/LandingPage/Header/Header";
 
 const Home: React.FC = () => {
   return (
     <>
       <Header />
-      <Explications />
-      <Collaboration />
-      <About />
+      <Explanations />
+      <Features />
+      <AboutUs />
     </>
   );
 };

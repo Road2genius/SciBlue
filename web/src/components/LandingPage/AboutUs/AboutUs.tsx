@@ -1,7 +1,7 @@
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import React from "react";
 
-const About: React.FC = () => {
+const AboutUs: React.FC = () => {
   return (
     <Box bgcolor="#283D3B" p={1}>
       <Container maxWidth="xl" sx={{ mt: 5, mb: 5 }}>
@@ -14,7 +14,6 @@ const About: React.FC = () => {
         >
           SciForEarth in a nutshell
         </Typography>
-
         <Typography
           variant="h6"
           align="center"
@@ -26,7 +25,6 @@ const About: React.FC = () => {
           This is the first version of the plateform, we will keep making it
           better according to your feedback
         </Typography>
-
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
             <Typography
@@ -37,7 +35,6 @@ const About: React.FC = () => {
             >
               Why SciForEarth?
             </Typography>
-
             <Typography variant="body1" color="#DAD7CD" paragraph>
               We believe in a wolrd where planet, environment, biodiversity,
               ecology is <br /> central. At SciForEarth we want to be part of
@@ -48,7 +45,6 @@ const About: React.FC = () => {
               explain what is going on and what might happen. But also, Sicence
               can help <br /> design solutions for the change needed.
             </Typography>
-
             <Typography
               variant="h6"
               color="#DAD7CD"
@@ -57,7 +53,6 @@ const About: React.FC = () => {
             >
               What is SciForEarth?
             </Typography>
-
             <Typography variant="body1" color="#DAD7CD" paragraph>
               SciForEarth is a matchmaking plateforme design to ease links
               between <br />
@@ -65,7 +60,6 @@ const About: React.FC = () => {
               ect...). <br /> On this plateform, you can respeond to an open
               question or to a request for <br /> collaboration.
             </Typography>
-
             <Typography
               variant="h6"
               color="#DAD7CD"
@@ -74,7 +68,6 @@ const About: React.FC = () => {
             >
               How do we work?
             </Typography>
-
             <Typography variant="body1" color="#DAD7CD" paragraph>
               At SciForEarth, we are committed in creating digital solutions
               with a <br /> significant impact on society. To achieve this, our
@@ -84,7 +77,6 @@ const About: React.FC = () => {
               to improve the platform and make it as useful as possible for you.
             </Typography>
           </Grid>
-
           <Grid item xs={12} md={6}>
             <Typography
               variant="h6"
@@ -94,33 +86,43 @@ const About: React.FC = () => {
             >
               Who are we?
             </Typography>
-
             <Typography variant="body1" color="#DAD7CD" paragraph>
               Our team has solid experience in working for the public sector,
               particularly in <br /> developing innovative solutions with impact
               for the French Ministry of Health.
             </Typography>
-
+            <Typography
+              variant="body1"
+              color="#DAD7CD"
+              fontWeight={700}
+              sx={{ fontStyle: "italic" }}
+              gutterBottom
+            >
+              Antoine de Zélicourt
+            </Typography>
             <Typography variant="body1" color="#DAD7CD" paragraph>
-              <strong>Antoine de Zélicourt</strong>
-              <br />
               Antoine has a professional doctorate in pharmacy and a biology PhD
               from <br />
               the Paris Saclay University, followed by a postdoc experience. His
               knowledge <br /> and passion for science are at the heart of our
               innovative approach.
             </Typography>
-
+            <Typography
+              variant="body1"
+              color="#DAD7CD"
+              fontWeight={700}
+              sx={{ fontStyle: "italic" }}
+              gutterBottom
+            >
+              Caroline de Kerhor
+            </Typography>
             <Typography variant="body1" color="#DAD7CD" paragraph>
-              <strong>Caroline de Kerhor</strong>
-              <br />
               Caroline is also a pharmacist, she has a master degree in
               biological an <br /> Medical Science and a MBA at ESSEC buisiness
               School. Her expertise and <br /> passion for developing digital
               solutions with a strong societal impact guide <br />
               our deployments.
             </Typography>
-
             <Typography
               variant="h6"
               color="#DAD7CD"
@@ -129,7 +131,6 @@ const About: React.FC = () => {
             >
               A community
             </Typography>
-
             <Typography
               variant="body1"
               fontStyle="italic"
@@ -145,7 +146,6 @@ const About: React.FC = () => {
             </Typography>
           </Grid>
         </Grid>
-
         <Box display="flex" justifyContent="center" mt={6}>
           <Button
             variant="contained"
@@ -164,7 +164,6 @@ const About: React.FC = () => {
           >
             Create your profile
           </Button>
-
           <Button
             variant="contained"
             color="primary"
@@ -187,4 +186,4 @@ const About: React.FC = () => {
   );
 };
 
-export default About;
+export default AboutUs;

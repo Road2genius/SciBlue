@@ -1,15 +1,16 @@
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import React from "react";
-import map from "../../../assets/images/map.svg";
+import featuresImage from "../../../assets/images/features.svg";
 
-const Collaboration: React.FC = () => {
+const Features: React.FC = () => {
   return (
     <Box my={10}>
       <Container maxWidth="xl" sx={{ mt: 4 }}>
         <Grid container spacing={4} alignItems="center">
-          <Grid item xs={12} md={6} display="flex" flexDirection="column">
+          <Grid item xs={12} md={7} display="flex" flexDirection="column">
             <Typography variant="h4" fontWeight={700} color="#00796b" mb={4}>
-              Respond to a collaboration request or answer a question
+              Respond to a collaboration request or
+              <br /> answer a question
             </Typography>
 
             <Typography variant="body1" paragraph>
@@ -64,8 +65,10 @@ const Collaboration: React.FC = () => {
             </Box>
           </Grid>
 
-          <Grid item xs={12} md={6}>
-            <img src={map} alt="map of collaborator" width="80%" />
+          <Grid item xs={12} md={5}>
+            <Box>
+              <img src={featuresImage} alt="features image" />
+            </Box>
           </Grid>
         </Grid>
       </Container>
@@ -73,4 +76,4 @@ const Collaboration: React.FC = () => {
   );
 };
 
-export default Collaboration;
+export default Features;
