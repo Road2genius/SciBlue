@@ -6,6 +6,7 @@ export const ERROR_CODES = {
   VALIDATION_ERROR: 1002,
   DATABASE_ERROR: 1003,
   USER_NOT_FOUND: 1004,
+  USERS_NOT_FOUND: 1005,
 
   // Auth
   WRONG_PASSWORD: 1101,
@@ -19,6 +20,7 @@ export const ERROR_MESSAGES = {
   [ERROR_CODES.VALIDATION_ERROR]: "Validation error",
   [ERROR_CODES.DATABASE_ERROR]: "Database error",
   [ERROR_CODES.USER_NOT_FOUND]: "User not found",
+  [ERROR_CODES.USERS_NOT_FOUND]: "Users not found",
 
   // Auth
   [ERROR_CODES.WRONG_PASSWORD]: "Wrong password",

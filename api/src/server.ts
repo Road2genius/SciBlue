@@ -1,10 +1,13 @@
-import express, { ErrorRequestHandler } from "express";
+import express from "express";
 import connectDB from "./config/db";
 import userRoutes from "./routes/user/userRoutes";
 import authRoutes from "./routes/auth/authRoutes";
 import cors from "cors";
 import { errorHandler } from "./middleware/responseHandler";
 import bodyParser from "body-parser";
+import { BASE_ROUTE } from "./routes/http";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
@@ -19,8 +22,8 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 // Routes
-app.use("/api", userRoutes);
-app.use("/api", authRoutes);
+app.use(BASE_ROUTE, userRoutes);
+app.use(BASE_ROUTE, authRoutes);
 
 app.get("/", (req, res) => {
   res.send("");

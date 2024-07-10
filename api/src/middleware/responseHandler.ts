@@ -15,7 +15,7 @@ export const successHandler = <T>(
 ): void => {
   res.status(statusCode).json({
     success: true,
-    ...convertToPlainObject(data),
+    data,
   });
 };
 

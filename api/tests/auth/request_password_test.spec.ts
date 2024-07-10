@@ -1,0 +1,43 @@
+import request from "supertest";
+import mongoose from "mongoose";
+import app from "../../src/server";
+import User from "../../src/models/user/User";
+import { describe, expect, it, afterAll, beforeEach, afterEach } from "@jest/globals";
+import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
+import { createUserFixture, validUserData } from "../user/fixtures/user";
+import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
+
+// POST /api/request-password-reset
+describe("Auth request password reset", () => {
+  const url: string = BASE_ROUTE + "/" + ENDPOINT.AUTH.REQUEST_PASSWORD_RESET_PATH;
+
+  beforeEach(async () => {
+    await User.deleteMany({});
+    await createUserFixture(validUserData);
+  });
+
+  afterEach(async () => {
+    await User.deleteMany({});
+  });
+
+  afterAll(async () => {
+    await mongoose.connection.close();
+  });
+
+  // testing plan mailtrap reached, need to find another plan
+  // it("should send a password reset email", async () => {
+  //   const response = await request(app).post(url).send({ email: validUserData.email }).expect(HTTP_STATUS_CODES.OK);
+
+  //   expect(response.body.data.message).toBe("Email sent");
+  // });
+
+  it("should return an error if user not found", async () => {
+    const response = await request(app)
+      .post(url)
+      .send({ email: "notfound@example.com" })
+      .expect(HTTP_STATUS_CODES.NOT_FOUND);
+
+    expect(response.body.code).toBe(ERROR_CODES.USER_NOT_FOUND);
+    expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
+  });
+});
