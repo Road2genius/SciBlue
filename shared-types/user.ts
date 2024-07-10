@@ -49,12 +49,12 @@ export enum FieldsProfessionalActivity {
 }
 
 export function getEnumValues<T extends { [key: string]: string | number }>(enumObj: T): string[] {
-  return Object.values(enumObj).filter((value) => typeof value === "string") as string[];
+  return Object.values(enumObj).filter((value) => typeof value === "string") as string[]
 }
 
 export function isValidEnumOrCustomString<T extends { [key: string]: string | number }>(enumObj: T) {
-  const enumValues = getEnumValues(enumObj);
+  const enumValues = getEnumValues(enumObj)
   return (value: string): boolean => {
-    return enumValues.includes(value) || typeof value === "string";
-  };
+    return enumValues.includes(value) || typeof value === "string"
+  }
 }
