@@ -44,6 +44,7 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
+          size="small"
           placeholder="Enter first name"
           variant="outlined"
           type="text"
@@ -57,6 +58,7 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
+          size="small"
           placeholder="Enter last name"
           type="text"
           variant="outlined"
@@ -70,6 +72,7 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
+          size="small"
           placeholder="Enter mail address"
           type="email"
           variant="outlined"
@@ -83,6 +86,7 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
+          size="small"
           placeholder="Enter password"
           type="password"
           variant="outlined"
@@ -136,6 +140,7 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
+          size="small"
           type="text"
           variant="outlined"
           value={user.organizationName}
@@ -148,6 +153,7 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
+          size="small"
           type="text"
           variant="outlined"
           value={user.institution}
@@ -160,6 +166,7 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
+          size="small"
           type="text"
           variant="outlined"
           value={user.address}
@@ -172,6 +179,7 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
+          size="small"
           type="text"
           variant="outlined"
           value={user.city}
@@ -184,6 +192,7 @@ const Signup: React.FC = () => {
         </Typography>
         <TextField
           fullWidth
+          size="small"
           type="text"
           variant="outlined"
           value={user.country}
