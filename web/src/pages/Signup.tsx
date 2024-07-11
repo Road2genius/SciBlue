@@ -107,7 +107,7 @@ const Signup: React.FC = () => {
               onClick={() =>
                 handleChange("organizationAffiliated", [
                   ...user.organizationAffiliated,
-                  label,
+                  label as OrganizationAffiliated,
                 ])
               }
               sx={{
@@ -131,7 +131,6 @@ const Signup: React.FC = () => {
             />
           ))}
         </Box>
-
         <Typography variant="body1" fontWeight={600}>
           Organization name *
         </Typography>
@@ -191,13 +190,14 @@ const Signup: React.FC = () => {
           onChange={(e) => handleChange("country", e.target.value)}
           sx={{ marginBottom: "20px" }}
         />
-
         <Typography variant="body1" fontWeight={600}>
           Describe in a few words your professional activity (e.g your research
           topic for a laboratory, the actions carried out by your NGO, ...)
         </Typography>
         <TextField
           fullWidth
+          multiline
+          rows={5}
           type="text"
           variant="outlined"
           value={user.description}
@@ -211,16 +211,54 @@ const Signup: React.FC = () => {
             handleChange("keywordsActivity", newKeywords)
           }
         />
-
-        <TagInput
-          label="Which field(s) might your professional activity be relevant to?"
-          placeholder="+ add your tag"
-          tags={user.fieldsProfessionalActivity}
-          setTags={(newTags) =>
-            handleChange("fieldsProfessionalActivity", newTags)
-          }
-          nonDeletableTags={Object.values(FieldsProfessionalActivity)}
-        />
+        <Typography variant="body1" fontWeight={600} mt={4}>
+          Which field(s) might your professional activity be relevant to?
+        </Typography>
+        <Box className={classes.chipContainer}>
+          {Object.values(FieldsProfessionalActivity).map((label) => (
+            <Chip
+              key={label}
+              label={label}
+              onClick={() =>
+                handleNestedChange("fieldsProfessionalActivity", "generic", [
+                  ...user.fieldsProfessionalActivity.generic,
+                  label as FieldsProfessionalActivity,
+                ])
+              }
+              sx={{
+                backgroundColor:
+                  user.fieldsProfessionalActivity.generic.includes(
+                    label as FieldsProfessionalActivity
+                  )
+                    ? "#C8E6C9"
+                    : "transparent",
+                color: user.fieldsProfessionalActivity.generic.includes(
+                  label as FieldsProfessionalActivity
+                )
+                  ? "#000"
+                  : "",
+                border: "1px solid black",
+                borderRadius: "8px",
+                "&:hover": {
+                  backgroundColor: "#C8E6C9",
+                },
+              }}
+              clickable
+            />
+          ))}
+          <TagInput
+            label=""
+            placeholder="+ add your tag"
+            tags={user.fieldsProfessionalActivity.custom}
+            setTags={(newTags) =>
+              handleNestedChange(
+                "fieldsProfessionalActivity",
+                "custom",
+                newTags as string[]
+              )
+            }
+          />
+        </Box>
         <TagInput
           label="Methods and specific techniques"
           placeholder="+ add a method or a precise technique (e.g imaging, computational models and simulation, ...)"
@@ -229,7 +267,7 @@ const Signup: React.FC = () => {
             handleNestedChange(
               "skillsOrTechnical",
               "specificTechnicsNames",
-              newTags
+              newTags as string[]
             )
           }
         />
@@ -238,7 +276,11 @@ const Signup: React.FC = () => {
           placeholder="+ add a particular equipment (e.g. UHPLC system, ...)"
           tags={user.skillsOrTechnical.equipment}
           setTags={(newTags) =>
-            handleNestedChange("skillsOrTechnical", "equipment", newTags)
+            handleNestedChange(
+              "skillsOrTechnical",
+              "equipment",
+              newTags as string[]
+            )
           }
         />
         <TagInput
@@ -246,7 +288,11 @@ const Signup: React.FC = () => {
           placeholder="+ add a model (e.g. particular mouse model, ...)"
           tags={user.skillsOrTechnical.models}
           setTags={(newTags) =>
-            handleNestedChange("skillsOrTechnical", "models", newTags)
+            handleNestedChange(
+              "skillsOrTechnical",
+              "models",
+              newTags as string[]
+            )
           }
         />
         <TagInput
@@ -257,7 +303,7 @@ const Signup: React.FC = () => {
             handleNestedChange(
               "skillsOrTechnical",
               "chemicalAndBiologicalProducts",
-              newTags
+              newTags as string[]
             )
           }
         />
@@ -266,7 +312,11 @@ const Signup: React.FC = () => {
           placeholder="+ add a skill"
           tags={user.skillsOrTechnical.otherSkills}
           setTags={(newTags) =>
-            handleNestedChange("skillsOrTechnical", "otherSkills", newTags)
+            handleNestedChange(
+              "skillsOrTechnical",
+              "otherSkills",
+              newTags as string[]
+            )
           }
         />
       </Box>
@@ -299,7 +349,7 @@ const Signup: React.FC = () => {
                   "typeOfCollaboration",
                   [
                     ...user.kindOfCollaborationWanted.typeOfCollaboration,
-                    collaboration,
+                    collaboration as TypeOfCollaboration,
                   ]
                 )
               }
@@ -342,7 +392,7 @@ const Signup: React.FC = () => {
                   "typeOfOrganization",
                   [
                     ...user.kindOfCollaborationWanted.typeOfOrganization,
-                    organization,
+                    organization as TypeOfOrganization,
                   ]
                 )
               }
@@ -383,23 +433,18 @@ const Signup: React.FC = () => {
                 handleNestedChange(
                   "kindOfCollaborationWanted",
                   "projectProgressStatus",
-                  [
-                    ...user.kindOfCollaborationWanted.projectProgressStatus,
-                    status,
-                  ]
+                  status as ProjectProgressStatus
                 )
               }
               sx={{
                 backgroundColor:
-                  user.kindOfCollaborationWanted.projectProgressStatus.includes(
-                    status as ProjectProgressStatus
-                  )
+                  user.kindOfCollaborationWanted.projectProgressStatus ===
+                  status
                     ? "#C8E6C9"
                     : "transparent",
                 color:
-                  user.kindOfCollaborationWanted.projectProgressStatus.includes(
-                    status as ProjectProgressStatus
-                  )
+                  user.kindOfCollaborationWanted.projectProgressStatus ===
+                  status
                     ? "#000"
                     : "",
                 border: "1px solid black",
@@ -426,23 +471,18 @@ const Signup: React.FC = () => {
                 handleNestedChange(
                   "kindOfCollaborationWanted",
                   "collaborationDuration",
-                  [
-                    ...user.kindOfCollaborationWanted.collaborationDuration,
-                    collabDuration,
-                  ]
+                  collabDuration as CollaborationDuration
                 )
               }
               sx={{
                 backgroundColor:
-                  user.kindOfCollaborationWanted.collaborationDuration.includes(
-                    collabDuration as CollaborationDuration
-                  )
+                  user.kindOfCollaborationWanted.collaborationDuration ===
+                  collabDuration
                     ? "#C8E6C9"
                     : "transparent",
                 color:
-                  user.kindOfCollaborationWanted.collaborationDuration.includes(
-                    collabDuration as CollaborationDuration
-                  )
+                  user.kindOfCollaborationWanted.collaborationDuration ===
+                  collabDuration
                     ? "#000"
                     : "",
                 border: "1px solid black",
@@ -471,7 +511,7 @@ const Signup: React.FC = () => {
             },
             alignSelf: "flex-end",
           }}
-          onClick={() => console.log("Validate")}
+          onClick={() => console.log("Validate", user)}
         >
           Validate
         </Button>

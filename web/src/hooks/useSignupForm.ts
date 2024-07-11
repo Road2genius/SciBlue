@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { User } from "../../../shared-types/userData";
 
+type NestedKeyOf<T> = {
+  [K in keyof T]: T[K] extends object ? K : never;
+}[keyof T];
+
 const initialUserState: User = {
-  _id: "",
   firstName: "",
   lastName: "",
   email: "",
@@ -15,7 +18,10 @@ const initialUserState: User = {
   country: "",
   description: "",
   keywordsActivity: [],
-  fieldsProfessionalActivity: [],
+  fieldsProfessionalActivity: {
+    generic: [],
+    custom: []
+  },
   skillsOrTechnical: {
     specificTechnicsNames: [],
     equipment: [],
@@ -26,29 +32,30 @@ const initialUserState: User = {
   kindOfCollaborationWanted: {
     typeOfCollaboration: [],
     typeOfOrganization: [],
-    projectProgressStatus: [],
-    collaborationDuration: [],
+    projectProgressStatus: undefined,
+    collaborationDuration: undefined,
   },
-  createdAt: undefined,
-  updatedAt: undefined,
 };
 
 const useSignupForm = () => {
   const [user, setUser] = useState<User>(initialUserState);
 
-  const handleChange = (field: keyof User, value: any) => {
+  const handleChange = <K extends keyof User>(field: K, value: User[K]) => {
     setUser({ ...user, [field]: value });
   };
 
-  const handleNestedChange = (
-    section: keyof User,
-    field: string,
-    value: any
+  const handleNestedChange = <
+    K extends NestedKeyOf<User>,
+    NK extends keyof User[K],
+  >(
+    section: K,
+    field: NK,
+    value: User[K][NK]
   ) => {
     setUser({
       ...user,
       [section]: {
-        ...(user[section] as any),
+        ...user[section],
         [field]: value,
       },
     });
