@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Chip,
-  Divider,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Chip, Divider, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import {
@@ -16,6 +9,8 @@ import {
   TypeOfCollaboration,
   TypeOfOrganization,
 } from "../../../shared-types/user";
+import CustomTextField from "../components/CustomTextField/CustomTextField";
+import { getTextFieldsConfig } from "../components/CustomTextField/getTextFieldsConfig";
 import KeywordInput from "../components/KeywordInput/KeywordInput";
 import TagInput from "../components/TagInput/TagInput";
 import useSignupForm from "../hooks/useSignupForm";
@@ -23,6 +18,7 @@ import useSignupForm from "../hooks/useSignupForm";
 const Signup: React.FC = () => {
   const classes = useStyles();
   const { user, handleChange, handleNestedChange } = useSignupForm();
+  const textFields = getTextFieldsConfig(user);
 
   return (
     <>
@@ -39,59 +35,21 @@ const Signup: React.FC = () => {
           General information
         </Typography>
 
-        <Typography variant="body1" fontWeight={600}>
-          First name *
-        </Typography>
-        <TextField
-          fullWidth
-          placeholder="Enter first name"
-          variant="outlined"
-          type="text"
-          value={user.firstName}
-          onChange={(e) => handleChange("firstName", e.target.value)}
-          sx={{ marginBottom: "20px" }}
-        />
+        {textFields.slice(0, 4).map((field, index) => (
+          <CustomTextField
+            key={index}
+            label={field.label}
+            placeholder={field.placeholder}
+            type={field.type}
+            value={field.value}
+            onChange={(e) =>
+              handleChange(field.field as keyof typeof user, e.target.value)
+            }
+            required={field.required}
+          />
+        ))}
 
-        <Typography variant="body1" fontWeight={600}>
-          Last name *
-        </Typography>
-        <TextField
-          fullWidth
-          placeholder="Enter last name"
-          type="text"
-          variant="outlined"
-          value={user.lastName}
-          onChange={(e) => handleChange("lastName", e.target.value)}
-          sx={{ marginBottom: "20px" }}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Mail address *
-        </Typography>
-        <TextField
-          fullWidth
-          placeholder="Enter mail address"
-          type="email"
-          variant="outlined"
-          value={user.email}
-          onChange={(e) => handleChange("email", e.target.value)}
-          sx={{ marginBottom: "20px" }}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Password *
-        </Typography>
-        <TextField
-          fullWidth
-          placeholder="Enter password"
-          type="password"
-          variant="outlined"
-          value={user.password}
-          onChange={(e) => handleChange("password", e.target.value)}
-          sx={{ marginBottom: "20px" }}
-        />
-
-        <Typography variant="h5" fontWeight={600} mt={4}>
+        <Typography variant="h5" fontWeight={600} mt={1}>
           Professional activity and expertise
         </Typography>
 
@@ -132,78 +90,19 @@ const Signup: React.FC = () => {
           ))}
         </Box>
 
-        <Typography variant="body1" fontWeight={600}>
-          Organization name *
-        </Typography>
-        <TextField
-          fullWidth
-          type="text"
-          variant="outlined"
-          value={user.organizationName}
-          onChange={(e) => handleChange("organizationName", e.target.value)}
-          sx={{ marginBottom: "20px" }}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Institution (if relevant)
-        </Typography>
-        <TextField
-          fullWidth
-          type="text"
-          variant="outlined"
-          value={user.institution}
-          onChange={(e) => handleChange("institution", e.target.value)}
-          sx={{ marginBottom: "20px" }}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Address *
-        </Typography>
-        <TextField
-          fullWidth
-          type="text"
-          variant="outlined"
-          value={user.address}
-          onChange={(e) => handleChange("address", e.target.value)}
-          sx={{ marginBottom: "20px" }}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          City *
-        </Typography>
-        <TextField
-          fullWidth
-          type="text"
-          variant="outlined"
-          value={user.city}
-          onChange={(e) => handleChange("city", e.target.value)}
-          sx={{ marginBottom: "20px" }}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Country *
-        </Typography>
-        <TextField
-          fullWidth
-          type="text"
-          variant="outlined"
-          value={user.country}
-          onChange={(e) => handleChange("country", e.target.value)}
-          sx={{ marginBottom: "20px" }}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Describe in a few words your professional activity (e.g your research
-          topic for a laboratory, the actions carried out by your NGO, ...)
-        </Typography>
-        <TextField
-          fullWidth
-          type="text"
-          variant="outlined"
-          value={user.description}
-          onChange={(e) => handleChange("description", e.target.value)}
-          sx={{ marginBottom: "20px" }}
-        />
+        {textFields.slice(4).map((field, index) => (
+          <CustomTextField
+            key={index + 4}
+            label={field.label}
+            placeholder={field.placeholder}
+            type={field.type}
+            value={field.value}
+            onChange={(e) =>
+              handleChange(field.field as keyof typeof user, e.target.value)
+            }
+            required={field.required}
+          />
+        ))}
 
         <KeywordInput
           keywords={user.keywordsActivity}
