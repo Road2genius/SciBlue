@@ -23,6 +23,7 @@ const CustomTextField: React.FC<TextFieldProps> = ({
       {label} {required && "*"}
     </Typography>
     <TextField
+      size="small"
       fullWidth
       placeholder={placeholder}
       type={type}

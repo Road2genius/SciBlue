@@ -64,7 +64,7 @@ const KeywordInput: React.FC<KeywordInputProps> = ({
         </Button>
       </Box>
 
-      <Box mb={3}>
+      <Box>
         {keywords.map((keyword, index) => (
           <Chip
             key={index}
@@ -74,6 +74,7 @@ const KeywordInput: React.FC<KeywordInputProps> = ({
               backgroundColor: "#fff",
               border: "1px solid black",
               borderRadius: "8px",
+              marginX: "5px",
               "&:hover": {
                 backgroundColor: "#C8E6C9",
               },
