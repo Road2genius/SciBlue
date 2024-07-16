@@ -8,6 +8,7 @@ interface TextFieldProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
+  multiline?: boolean;
 }
 
 const CustomTextField: React.FC<TextFieldProps> = ({
@@ -17,20 +18,29 @@ const CustomTextField: React.FC<TextFieldProps> = ({
   value,
   onChange,
   required = false,
+  multiline = false,
 }) => (
   <>
-    <Typography variant="body1" fontWeight={600}>
+    <Typography variant="subtitle2" fontWeight={600}>
       {label} {required && "*"}
     </Typography>
     <TextField
       size="small"
-      fullWidth
       placeholder={placeholder}
       type={type}
       variant="outlined"
       value={value}
       onChange={onChange}
-      sx={{ marginBottom: "20px" }}
+      multiline={multiline}
+      rows={multiline ? 5 : undefined}
+      sx={{
+        marginBottom: "20px",
+        width: "100%",
+        maxWidth: multiline ? "100%" : "500px",
+        minWidth: multiline
+          ? { xs: "100%", sm: "100%", md: "900px" }
+          : { xs: "100%", sm: "100%", md: "0" },
+      }}
     />
   </>
 );

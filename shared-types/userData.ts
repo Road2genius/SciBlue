@@ -37,4 +37,7 @@ export type User = {
     projectProgressStatus?: ProjectProgressStatus;
     collaborationDuration?: CollaborationDuration;
   };
+  avatar: string
 };
+
+

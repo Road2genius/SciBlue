@@ -6,7 +6,7 @@ export const getTextFieldsConfig = (user: User) => [
     placeholder: "Enter first name",
     type: "text",
     value: user.firstName,
-    field: "firstName",
+    textfield: "firstName",
     required: true,
   },
   {
@@ -22,7 +22,7 @@ export const getTextFieldsConfig = (user: User) => [
     placeholder: "Enter mail address",
     type: "email",
     value: user.email,
-    field: "email",
+    textfield: "email",
     required: true,
   },
   {
@@ -30,7 +30,7 @@ export const getTextFieldsConfig = (user: User) => [
     placeholder: "Enter password",
     type: "password",
     value: user.password,
-    field: "password",
+    textfield: "password",
     required: true,
   },
   {
@@ -38,7 +38,7 @@ export const getTextFieldsConfig = (user: User) => [
     placeholder: "",
     type: "text",
     value: user.organizationName,
-    field: "organizationName",
+    textfield: "organizationName",
     required: true,
   },
   {
@@ -46,14 +46,14 @@ export const getTextFieldsConfig = (user: User) => [
     placeholder: "",
     type: "text",
     value: user.institution,
-    field: "institution",
+    textfield: "institution",
   },
   {
     label: "Address",
     placeholder: "",
     type: "text",
     value: user.address,
-    field: "address",
+    textfield: "address",
     required: true,
   },
   {
@@ -61,7 +61,7 @@ export const getTextFieldsConfig = (user: User) => [
     placeholder: "",
     type: "text",
     value: user.city,
-    field: "city",
+    textfield: "city",
     required: true,
   },
   {
@@ -69,7 +69,7 @@ export const getTextFieldsConfig = (user: User) => [
     placeholder: "",
     type: "text",
     value: user.country,
-    field: "country",
+    textfield: "country",
     required: true,
   },
   {
@@ -77,6 +77,7 @@ export const getTextFieldsConfig = (user: User) => [
     placeholder: "",
     type: "text",
     value: user.description,
-    field: "description",
+    textfield: "description",
+    multiline: true,
   },
 ];

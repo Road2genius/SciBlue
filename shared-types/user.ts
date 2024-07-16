@@ -17,11 +17,13 @@ export enum TypeOfCollaboration {
 }
 
 export enum TypeOfOrganization {
-  AcademicLaboratory = "Academic laboratory (including institutes, joint research units, ...)",
+  AcademicLaboratoryAndInstitute = "Academic laboratory and institute",
   AcademicTechnologyPlatform = "Academic technology platform",
+  NgoNonProfitOrganizationFoundation = "NGO, non-profit organization, foundation",
+  Government = "Government",
   CroAndPrivateTechnologyPlatform = "CRO and private technology platform",
   Corporation = "Corporation",
-  GovernmentNonProfitNgo = "Government, non-profit organization, NGO, foundations",
+  Freelancer = "Freelancer",
 }
 
 export enum ProjectProgressStatus {
@@ -48,13 +50,26 @@ export enum FieldsProfessionalActivity {
   PopulationMovement = "Population movement",
 }
 
-export function getEnumValues<T extends { [key: string]: string | number }>(enumObj: T): string[] {
-  return Object.values(enumObj).filter((value) => typeof value === "string") as string[]
+export type SkillsOrTechnicalKeys =
+  | "specificTechnicsNames"
+  | "equipment"
+  | "models"
+  | "chemicalAndBiologicalProducts"
+  | "otherSkills";
+
+export function getEnumValues<T extends { [key: string]: string | number }>(
+  enumObj: T
+): string[] {
+  return Object.values(enumObj).filter(
+    (value) => typeof value === "string"
+  ) as string[];
 }
 
-export function isValidEnumOrCustomString<T extends { [key: string]: string | number }>(enumObj: T) {
-  const enumValues = getEnumValues(enumObj)
+export function isValidEnumOrCustomString<
+  T extends { [key: string]: string | number }
+>(enumObj: T) {
+  const enumValues = getEnumValues(enumObj);
   return (value: string): boolean => {
-    return enumValues.includes(value) || typeof value === "string"
-  }
+    return enumValues.includes(value) || typeof value === "string";
+  };
 }
