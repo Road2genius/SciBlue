@@ -1,56 +1,42 @@
 import {
+  Avatar,
   Box,
   Button,
   Chip,
   Divider,
-  TextField,
+  Grid,
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React, { useState } from "react";
-import KeywordInput from "../components/KeywordInput/KeywordInput";
-import TagInput from "../components/TagInput/TagInput";
+import React from "react";
 import {
-  chipData,
-  chipDataCollaboration,
-  chipDataCollaborationDuration,
-  chipDataOrganization,
-  chipDataStatus,
-  defaultTags,
-} from "../data/chipData";
-import { formData } from "../types/formData.type";
+  CollaborationDuration,
+  FieldsProfessionalActivity,
+  OrganizationAffiliated,
+  ProjectProgressStatus,
+  SkillsOrTechnicalKeys,
+  TypeOfCollaboration,
+  TypeOfOrganization,
+} from "../../../shared-types/user";
+import CustomTextField from "../components/CustomTextField/CustomTextField";
+import { getTextFieldsConfig } from "../components/CustomTextField/getTextFieldsConfig";
+import { getSkillsOrTechnicalProperties } from "../components/CustomTag/skillsOrTechnicalProperties";
+import useSignupForm from "../hooks/useSignupForm";
+import CustomTagInput from "../components/CustomTag/CustomTag";
 
 const Signup: React.FC = () => {
   const classes = useStyles();
-  const [selectedChips, setSelectedChips] = useState<string[]>([]);
-  const [formState, setFormState] = useState<formData>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    organizationName: "",
-    institution: "",
-    address: "",
-    city: "",
-    country: "",
-    professionalActivity: "",
-  });
-
-  const handleChipClick = (label: string): void => {
-    setSelectedChips((prevSelected) =>
-      prevSelected.includes(label)
-        ? prevSelected.filter((chip) => chip !== label)
-        : [...prevSelected, label]
-    );
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setFormState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const {
+    user,
+    getAvatarByOrganization,
+    handleChangeChip,
+    handleChange,
+    handleNestedChip,
+    handleNestedChange,
+    handleValidate,
+  } = useSignupForm();
+  const textFields = getTextFieldsConfig(user);
+  const skillsOrTechnicalProperties = getSkillsOrTechnicalProperties(user);
 
   return (
     <>
@@ -58,223 +44,185 @@ const Signup: React.FC = () => {
         <Typography variant="h4" fontWeight={700} color="#197278">
           Sign up
         </Typography>
-
-        <Typography variant="body1" fontWeight={700} mb={4}>
+        <Typography variant="body2" mb={4} color="grey">
           * information requested
         </Typography>
-
-        <Typography variant="h5" fontWeight={600} mb={4}>
-          General information
-        </Typography>
-
-        <Typography variant="body1" fontWeight={600}>
-          First name *
-        </Typography>
-        <TextField
-          fullWidth
-          name="firstName"
-          placeholder="Enter first name"
-          variant="outlined"
-          type="text"
-          sx={{ marginBottom: "20px" }}
-          value={formState.firstName}
-          onChange={handleInputChange}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Last name *
-        </Typography>
-        <TextField
-          fullWidth
-          name="lastName"
-          placeholder="Enter last name"
-          type="text"
-          variant="outlined"
-          sx={{ marginBottom: "20px" }}
-          value={formState.lastName}
-          onChange={handleInputChange}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Mail address *
-        </Typography>
-        <TextField
-          fullWidth
-          name="email"
-          placeholder="Enter mail address"
-          type="email"
-          variant="outlined"
-          sx={{ marginBottom: "20px" }}
-          value={formState.email}
-          onChange={handleInputChange}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Password *
-        </Typography>
-        <TextField
-          fullWidth
-          name="password"
-          placeholder="Enter password"
-          type="password"
-          variant="outlined"
-          sx={{ marginBottom: "20px" }}
-          value={formState.password}
-          onChange={handleInputChange}
-        />
-
-        <Typography variant="h5" fontWeight={600} mt={4}>
-          Professional activity and expertise
-        </Typography>
-
-        <Typography variant="body1" fontWeight={600} mt={4}>
-          What type of organization are you affiliated with?
-        </Typography>
-
-        <Box className={classes.chipContainer}>
-          {chipData.map((label) => (
-            <Chip
-              key={label}
-              label={label}
-              onClick={() => handleChipClick(label)}
-              sx={{
-                backgroundColor: selectedChips.includes(label)
-                  ? "#C8E6C9"
-                  : "transparent",
-                color: selectedChips.includes(label) ? "#000" : "",
-                border: "1px solid black",
-                borderRadius: "8px",
-                "&:hover": {
-                  backgroundColor: "#C8E6C9",
-                },
-              }}
-              clickable
+        <Grid container>
+          <Grid item xs={10}>
+            <Typography variant="h5" fontWeight={600} mb={4}>
+              General information
+            </Typography>
+            {textFields.slice(0, 4).map((field, index) => (
+              <CustomTextField
+                key={index}
+                label={field.label}
+                placeholder={field.placeholder}
+                type={field.type}
+                value={field.value}
+                onChange={(e) =>
+                  handleChange(
+                    field.textfield as keyof typeof user,
+                    e.target.value
+                  )
+                }
+                required={field.required}
+              />
+            ))}
+            <Typography variant="h5" fontWeight={600} mt={1}>
+              Professional activity and expertise
+            </Typography>
+            <Typography variant="body1" fontWeight={600} mt={4}>
+              What type of organization are you affiliated with?
+            </Typography>
+            <Box className={classes.chipContainer}>
+              {Object.values(OrganizationAffiliated).map((label) => (
+                <Chip
+                  key={label}
+                  label={label}
+                  onClick={() => {
+                    handleChangeChip("organizationAffiliated", label);
+                  }}
+                  sx={{
+                    margin: "5px",
+                    backgroundColor: user.organizationAffiliated.includes(
+                      label as OrganizationAffiliated
+                    )
+                      ? "#C8E6C9"
+                      : "transparent",
+                    color: user.organizationAffiliated.includes(
+                      label as OrganizationAffiliated
+                    )
+                      ? "#000"
+                      : "",
+                    border: "1px solid black",
+                    borderRadius: "8px",
+                    "&:hover": {
+                      backgroundColor: "#C8E6C9",
+                    },
+                  }}
+                  clickable
+                />
+              ))}
+            </Box>
+          </Grid>
+          <Grid item xs={2}>
+            <Avatar
+              variant="square"
+              src={getAvatarByOrganization(user.organizationAffiliated)}
+              sx={{ width: 146, height: 146, borderRadius: "8px" }}
+            ></Avatar>
+          </Grid>
+        </Grid>
+        <Box my={3}>
+          {textFields.slice(4).map((field, index) => (
+            <CustomTextField
+              key={index + 4}
+              label={field.label}
+              placeholder={field.placeholder}
+              type={field.type}
+              value={field.value}
+              onChange={(e) =>
+                handleChange(
+                  field.textfield as keyof typeof user,
+                  e.target.value
+                )
+              }
+              required={field.required}
+              multiline={field.multiline}
             />
           ))}
         </Box>
-
-        <Typography variant="body1" fontWeight={600}>
-          Organization name *
+        <CustomTagInput
+          title="Add relevant keywords to your activity"
+          label="add a keyword"
+          customTags={user.keywordsActivity}
+          setCustomTags={(newCustomTags) =>
+            handleChange("keywordsActivity", newCustomTags)
+          }
+        />
+        <Typography variant="body1" fontWeight={600} mt={2}>
+          Which field(s) might your professional activity be relevant to?
         </Typography>
-        <TextField
-          fullWidth
-          name="organizationName"
-          type="text"
-          variant="outlined"
-          sx={{ marginBottom: "20px" }}
-          value={formState.organizationName}
-          onChange={handleInputChange}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Institution (if relevant)
+        <Box className={classes.chipContainer} my={2}>
+          <>
+            {Object.values(FieldsProfessionalActivity).map((label) => (
+              <Chip
+                key={label}
+                label={label}
+                onClick={() =>
+                  handleNestedChip(
+                    "fieldsProfessionalActivity",
+                    "generic",
+                    label
+                  )
+                }
+                sx={{
+                  margin: "5px",
+                  backgroundColor:
+                    user.fieldsProfessionalActivity.generic.includes(
+                      label as FieldsProfessionalActivity
+                    )
+                      ? "#C8E6C9"
+                      : "transparent",
+                  color: user.fieldsProfessionalActivity.generic.includes(
+                    label as FieldsProfessionalActivity
+                  )
+                    ? "#000"
+                    : "",
+                  border: "1px solid black",
+                  borderRadius: "8px",
+                  "&:hover": {
+                    backgroundColor: "#C8E6C9",
+                  },
+                }}
+                clickable
+              />
+            ))}
+            <CustomTagInput
+              label="add your tag"
+              customTags={user.fieldsProfessionalActivity.custom ?? []}
+              setCustomTags={(newCustomTags) =>
+                handleNestedChange(
+                  "fieldsProfessionalActivity",
+                  "custom",
+                  newCustomTags
+                )
+              }
+            />
+          </>
+        </Box>
+        <Typography variant="h6" fontWeight={600} mt={3} mb={2}>
+          Inform any skills or technical specifics that would be interesting to
+          mention for a potential collaborator
         </Typography>
-        <TextField
-          fullWidth
-          name="institution"
-          type="text"
-          variant="outlined"
-          sx={{ marginBottom: "20px" }}
-          value={formState.institution}
-          onChange={handleInputChange}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Address *
-        </Typography>
-        <TextField
-          fullWidth
-          name="address"
-          type="text"
-          variant="outlined"
-          sx={{ marginBottom: "20px" }}
-          value={formState.address}
-          onChange={handleInputChange}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          City *
-        </Typography>
-        <TextField
-          fullWidth
-          name="city"
-          type="text"
-          variant="outlined"
-          sx={{ marginBottom: "20px" }}
-          value={formState.city}
-          onChange={handleInputChange}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Country *
-        </Typography>
-        <TextField
-          fullWidth
-          name="country"
-          type="text"
-          variant="outlined"
-          sx={{ marginBottom: "20px" }}
-          value={formState.country}
-          onChange={handleInputChange}
-        />
-
-        <Typography variant="body1" fontWeight={600}>
-          Describe in a few words your professional activity (e.g your research
-          topic for a laboratory, the actions carried out by your NGO, ...)
-        </Typography>
-        <TextField
-          fullWidth
-          name="professionalActivity"
-          type="text"
-          variant="outlined"
-          sx={{ marginBottom: "20px" }}
-          value={formState.professionalActivity}
-          onChange={handleInputChange}
-        />
-
-        <KeywordInput />
-
-        <TagInput
-          label="Which field(s) might your professional activity be relevant to?"
-          placeholder="+ add your tag"
-          defaultTags={defaultTags}
-        />
-        <TagInput
-          label="Methods and specific techniques"
-          placeholder="+ add a method or a precise technique (e.g imaging, computational models and simulation, ...)"
-          defaultTags={[]}
-        />
-        <TagInput
-          label="Equipment"
-          placeholder="+ add a particular equipment (e.g. UHPLC system, ...)"
-          defaultTags={[]}
-        />
-        <TagInput
-          label="Models"
-          placeholder="+ add a model (e.g. particular mouse model, ...)"
-          defaultTags={[]}
-        />
-        <TagInput
-          label="Chemical and biological products"
-          placeholder="+ add a product (e.g. antibodies, cells, small molecules, ...)"
-          defaultTags={[]}
-        />
-        <TagInput
-          label="Any other skill that you would like to mention"
-          placeholder="+ add a skill"
-          defaultTags={[]}
-        />
+        {skillsOrTechnicalProperties.map((section) => (
+          <Box my={1} key={section.key}>
+            <CustomTagInput
+              subtitle={section.subtitle}
+              label={section.label}
+              customTags={section.keywords}
+              setCustomTags={(newCustomTags) =>
+                handleNestedChange(
+                  "skillsOrTechnical",
+                  section.key as SkillsOrTechnicalKeys,
+                  newCustomTags
+                )
+              }
+            />
+          </Box>
+        ))}
       </Box>
-
       <Divider
         variant="middle"
         sx={{
           marginTop: "40px",
-          marginBottom: "40px",
+          marginBottom: "20px",
+          width: "80%",
+          marginLeft: "40px",
         }}
       />
       <Box className={classes.root}>
-        <Typography variant="h4" fontWeight={600} mt={4}>
+        <Typography variant="h6" fontWeight={600} mt={1}>
           Inform the community for what kind of collaboration would you like to
           be contacted for :
         </Typography>
@@ -282,18 +230,32 @@ const Signup: React.FC = () => {
         <Typography variant="body1" fontWeight={600} mt={4}>
           Type of collaboration you are interested in
         </Typography>
-
         <Box className={classes.chipContainer}>
-          {chipDataCollaboration.map((collaboration) => (
+          {Object.values(TypeOfCollaboration).map((collaboration) => (
             <Chip
               key={collaboration}
               label={collaboration}
-              onClick={() => handleChipClick(collaboration)}
+              onClick={() =>
+                handleNestedChip(
+                  "kindOfCollaborationWanted",
+                  "typeOfCollaboration",
+                  collaboration
+                )
+              }
               sx={{
-                backgroundColor: selectedChips.includes(collaboration)
-                  ? "#C8E6C9"
-                  : "transparent",
-                color: selectedChips.includes(collaboration) ? "#000" : "",
+                margin: "5px",
+                backgroundColor:
+                  user.kindOfCollaborationWanted.typeOfCollaboration.includes(
+                    collaboration as TypeOfCollaboration
+                  )
+                    ? "#C8E6C9"
+                    : "transparent",
+                color:
+                  user.kindOfCollaborationWanted.typeOfCollaboration.includes(
+                    collaboration as TypeOfCollaboration
+                  )
+                    ? "#000"
+                    : "",
                 border: "1px solid black",
                 borderRadius: "8px",
                 "&:hover": {
@@ -304,22 +266,35 @@ const Signup: React.FC = () => {
             />
           ))}
         </Box>
-
         <Typography variant="body1" fontWeight={600}>
           With what type of organization would you be willing to collaborate?
         </Typography>
-
         <Box className={classes.chipContainer}>
-          {chipDataOrganization.map((organization) => (
+          {Object.values(TypeOfOrganization).map((organization) => (
             <Chip
               key={organization}
               label={organization}
-              onClick={() => handleChipClick(organization)}
+              onClick={() =>
+                handleNestedChip(
+                  "kindOfCollaborationWanted",
+                  "typeOfOrganization",
+                  organization
+                )
+              }
               sx={{
-                backgroundColor: selectedChips.includes(organization)
-                  ? "#C8E6C9"
-                  : "transparent",
-                color: selectedChips.includes(organization) ? "#000" : "",
+                margin: "5px",
+                backgroundColor:
+                  user.kindOfCollaborationWanted.typeOfOrganization.includes(
+                    organization as TypeOfOrganization
+                  )
+                    ? "#C8E6C9"
+                    : "transparent",
+                color:
+                  user.kindOfCollaborationWanted.typeOfOrganization.includes(
+                    organization as TypeOfOrganization
+                  )
+                    ? "#000"
+                    : "",
                 border: "1px solid black",
                 borderRadius: "8px",
                 "&:hover": {
@@ -330,22 +305,33 @@ const Signup: React.FC = () => {
             />
           ))}
         </Box>
-
         <Typography variant="body1" fontWeight={600}>
           Project’s progress status
         </Typography>
-
         <Box className={classes.chipContainer}>
-          {chipDataStatus.map((status) => (
+          {Object.values(ProjectProgressStatus).map((status) => (
             <Chip
               key={status}
               label={status}
-              onClick={() => handleChipClick(status)}
+              onClick={() =>
+                handleNestedChange(
+                  "kindOfCollaborationWanted",
+                  "projectProgressStatus",
+                  status
+                )
+              }
               sx={{
-                backgroundColor: selectedChips.includes(status)
-                  ? "#C8E6C9"
-                  : "transparent",
-                color: selectedChips.includes(status) ? "#000" : "",
+                margin: "5px",
+                backgroundColor:
+                  user.kindOfCollaborationWanted.projectProgressStatus ===
+                  status
+                    ? "#C8E6C9"
+                    : "transparent",
+                color:
+                  user.kindOfCollaborationWanted.projectProgressStatus ===
+                  status
+                    ? "#000"
+                    : "",
                 border: "1px solid black",
                 borderRadius: "8px",
                 "&:hover": {
@@ -356,22 +342,33 @@ const Signup: React.FC = () => {
             />
           ))}
         </Box>
-
         <Typography variant="body1" fontWeight={600}>
           Collaboration duration
         </Typography>
-
         <Box className={classes.chipContainer}>
-          {chipDataCollaborationDuration.map((collabDuration) => (
+          {Object.values(CollaborationDuration).map((collabDuration) => (
             <Chip
               key={collabDuration}
               label={collabDuration}
-              onClick={() => handleChipClick(collabDuration)}
+              onClick={() =>
+                handleNestedChange(
+                  "kindOfCollaborationWanted",
+                  "collaborationDuration",
+                  collabDuration
+                )
+              }
               sx={{
-                backgroundColor: selectedChips.includes(collabDuration)
-                  ? "#C8E6C9"
-                  : "transparent",
-                color: selectedChips.includes(collabDuration) ? "#000" : "",
+                margin: "5px",
+                backgroundColor:
+                  user.kindOfCollaborationWanted.collaborationDuration ===
+                  collabDuration
+                    ? "#C8E6C9"
+                    : "transparent",
+                color:
+                  user.kindOfCollaborationWanted.collaborationDuration ===
+                  collabDuration
+                    ? "#000"
+                    : "",
                 border: "1px solid black",
                 borderRadius: "8px",
                 "&:hover": {
@@ -382,7 +379,6 @@ const Signup: React.FC = () => {
             />
           ))}
         </Box>
-
         <Button
           variant="contained"
           color="primary"
@@ -398,7 +394,7 @@ const Signup: React.FC = () => {
             },
             alignSelf: "flex-end",
           }}
-          onClick={() => console.log("Validate", formState)}
+          onClick={() => handleValidate()}
         >
           Validate
         </Button>
@@ -412,8 +408,8 @@ export default Signup;
 const useStyles = makeStyles({
   root: {
     marginTop: "40px",
-    marginLeft: "80px",
-    maxWidth: "720px",
+    margin: "20px",
+    maxWidth: "980px",
     minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
@@ -421,9 +417,9 @@ const useStyles = makeStyles({
   chipContainer: {
     display: "flex",
     flexWrap: "wrap",
-    gap: "10px",
-    marginTop: "20px",
-    marginBottom: "20px",
+    marginTop: "5px",
+    marginBottom: "5px",
+    alignItems: "center",
   },
   chip: {
     padding: "10px",

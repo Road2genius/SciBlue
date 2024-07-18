@@ -1,11 +1,11 @@
-import request from "supertest";
+import { afterAll, afterEach, beforeEach, describe, expect, it } from "@jest/globals";
 import mongoose from "mongoose";
-import app from "../../src/server";
-import User from "../../src/models/user/User";
-import { describe, expect, it, afterAll, beforeEach, afterEach } from "@jest/globals";
+import request from "supertest";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
-import { createUserFixture, validUserData } from "../user/fixtures/user";
+import User from "../../src/models/user/User";
 import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
+import app from "../../src/server";
+import { createUserFixture, validUserData } from "../user/fixtures/user";
 
 // POST /api/request-password-reset
 describe("Auth request password reset", () => {

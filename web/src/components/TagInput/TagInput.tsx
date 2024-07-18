@@ -6,22 +6,25 @@ import { TagInputProps } from "../../types/tagInput.type";
 const TagInput: React.FC<TagInputProps> = ({
   label,
   placeholder,
-  defaultTags,
+  tags,
+  setTags,
+  nonDeletableTags = [],
 }) => {
   const classes = useStyles();
-  const defaultTagList: string[] = defaultTags;
-  const [customTags, setCustomTags] = useState<string[]>([]);
   const [tag, setTag] = useState<string>("");
 
   const handleAddPersonnalisedTag = (): void => {
-    if (tag.trim() !== "" && !customTags.includes(tag.trim())) {
-      setCustomTags([...customTags, tag.trim()]);
+    if (tag.trim() !== "" && !tags.includes(tag.trim())) {
+      setTags([...tags, tag.trim()]);
       setTag("");
     }
   };
 
-  const handleDeleteTag = (tagToDelete: string) => (): void =>
-    setCustomTags(customTags.filter((tag) => tag !== tagToDelete));
+  const handleDeleteTag = (tagToDelete: string) => (): void => {
+    if (!nonDeletableTags.includes(tagToDelete)) {
+      setTags(tags.filter((tag) => tag !== tagToDelete));
+    }
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent): void => {
     if (event.key === "Enter") {
@@ -33,7 +36,7 @@ const TagInput: React.FC<TagInputProps> = ({
     <Box>
       <Typography variant="h6">{label}</Typography>
       <Box className={classes.chipContainer}>
-        {defaultTagList.map((tag, index) => (
+        {nonDeletableTags.map((tag, index) => (
           <Chip
             key={index}
             label={tag}
@@ -47,7 +50,7 @@ const TagInput: React.FC<TagInputProps> = ({
             }}
           />
         ))}
-        {customTags.map((tag, index) => (
+        {tags.map((tag, index) => (
           <Chip
             key={index}
             label={tag}
@@ -62,9 +65,6 @@ const TagInput: React.FC<TagInputProps> = ({
             }}
           />
         ))}
-      </Box>
-
-      <Box mt={1} mb={1}>
         <TextField
           label={placeholder}
           variant="outlined"
@@ -73,7 +73,6 @@ const TagInput: React.FC<TagInputProps> = ({
           onChange={(e) => setTag(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-
         <Button
           variant="outlined"
           onClick={handleAddPersonnalisedTag}
@@ -87,7 +86,6 @@ const TagInput: React.FC<TagInputProps> = ({
               backgroundColor: "#006666",
             },
             color: "#fff",
-            marginLeft: "10px",
           }}
         >
           Add

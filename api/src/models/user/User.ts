@@ -1,4 +1,3 @@
-import mongoose, { Document, Schema } from "mongoose";
 import {
   CollaborationDuration,
   FieldsProfessionalActivity,
@@ -7,8 +6,8 @@ import {
   ProjectProgressStatus,
   TypeOfCollaboration,
   TypeOfOrganization,
-  getEnumValues
-} from "../constants/user";
+} from "@shared/user";
+import mongoose, { Document, Schema } from "mongoose";
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
   firstName: string;
@@ -23,7 +22,10 @@ export interface IUser extends Document {
   country: string;
   description: string;
   keywordsActivity: string[];
-  fieldsProfessionalActivity: (FieldsProfessionalActivity | string)[];
+  fieldsProfessionalActivity: {
+    generic: FieldsProfessionalActivity[];
+    custom: string[];
+  };
   skillsOrTechnical: {
     specificTechnicsNames: string[];
     equipment: string[];
@@ -34,8 +36,8 @@ export interface IUser extends Document {
   kindOfCollaborationWanted: {
     typeOfCollaboration: TypeOfCollaboration[];
     typeOfOrganization: TypeOfOrganization[];
-    projectProgressStatus: ProjectProgressStatus[];
-    collaborationDuration: CollaborationDuration[];
+    projectProgressStatus: ProjectProgressStatus;
+    collaborationDuration: CollaborationDuration;
   };
   createdAt?: Date;
   updatedAt?: Date;
@@ -49,7 +51,7 @@ const userSchema: Schema = new Schema(
     password: { type: String, required: true },
     organizationAffiliated: {
       type: [{ type: String, enum: OrganizationAffiliated }],
-      required: true
+      required: true,
     },
     organizationName: { type: String, required: true },
     institution: { type: String, required: true },
@@ -59,11 +61,11 @@ const userSchema: Schema = new Schema(
     description: { type: String },
     keywordsActivity: { type: [String] },
     fieldsProfessionalActivity: {
-      type: [String],
-      validate: {
-        validator: (values: string[]) => values.every(isValidEnumOrCustomString(FieldsProfessionalActivity)),
-        message: (props: { value: string[] }) => `${props.value} is not a valid research specificity!`,
+      generic: {
+        type: [String],
+        enum: FieldsProfessionalActivity,
       },
+      custom: { type: [String] },
     },
     skillsOrTechnical: {
       specificTechnicsNames: { type: [String] },
