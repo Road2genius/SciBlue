@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
 import { createUserFixture, generateTestToken, validUserData } from "./fixtures/user";
 import User, { IUser } from "../../src/models/user/User";
-import { describe, expect, it, afterAll, beforeEach } from "@jest/globals";
 
 // DELETE /api/users/:id
 describe("Delete a user", () => {
