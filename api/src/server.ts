@@ -2,6 +2,7 @@ import express from "express";
 import connectDB from "./config/db";
 import userRoutes from "./routes/user/userRoutes";
 import authRoutes from "./routes/auth/authRoutes";
+import requestRoutes from "./routes/request/requestRoutes";
 import cors from "cors";
 import { errorHandler } from "./middleware/responseHandler";
 import bodyParser from "body-parser";
@@ -25,6 +26,7 @@ app.use(bodyParser.json());
 // Routes
 app.use(BASE_ROUTE, userRoutes);
 app.use(BASE_ROUTE, authRoutes);
+app.use(BASE_ROUTE, requestRoutes);
 
 app.get("/", (req, res) => {
   res.send("");
