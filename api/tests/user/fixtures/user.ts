@@ -1,7 +1,7 @@
 import User, { IUser } from "../../../src/models/user/User";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { OrganizationAffiliated } from "../../../src/models/constants/user";
+import { OrganizationAffiliated } from "../../../../shared-types/user";
 
 export const validUserData: Partial<IUser> = {
   firstName: "John",

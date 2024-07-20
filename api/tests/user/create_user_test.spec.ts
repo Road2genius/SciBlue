@@ -2,7 +2,6 @@ import request from "supertest";
 import app from "../../src/server";
 import mongoose from "mongoose";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
-import { describe, expect, it, afterAll } from "@jest/globals";
 import { createUserFixture, validUserData } from "./fixtures/user";
 import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
 

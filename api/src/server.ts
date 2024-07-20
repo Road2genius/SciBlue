@@ -7,6 +7,7 @@ import { errorHandler } from "./middleware/responseHandler";
 import bodyParser from "body-parser";
 import { BASE_ROUTE } from "./routes/http";
 import dotenv from "dotenv";
+import http from "http";
 dotenv.config();
 
 const app = express();
@@ -32,10 +33,26 @@ app.get("/", (req, res) => {
 app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
+let server: http.Server | undefined;
 if (process.env.NODE_ENV !== "test") {
-  app.listen(port, () => {
+  server = app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
   });
 }
+
+// Handle graceful shutdown
+const shutdown = () => {
+  if (server) {
+    server.close(() => {
+      console.log("Server closed");
+      process.exit(0);
+    });
+  } else {
+    process.exit(0);
+  }
+};
+
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);
 
 export default app;

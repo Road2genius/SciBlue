@@ -1,12 +1,11 @@
 import {
   CollaborationDuration,
   FieldsProfessionalActivity,
-  isValidEnumOrCustomString,
   OrganizationAffiliated,
   ProjectProgressStatus,
   TypeOfCollaboration,
   TypeOfOrganization,
-} from "@shared/user";
+} from "../../../../shared-types/user";
 import mongoose, { Document, Schema } from "mongoose";
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;

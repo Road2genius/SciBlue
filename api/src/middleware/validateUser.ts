@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../constants/error/errorCodes";
 import { CustomError } from "../types/error/customError";
 import { isStrongPassword, isValidEmail } from "../utils/validators";
-import { OrganizationAffiliated } from "../models/constants/user";
+import { OrganizationAffiliated } from "../../../shared-types/user";
 
 export const createUserValidationRules = (): ValidationChain[] => [
   body("firstName").notEmpty().withMessage("First Name is required"),

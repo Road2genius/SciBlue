@@ -13,7 +13,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["node_modules/@types"],
+    "types": ["jest"]
   },
-  "include": ["src/**/*", "tests/*.ts", "../shared-types/**/*"]
+  "include": ["src/**/*", "tests/**/*", "../shared-types/**/*"]
 }
