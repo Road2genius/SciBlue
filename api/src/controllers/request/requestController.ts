@@ -47,6 +47,7 @@ export const getRequestById = async (req: Request, res: Response, next: NextFunc
   }
 };
 
+// deleteRequest requests the server to delete a collaboration request
 export const deleteRequest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const requestId: string = req.params.id;
@@ -80,6 +81,7 @@ export const deleteRequest = async (req: Request, res: Response, next: NextFunct
   }
 };
 
+// updateRequest requests the server to update a collaboration request
 export const updateRequest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const requestId: string = req.params.id;
@@ -115,6 +117,7 @@ export const updateRequest = async (req: Request, res: Response, next: NextFunct
   }
 };
 
+// getRequestsList requests the server to get a list of collaboration request
 export const getRequestsList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const requests: IRequest[] = await RequestCollab.find();

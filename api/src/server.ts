@@ -8,15 +8,9 @@ import { errorHandler } from "./middleware/responseHandler";
 import bodyParser from "body-parser";
 import { BASE_ROUTE } from "./routes/http";
 import dotenv from "dotenv";
-import http from "http";
 dotenv.config();
 
 const app = express();
-
-// Connect to DB only if not in test environment
-if (process.env.NODE_ENV !== "test") {
-  connectDB();
-}
 
 // Middleware
 app.use(cors());
@@ -34,27 +28,15 @@ app.get("/", (req, res) => {
 
 app.use(errorHandler);
 
-const port = process.env.PORT || 5000;
-let server: http.Server | undefined;
+const PORT = process.env.PORT || 4321; //todo: move env file
+
 if (process.env.NODE_ENV !== "test") {
-  server = app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+  connectDB().then(() => {
+    console.log(`⚡️[api]: express...`);
+    app.listen(PORT, () => {
+      console.log(`⚡️[api]: express http://localhost:${PORT}`);
+    });
   });
 }
-
-// Handle graceful shutdown
-const shutdown = () => {
-  if (server) {
-    server.close(() => {
-      console.log("Server closed");
-      process.exit(0);
-    });
-  } else {
-    process.exit(0);
-  }
-};
-
-process.on("SIGINT", shutdown);
-process.on("SIGTERM", shutdown);
 
 export default app;

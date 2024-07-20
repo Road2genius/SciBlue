@@ -20,7 +20,7 @@ export interface IRequest extends Document {
   userId: mongoose.Types.ObjectId;
   project: {
     projectTitle: string;
-    summary?: string;
+    summary: string;
     fieldsProfessionalActivity: {
       generic: FieldsProfessionalActivity[];
       custom: string[];

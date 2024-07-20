@@ -17,10 +17,6 @@ describe("Update a user", () => {
     token = generateTestToken(user);
   });
 
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
-
   it("should update a user", async () => {
     const updatedData = { firstName: "Jane", lastName: "Smith" };
 

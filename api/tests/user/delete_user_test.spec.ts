@@ -17,10 +17,6 @@ describe("Delete a user", () => {
     token = generateTestToken(user);
   });
 
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
-
   it("should delete a user", async () => {
     await request(app)
       .delete(`/api/users/${userId}`)

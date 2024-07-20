@@ -1,5 +1,4 @@
 import request from "supertest";
-import mongoose from "mongoose";
 import app from "../../src/server";
 import User from "../../src/models/user/User";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
@@ -16,10 +15,6 @@ describe("Get Users List", () => {
 
   afterEach(async () => {
     await User.deleteMany({});
-  });
-
-  afterAll(async () => {
-    await mongoose.connection.close();
   });
 
   it("should return the list of users", async () => {

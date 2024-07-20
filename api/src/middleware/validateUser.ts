@@ -80,7 +80,7 @@ export const updateUserValidationRules = (): ValidationChain[] => [
 ];
 
 // Middleware to check for validation errors
-export const validate = (req: Request, res: Response, next: NextFunction) => {
+export const mappingErrors = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);

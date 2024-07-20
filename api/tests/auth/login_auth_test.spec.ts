@@ -19,10 +19,6 @@ describe("Auth login", () => {
     await User.deleteMany({});
   });
 
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
-
   it("should login successfully with valid credentials", async () => {
     const response = await request(app)
       .post(url)

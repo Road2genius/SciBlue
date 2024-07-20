@@ -21,10 +21,6 @@ describe("Get a user", () => {
     await User.deleteMany({});
   });
 
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
-
   it("should get a user", async () => {
     const response = await request(app)
       .get(`/api/users/${userId}`)

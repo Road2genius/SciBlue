@@ -19,10 +19,6 @@ describe("Auth request password reset", () => {
     await User.deleteMany({});
   });
 
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
-
   // testing plan mailtrap reached, need to find another plan
   // it("should send a password reset email", async () => {
   //   const response = await request(app).post(url).send({ email: validUserData.email }).expect(HTTP_STATUS_CODES.OK);
