@@ -21,6 +21,9 @@ jobs:
       - name: Change directory to /api
         run: cd api
 
+      - name: Install pnpm
+        run: npm install -g pnpm
+
       - name: Install dependencies
         run: pnpm install
         working-directory: ./api
