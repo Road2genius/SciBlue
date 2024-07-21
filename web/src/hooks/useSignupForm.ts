@@ -8,6 +8,10 @@ import FreelanceAvatar from "../assets/avatars/freelance.svg";
 import NgoNonProfitAvatar from "../assets/avatars/ngo-non-profit.svg";
 import CorporationAvatar from "../assets/avatars/corporation.svg";
 import GovernmentAvatar from "../assets/avatars/government.svg";
+import { createUserAction } from "../actions/user/user";
+import { useNavigate } from "react-router-dom";
+import { getErrorMessage } from "../utils/handleError";
+import { useSnackbar } from "notistack";
 
 type NestedKeyOf<T> = {
   [K in keyof T]: T[K] extends object ? K : never;
@@ -48,6 +52,8 @@ const initialUserState: User = {
 
 const useSignupForm = () => {
   const [user, setUser] = useState<User>(initialUserState);
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   const avatarUrls: { [key in OrganizationAffiliated]: string } = {
     [OrganizationAffiliated.AcademicLaboratoryAndInstitute]: AcademicAvatar,
@@ -155,7 +161,17 @@ const useSignupForm = () => {
     });
   };
 
-  const handleValidate = (): void => {
+  const handleValidate = async (): Promise<void> => {
+    try {
+      await createUserAction(user);
+      enqueueSnackbar("Signup successful", { variant: "success" });
+      navigate("/login");
+    } catch (err) {
+      const errorMessages = getErrorMessage(err).split(",");
+      errorMessages.forEach((message) =>
+        enqueueSnackbar(message, { variant: "error" })
+      );
+    }
     console.log("user:", user);
   };
 

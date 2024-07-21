@@ -38,6 +38,7 @@ export interface IUser extends Document {
     projectProgressStatus: ProjectProgressStatus;
     collaborationDuration: CollaborationDuration;
   };
+  avatar: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -53,7 +54,7 @@ const userSchema: Schema = new Schema(
       required: true,
     },
     organizationName: { type: String, required: true },
-    institution: { type: String, required: true },
+    institution: { type: String },
     address: { type: String, required: true },
     city: { type: String, required: true },
     country: { type: String, required: true },
@@ -91,6 +92,7 @@ const userSchema: Schema = new Schema(
         enum: CollaborationDuration,
       },
     },
+    avatar: { type: String },
   },
   { timestamps: true }
 );

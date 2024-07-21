@@ -42,11 +42,13 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
       expiresIn: "1h",
     });
 
-    successHandler<{ token: string }>(
+    successHandler<{ token: string; userId: string; avatar: string }>(
       req,
       res,
       {
         token,
+        userId: user._id.toString(),
+        avatar: user.avatar,
       },
       HTTP_STATUS_CODES.OK
     );

@@ -1,6 +1,7 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
+  Avatar,
   Box,
   Button,
   Drawer,
@@ -9,15 +10,21 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useUserContext } from "../../context/UserContext";
+import { avatars, getAvatarKey } from "./avatar";
 
 const Navbar: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate: NavigateFunction = useNavigate();
+  const { userContext, setUserContext } = useUserContext();
 
   const buttons: {
     name: string;
@@ -41,6 +48,13 @@ const Navbar: React.FC = () => {
       }
       setDrawerOpen(open);
     };
+
+  const handleLogout = () => {
+    setUserContext(null);
+    localStorage.removeItem("token");
+    navigate("/login");
+    setAnchorEl(null);
+  };
 
   const list: JSX.Element = (
     <Box
@@ -101,37 +115,69 @@ const Navbar: React.FC = () => {
             </Button>
           ))}
         </Box>
-        <Button
-          variant="outlined"
-          sx={{
-            display: { xs: "none", md: "block" },
-            textTransform: "none",
-            color: "#000",
-            borderRadius: "10px",
-            borderColor: "#000",
-            "&:hover": {
-              borderColor: "#00796b",
-              backgroundColor: "#00796b",
-              color: "#fff",
-            },
-          }}
-          onClick={() => navigate("/login")}
-        >
-          Login & Signup
-        </Button>
-        <Box sx={{ display: { xs: "flex", md: "none" } }}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
-            onClick={toggleDrawer(true)}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Box>
-        <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-          {list}
-        </Drawer>
+        {userContext ? (
+          <>
+            <Avatar
+              src={avatars[getAvatarKey(userContext.avatar)]}
+              alt="User Avatar"
+              sx={{ cursor: "pointer" }}
+              onClick={(e) => setAnchorEl(e.currentTarget)}
+            ></Avatar>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={() => setAnchorEl(null)}
+            >
+              <MenuItem
+                onClick={() => {
+                  navigate("/profile");
+                  setAnchorEl(null);
+                }}
+              >
+                Profile Information
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </>
+        ) : (
+          <>
+            <Button
+              variant="outlined"
+              sx={{
+                display: { xs: "none", md: "block" },
+                textTransform: "none",
+                color: "#000",
+                borderRadius: "10px",
+                borderColor: "#000",
+                "&:hover": {
+                  borderColor: "#00796b",
+                  backgroundColor: "#00796b",
+                  color: "#fff",
+                },
+              }}
+              onClick={() => navigate("/login")}
+            >
+              Login & Signup
+            </Button>
+            <Box sx={{ display: { xs: "flex", md: "none" } }}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="end"
+                onClick={toggleDrawer(true)}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Box>
+            <Drawer
+              anchor="right"
+              open={drawerOpen}
+              onClose={toggleDrawer(false)}
+            >
+              {list}
+            </Drawer>
+          </>
+        )}
       </Toolbar>
     </AppBar>
   );
