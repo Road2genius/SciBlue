@@ -24,7 +24,8 @@
     "mongoose": "^8.4.3",
     "node-cache": "^5.1.2",
     "nodemailer": "^6.9.14",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
