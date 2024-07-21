@@ -19,10 +19,6 @@ describe("Auth reset password", () => {
     await User.deleteMany({});
   });
 
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
-
   const url: string = BASE_ROUTE + "/" + ENDPOINT.AUTH.RESET_PASSWORD_PATH;
   const token = "valid-reset-token";
   const newPassword = "NewStrongPassword123!";

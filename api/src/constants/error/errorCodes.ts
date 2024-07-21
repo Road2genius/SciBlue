@@ -12,6 +12,10 @@ export const ERROR_CODES = {
   WRONG_PASSWORD: 1101,
   INTERNAL_ERROR: 1102,
   UNAUTHORIZED: 1103,
+
+  // Request
+  REQUEST_NOT_FOUND: 1201,
+  REQUESTS_NOT_FOUND: 1202,
 };
 
 export const ERROR_MESSAGES = {
@@ -26,6 +30,10 @@ export const ERROR_MESSAGES = {
   [ERROR_CODES.WRONG_PASSWORD]: "Wrong password",
   [ERROR_CODES.INTERNAL_ERROR]: "Internal server error",
   [ERROR_CODES.UNAUTHORIZED]: "Content unauthorized",
+
+  // Request
+  [ERROR_CODES.REQUEST_NOT_FOUND]: "Request not found",
+  [ERROR_CODES.REQUESTS_NOT_FOUND]: "Requests not found",
 };
 
 export const HTTP_STATUS_CODES = {

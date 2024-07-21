@@ -13,4 +13,11 @@ export const ENDPOINT = {
     REQUEST_PASSWORD_RESET_PATH: `/request-password-reset`,
     RESET_PASSWORD_PATH: `/reset-password`,
   },
+  REQUEST: {
+    CREATE_REQUEST_PATH: `/requests`,
+    GET_REQUEST_BY_ID_PATH: `/requests/:id`,
+    DELETE_REQUEST_PATH: `/requests/:id`,
+    UPDATE_REQUEST_PATH: `/requests/:id`,
+    GET_REQUESTS_LIST_PATH: `/requests`
+  },
 };

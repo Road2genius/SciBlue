@@ -20,7 +20,7 @@ export interface IRequest extends Document {
   userId: mongoose.Types.ObjectId;
   project: {
     projectTitle: string;
-    summary?: string;
+    summary: string;
     fieldsProfessionalActivity: {
       generic: FieldsProfessionalActivity[];
       custom: string[];
@@ -70,7 +70,6 @@ const requestSchema: Schema = new Schema(
         generic: {
           type: [String],
           enum: FieldsProfessionalActivity,
-          required: true,
         },
         custom: { type: [String] },
       },
@@ -85,7 +84,7 @@ const requestSchema: Schema = new Schema(
           enum: CollaborationDuration,
           required: true,
         },
-        estimation: { type: String, required: true },
+        estimation: { type: String },
       },
     },
     kindOfCollaborationWanted: {
@@ -102,7 +101,6 @@ const requestSchema: Schema = new Schema(
       organizationAffiliated: {
         type: [String],
         enum: OrganizationAffiliated,
-        required: true,
       },
       specificTechnicsNames: { type: [String] },
       equipment: { type: [String] },
@@ -116,6 +114,6 @@ const requestSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-const Request = mongoose.model<IRequest>("Request", requestSchema);
+const RequestCollab = mongoose.model<IRequest>("RequestCollab", requestSchema);
 
-export default Request;
+export default RequestCollab;
