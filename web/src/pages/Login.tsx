@@ -4,10 +4,12 @@ import React, { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
+import { useSnackbar } from "notistack";
 
 const LoginPage: React.FC = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const { login, loading, error } = useLogin();
   const { setUserContext } = useUserContext();
   const [email, setEmail] = useState("");
@@ -19,6 +21,7 @@ const LoginPage: React.FC = () => {
       if (response) {
         const { userId, avatar } = response;
         setUserContext({ userId, avatar });
+        enqueueSnackbar("Login successful", { variant: "success" });
         navigate("/");
       }
     });

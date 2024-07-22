@@ -1,15 +1,5 @@
 import { login } from "../../services/auth/auth";
-
-interface LoginData {
-  email: string;
-  password: string;
-}
-
-interface AuthResponse {
-  token: string;
-  userId: string;
-  avatar: string;
-}
+import { AuthResponse, LoginData } from "../../types/auth/auth";
 
 export const loginUser = async (data: LoginData): Promise<AuthResponse> => {
   try {

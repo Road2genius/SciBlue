@@ -51,7 +51,13 @@ describe("Create a user", () => {
     expect(response.body.code).toBe(ERROR_CODES.VALIDATION_ERROR);
     expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
     expect(response.body.details).toContain(
-      "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character (@, $, !, %, *, ?, &, #)"
+      `Password must:
+        - Be at least 8 characters long
+        - Contain at least one lowercase letter
+        - Contain at least one uppercase letter
+        - Contain at least one number
+        - Contain at least one special character
+      `
     );
   });
 

@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { loginUser } from "../actions/auth/auth";
+import { AuthResponse } from "../types/auth/auth";
+import { useSnackbar } from "notistack";
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const [error, setError] = useState<string | null>(null);
-
-  interface AuthResponse {
-    token: string;
-    userId: string;
-    avatar: string;
-  }
 
   const login = async (
     email: string,
@@ -21,7 +18,7 @@ export const useLogin = () => {
       const user = await loginUser({ email, password });
       return user;
     } catch (err) {
-      setError("Login failed");
+      enqueueSnackbar("Failed to log in", { variant: "error" });
     } finally {
       setLoading(false);
     }

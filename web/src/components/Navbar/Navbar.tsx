@@ -19,9 +19,11 @@ import React, { useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserContext";
 import { avatars, getAvatarKey } from "./avatar";
+import { useSnackbar } from "notistack";
 
 const Navbar: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate: NavigateFunction = useNavigate();
   const { userContext, setUserContext } = useUserContext();
@@ -52,6 +54,7 @@ const Navbar: React.FC = () => {
   const handleLogout = () => {
     setUserContext(null);
     localStorage.removeItem("token");
+    enqueueSnackbar("Logout successful", { variant: "warning" });
     navigate("/login");
     setAnchorEl(null);
   };
