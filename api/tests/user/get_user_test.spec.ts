@@ -2,7 +2,7 @@ import request from "supertest";
 import app from "../../src/server";
 import mongoose from "mongoose";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
-import User, { IUser } from "../../src/models/user/User";
+import UserModel, { IUser } from "../../src/models/user/User";
 import { createUserFixture, generateTestToken, validUserData } from "./fixtures/user";
 
 // GET /api/users/:id
@@ -11,14 +11,14 @@ describe("Get a user", () => {
   let token: string;
 
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
     const user: IUser = await createUserFixture(validUserData);
     userId = user._id.toString();
     token = generateTestToken(user);
   });
 
   afterEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
   });
 
   it("should get a user", async () => {

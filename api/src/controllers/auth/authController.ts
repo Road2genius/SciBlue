@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import User, { IUser } from "../../models/user/User";
+import UserModel, { IUser } from "../../models/user/User";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../constants/error/errorCodes";
 import { CustomError } from "../../types/error/customError";
 import jwt from "jsonwebtoken";
@@ -20,7 +20,7 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
       throw error;
     }
 
-    const user: IUser | null = await User.findOne({ email });
+    const user: IUser | null = await UserModel.findOne({ email });
 
     if (!user) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
@@ -60,7 +60,7 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
 export const requestPasswordReset = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ email });
+    const user = await UserModel.findOne({ email });
 
     if (!user) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
@@ -121,7 +121,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
       throw error;
     }
 
-    const user = await User.findOne({ email });
+    const user = await UserModel.findOne({ email });
 
     if (!user) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);

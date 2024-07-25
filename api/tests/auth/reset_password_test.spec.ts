@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import request from "supertest";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
 import cache from "../../src/middleware/auth";
-import User from "../../src/models/user/User";
+import UserModel from "../../src/models/user/User";
 import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
 import app from "../../src/server";
 import { createUserFixture, validUserData } from "../user/fixtures/user";
@@ -11,12 +11,12 @@ import { createUserFixture, validUserData } from "../user/fixtures/user";
 // POST /api/reset-password
 describe("Auth reset password", () => {
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
     await createUserFixture(validUserData);
   });
 
   afterEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
   });
 
   const url: string = BASE_ROUTE + "/" + ENDPOINT.AUTH.RESET_PASSWORD_PATH;
@@ -25,14 +25,14 @@ describe("Auth reset password", () => {
   const email = validUserData.email;
 
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
     await createUserFixture(validUserData);
 
     if (email) cache.set(email, token);
   });
 
   afterEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
     cache.flushAll();
   });
 
@@ -49,7 +49,7 @@ describe("Auth reset password", () => {
 
     expect(response.body.data.message).toBe("Password reset successfully");
 
-    const user = await User.findOne({ email });
+    const user = await UserModel.findOne({ email });
     const isPasswordMatch = await bcrypt.compare(newPassword, user!.password);
     expect(isPasswordMatch).toBe(true);
   });
@@ -66,7 +66,7 @@ describe("Auth reset password", () => {
   });
 
   it("should return an error if the user is not found", async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
 
     const response = await request(app)
       .post(url)

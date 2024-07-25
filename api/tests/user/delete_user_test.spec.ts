@@ -3,7 +3,7 @@ import app from "../../src/server";
 import mongoose from "mongoose";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
 import { createUserFixture, generateTestToken, validUserData } from "./fixtures/user";
-import User, { IUser } from "../../src/models/user/User";
+import UserModel, { IUser } from "../../src/models/user/User";
 
 // DELETE /api/users/:id
 describe("Delete a user", () => {
@@ -11,7 +11,7 @@ describe("Delete a user", () => {
   let token: string;
 
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
     const user: IUser = await createUserFixture(validUserData);
     userId = user._id.toString();
     token = generateTestToken(user);
@@ -23,7 +23,7 @@ describe("Delete a user", () => {
       .set("Authorization", `Bearer ${token}`)
       .expect(HTTP_STATUS_CODES.OK);
 
-    const user = await User.findById(userId);
+    const user = await UserModel.findById(userId);
     expect(user).toBeNull();
   });
 

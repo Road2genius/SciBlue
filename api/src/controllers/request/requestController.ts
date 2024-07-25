@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { successHandler } from "../../middleware/responseHandler";
-import RequestCollab, { IRequest } from "../../models/requests/Request";
+import RequestModel, { IRequest } from "../../models/requests/Request";
 import { convertToPlainObject } from "../../utils/convertPlainObject";
 import mongoose from "mongoose";
 import { CustomError } from "../../types/error/customError";
@@ -10,7 +10,7 @@ const dot = require("dot-object");
 // createRequest requests the server to create a new collaboration request
 export const createRequest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const request: IRequest = new RequestCollab({
+    const request: IRequest = new RequestModel({
       ...req.body,
     });
 
@@ -33,7 +33,7 @@ export const getRequestById = async (req: Request, res: Response, next: NextFunc
       throw error;
     }
 
-    const request: IRequest | null = await RequestCollab.findById(requestId);
+    const request: IRequest | null = await RequestModel.findById(requestId);
 
     if (!request) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.REQUEST_NOT_FOUND]);
@@ -59,7 +59,7 @@ export const deleteRequest = async (req: Request, res: Response, next: NextFunct
       throw error;
     }
 
-    const request: IRequest | null = await RequestCollab.findByIdAndDelete(requestId);
+    const request: IRequest | null = await RequestModel.findByIdAndDelete(requestId);
 
     if (!request) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.REQUEST_NOT_FOUND]);
@@ -95,7 +95,7 @@ export const updateRequest = async (req: Request, res: Response, next: NextFunct
 
     const updatedRequestData: IRequest = dot.dot(req.body);
 
-    const request: IRequest | null = await RequestCollab.findByIdAndUpdate(
+    const request: IRequest | null = await RequestModel.findByIdAndUpdate(
       requestId,
       { $set: updatedRequestData },
       {
@@ -120,7 +120,7 @@ export const updateRequest = async (req: Request, res: Response, next: NextFunct
 // getRequestsList requests the server to get a list of collaboration request
 export const getRequestsList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const requests: IRequest[] = await RequestCollab.find();
+    const requests: IRequest[] = await RequestModel.find();
 
     if (!requests.length) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.REQUESTS_NOT_FOUND]);

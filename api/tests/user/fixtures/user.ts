@@ -1,4 +1,4 @@
-import User, { IUser } from "../../../src/models/user/User";
+import UserModel, { IUser } from "../../../src/models/user/User";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { OrganizationAffiliated } from "../../../../shared-types/user";
@@ -36,7 +36,7 @@ export const createUserFixture = async (userData: Partial<IUser>): Promise<IUser
     const hashedPassword = await bcrypt.hash(userCopy.password, 10);
     userCopy.password = hashedPassword;
   }
-  const user: IUser = new User(userCopy);
+  const user: IUser = new UserModel(userCopy);
   await user.save();
   return user;
 };

@@ -3,8 +3,8 @@ import app from "../../src/server";
 import mongoose from "mongoose";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
 import { createUserFixture, generateTestToken, validUserData } from "../user/fixtures/user";
-import User, { IUser } from "../../src/models/user/User";
-import RequestCollab, { IRequest } from "../../src/models/requests/Request";
+import UserModel, { IUser } from "../../src/models/user/User";
+import RequestModel, { IRequest } from "../../src/models/requests/Request";
 import { createRequestFixture, valideRequestData } from "./fixtures/request";
 
 // DELETE /api/requests/:id
@@ -13,9 +13,9 @@ describe("Delete a request", () => {
   let requestId: string;
 
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
     const user: IUser = await createUserFixture(validUserData);
-    await RequestCollab.deleteMany({});
+    await RequestModel.deleteMany({});
     const addUserIdToRequest: Partial<IRequest> = {
       ...valideRequestData,
       userId: user._id,
@@ -31,7 +31,7 @@ describe("Delete a request", () => {
       .set("Authorization", `Bearer ${token}`)
       .expect(HTTP_STATUS_CODES.OK);
 
-    const requestDeleted = await RequestCollab.findById(requestId);
+    const requestDeleted = await RequestModel.findById(requestId);
     expect(requestDeleted).toBeNull();
   });
 

@@ -1,11 +1,5 @@
-import mongoose from "mongoose";
-import {
-  CollaborationDuration,
-  FieldsProfessionalActivity,
-  ProjectProgressStatus,
-  TypeOfCollaboration,
-} from "../../../../shared-types/user";
-import RequestCollab, { IRequest } from "../../../src/models/requests/Request";
+import { FieldsProfessionalActivity, ProjectProgressStatus, TypeOfCollaboration } from "../../../../shared-types/user";
+import RequestModel, { IRequest } from "../../../src/models/requests/Request";
 
 export const valideRequestData: Partial<IRequest> = {
   project: {
@@ -16,46 +10,33 @@ export const valideRequestData: Partial<IRequest> = {
       custom: ["test"],
     },
     projectProgressStatus: ProjectProgressStatus.NotFunded,
-    collaborationDuration: {
-      duration: CollaborationDuration.LongTermCollaboration,
-      estimation: "will see",
-    },
   },
   kindOfCollaborationWanted: {
-    typeOfCollaboration: [TypeOfCollaboration.DirectFunding],
+    typeOfCollaboration: [TypeOfCollaboration.PartnershipForGrant],
     requestTitle: "request title",
     description: "this is a description",
-    keywordsActivity: ["test1", "test2"],
   },
-  additional_notes: "nothing special",
 };
 
 export const anotherValideRequestData: Partial<IRequest> = {
   project: {
     projectTitle: "testProject1337",
-    summary: "this is also a test",
+    summary: "this is a test again",
     fieldsProfessionalActivity: {
-      generic: [FieldsProfessionalActivity.AquaticEcosystems, FieldsProfessionalActivity.Pollution],
-      custom: ["test2"],
+      generic: [FieldsProfessionalActivity.ClimateChange, FieldsProfessionalActivity.AgriFood],
     },
-    projectProgressStatus: ProjectProgressStatus.NearingCompletion,
-    collaborationDuration: {
-      duration: CollaborationDuration.ShortTermOrOneTimeExperiment,
-      estimation: "will see",
-    },
+    projectProgressStatus: ProjectProgressStatus.NotFunded,
   },
   kindOfCollaborationWanted: {
     typeOfCollaboration: [TypeOfCollaboration.PartnershipForGrant],
     requestTitle: "request title test",
-    description: "this is a description222",
-    keywordsActivity: ["test12", "test22"],
+    description: "this is a test description",
   },
-  additional_notes: "nothing special again",
 };
 
 // createRequestFixture create a request for testing environment
 export const createRequestFixture = async (requestData: Partial<IRequest>): Promise<IRequest> => {
-  const request: IRequest = new RequestCollab(requestData);
+  const request: IRequest = new RequestModel(requestData);
   await request.save();
   return request;
 };

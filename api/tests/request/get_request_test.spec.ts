@@ -2,10 +2,10 @@ import request from "supertest";
 import app from "../../src/server";
 import mongoose from "mongoose";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
-import User, { IUser } from "../../src/models/user/User";
+import UserModel, { IUser } from "../../src/models/user/User";
 import { createUserFixture, generateTestToken, validUserData } from "../user/fixtures/user";
 import { createRequestFixture, valideRequestData } from "./fixtures/request";
-import RequestCollab, { IRequest } from "../../src/models/requests/Request";
+import RequestModel, { IRequest } from "../../src/models/requests/Request";
 
 // GET /api/requests/:id
 describe("Get a request", () => {
@@ -13,9 +13,9 @@ describe("Get a request", () => {
   let token: string;
 
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
     const user: IUser = await createUserFixture(validUserData);
-    await RequestCollab.deleteMany({});
+    await RequestModel.deleteMany({});
     const addUserIdToRequest: Partial<IRequest> = {
       ...valideRequestData,
       userId: user._id,
@@ -26,7 +26,7 @@ describe("Get a request", () => {
   });
 
   afterEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
   });
 
   it("should get a request collaboration", async () => {

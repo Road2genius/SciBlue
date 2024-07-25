@@ -1,17 +1,16 @@
 import request from "supertest";
 import app from "../../src/server";
-import mongoose from "mongoose";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
 import { createUserFixture, validUserData } from "./fixtures/user";
 import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
-import User from "../../src/models/user/User";
+import UserModel from "../../src/models/user/User";
 
 // POST /api/users
 describe("Create a user", () => {
   const url: string = BASE_ROUTE + "/" + ENDPOINT.USER.CREATE_USER_PATH;
 
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
   });
 
   it("should create a new user", async () => {

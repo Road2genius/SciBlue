@@ -1,10 +1,9 @@
 import { body, ValidationChain, validationResult } from "express-validator";
-import User from "../models/user/User";
+import UserModel from "../models/user/User";
 import { Request, Response, NextFunction } from "express";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../constants/error/errorCodes";
 import { CustomError } from "../types/error/customError";
 import { isStrongPassword, isValidEmail } from "../utils/validators";
-import { OrganizationAffiliated } from "../../../shared-types/user";
 
 export const createUserValidationRules = (): ValidationChain[] => [
   body("firstName").notEmpty().withMessage("First Name is required"),
@@ -94,7 +93,7 @@ export const mappingErrors = (req: Request, res: Response, next: NextFunction) =
 // Middleware to check if the user already exists
 export const checkUserExists = async (req: Request, res: Response, next: NextFunction) => {
   const { email } = req.body;
-  const existingUser = await User.findOne({ email });
+  const existingUser = await UserModel.findOne({ email });
   if (existingUser) {
     const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_ALREADY_EXISTS]);
     error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;

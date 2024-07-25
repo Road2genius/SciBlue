@@ -1,10 +1,10 @@
 import request from "supertest";
 import app from "../../src/server";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
-import { anotherValidUserData, createUserFixture, validUserData } from "../user/fixtures/user";
+import { createUserFixture, validUserData } from "../user/fixtures/user";
 import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
-import User, { IUser } from "../../src/models/user/User";
-import RequestCollab, { IRequest } from "../../src/models/requests/Request";
+import { IUser } from "../../src/models/user/User";
+import RequestModel, { IRequest } from "../../src/models/requests/Request";
 import { anotherValideRequestData, createRequestFixture, valideRequestData } from "./fixtures/request";
 
 // GET /api/users
@@ -12,16 +12,16 @@ describe("Get requests list", () => {
   const url: string = BASE_ROUTE + "/" + ENDPOINT.REQUEST.GET_REQUESTS_LIST_PATH;
 
   beforeEach(async () => {
-    await RequestCollab.deleteMany({});
+    await RequestModel.deleteMany({});
   });
 
   afterEach(async () => {
-    await RequestCollab.deleteMany({});
+    await RequestModel.deleteMany({});
   });
 
   it("should return the list of requests", async () => {
     const user: IUser = await createUserFixture(validUserData);
-    await RequestCollab.deleteMany({});
+    await RequestModel.deleteMany({});
     const addUserIdToRequest: Partial<IRequest> = {
       ...valideRequestData,
       userId: user._id,

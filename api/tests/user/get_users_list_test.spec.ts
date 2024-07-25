@@ -1,6 +1,6 @@
 import request from "supertest";
 import app from "../../src/server";
-import User from "../../src/models/user/User";
+import UserModel from "../../src/models/user/User";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
 import { anotherValidUserData, createUserFixture, validUserData } from "../user/fixtures/user";
 import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
@@ -10,11 +10,11 @@ describe("Get Users List", () => {
   const url: string = BASE_ROUTE + "/" + ENDPOINT.USER.GET_USERS_LIST_PATH;
 
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
   });
 
   afterEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
   });
 
   it("should return the list of users", async () => {

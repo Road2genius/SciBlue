@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
 import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
 import { createUserFixture, generateTestToken, validUserData } from "../user/fixtures/user";
-import User, { IUser } from "../../src/models/user/User";
+import UserModel, { IUser } from "../../src/models/user/User";
 import { valideRequestData } from "./fixtures/request";
 import { IRequest } from "src/models/requests/Request";
 
@@ -15,7 +15,7 @@ describe("Create a request", () => {
   let token: string;
 
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
     const user: IUser = await createUserFixture(validUserData);
     userId = user._id;
     token = generateTestToken(user);
@@ -55,10 +55,10 @@ describe("Create a request", () => {
     expect(response.body.code).toBe(ERROR_CODES.VALIDATION_ERROR);
     expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
     expect(response.body.details).toContain("User ID is required");
-    expect(response.body.details).toContain("Project Progress Status is required");
-    expect(response.body.details).toContain("Collaboration Duration is required");
-    expect(response.body.details).toContain("Type of Collaboration is required");
-    expect(response.body.details).toContain("Request Title is required");
-    expect(response.body.details).toContain("Description is required");
+    expect(response.body.details).toContain("Fields of application is required");
+    expect(response.body.details).toContain("Project progress status is required");
+    expect(response.body.details).toContain("Type of collaboration is required");
+    expect(response.body.details).toContain("Request title is required");
+    expect(response.body.details).toContain("Request description is required");
   });
 });
