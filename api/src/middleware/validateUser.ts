@@ -21,22 +21,20 @@ export const createUserValidationRules = (): ValidationChain[] => [
     .bail()
     .custom((value) => isStrongPassword(value))
     .withMessage(
-      "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character (@, $, !, %, *, ?, &, #)"
+      `Password must:
+        - Be at least 8 characters long
+        - Contain at least one lowercase letter
+        - Contain at least one uppercase letter
+        - Contain at least one number
+        - Contain at least one special character
+      `
     ),
-  body("organizationAffiliated")
-    .notEmpty()
-    .withMessage("Organization affiliated is required")
-    .bail()
-    .isIn([
-      OrganizationAffiliated.AcademicLaboratoryAndInstitute,
-      OrganizationAffiliated.AcademicTechnologyPlatform,
-      OrganizationAffiliated.NgoNonProfitOrganizationFoundation,
-      OrganizationAffiliated.Government,
-      OrganizationAffiliated.CroAndPrivateTechnologyPlatform,
-      OrganizationAffiliated.Corporation,
-      OrganizationAffiliated.Freelancer,
-    ])
-    .withMessage("Valid Organization affiliated is required"),
+  body("organizationAffiliated").custom((value) => {
+    if (value.length === 0) {
+      throw new Error("Organization affiliated is required");
+    }
+    return true;
+  }),
   body("address").notEmpty().withMessage("Address is required"),
   body("city").notEmpty().withMessage("City is required"),
   body("country").notEmpty().withMessage("Country is required"),
@@ -59,21 +57,22 @@ export const updateUserValidationRules = (): ValidationChain[] => [
     .bail()
     .custom((value) => isStrongPassword(value))
     .withMessage(
-      "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character (@, $, !, %, *, ?, &, #)"
+      `Password must:
+        - Be at least 8 characters long
+        - Contain at least one lowercase letter
+        - Contain at least one uppercase letter
+        - Contain at least one number
+        - Contain at least one special character
+      `
     ),
-  body("typeOfActor")
+  body("organizationAffiliated")
     .optional()
-    .notEmpty()
-    .withMessage("Type of Actor is required")
-    .bail()
-    .isIn([
-      "academic laboratory",
-      "academic technology platform",
-      "cro and private technology platform",
-      "corporation",
-      "others",
-    ])
-    .withMessage("Valid Type of Actor is required"),
+    .custom((value) => {
+      if (value.length === 0) {
+        throw new Error("Organization affiliated is required");
+      }
+      return true;
+    }),
   body("address").optional().notEmpty().withMessage("Address is required"),
   body("city").optional().notEmpty().withMessage("City is required"),
   body("country").optional().notEmpty().withMessage("Country is required"),

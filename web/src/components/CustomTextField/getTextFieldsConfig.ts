@@ -14,7 +14,7 @@ export const getTextFieldsConfig = (user: User) => [
     placeholder: "Enter last name",
     type: "text",
     value: user.lastName,
-    field: "lastName",
+    textfield: "lastName",
     required: true,
   },
   {
