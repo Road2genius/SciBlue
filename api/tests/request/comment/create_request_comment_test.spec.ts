@@ -8,9 +8,9 @@ import UserModel, { IUser } from "../../../src/models/user/User";
 import RequestModel, { IRequest } from "../../../src/models/requests/Request";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../../src/constants/error/errorCodes";
 
-// POST /api/comments
+// POST /requests/:requestId/comments
 describe("Create a comment", () => {
-  const url: string = "/api/requests/comments";
+  const url: string = "";
   let userId: mongoose.Types.ObjectId;
   let token: string;
   let requestId: mongoose.Types.ObjectId;
@@ -36,11 +36,10 @@ describe("Create a comment", () => {
 
   it("should create a new comment", async () => {
     const response = await request(app)
-      .post(url)
+      .post(`/api/requests/${requestId}/comments`)
       .set("Authorization", `Bearer ${token}`)
       .send({
         userId: userId,
-        requestId: requestId,
         text: "This is a test comment",
       })
       .expect(HTTP_STATUS_CODES.CREATED);
@@ -53,11 +52,10 @@ describe("Create a comment", () => {
 
   it("should not create a comment with missing text field", async () => {
     const response = await request(app)
-      .post(url)
+      .post(`/api/requests/${requestId}/comments`)
       .set("Authorization", `Bearer ${token}`)
       .send({
         userId: userId,
-        requestId: requestId,
       })
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
 
@@ -68,11 +66,10 @@ describe("Create a comment", () => {
 
   it("should not create a comment with missing user id field", async () => {
     const response = await request(app)
-      .post(url)
+      .post(`/api/requests/${requestId}/comments`)
       .set("Authorization", `Bearer ${token}`)
       .send({
         text: "Test",
-        requestId: requestId,
       })
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
 

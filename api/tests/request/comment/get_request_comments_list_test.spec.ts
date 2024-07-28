@@ -8,7 +8,7 @@ import UserModel, { IUser } from "../../../src/models/user/User";
 import RequestModel, { IRequest } from "../../../src/models/requests/Request";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../../src/constants/error/errorCodes";
 
-// DELETE /api/comments/:id
+// GET /requests/:requestId/comments
 describe("Get list of comments in a request", () => {
   let userId: mongoose.Types.ObjectId;
   let requestId: mongoose.Types.ObjectId;
@@ -51,7 +51,7 @@ describe("Get list of comments in a request", () => {
   });
 
   it("should get list of comments in a request", async () => {
-    const response = await request(app).get(`/api/requests/comments/${requestId}`).expect(HTTP_STATUS_CODES.OK);
+    const response = await request(app).get(`/api/requests/${requestId}/comments`).expect(HTTP_STATUS_CODES.OK);
 
     expect(response.body.data.length).toBeGreaterThan(0);
     expect(response.body.data.length).toBe(2);
@@ -59,7 +59,7 @@ describe("Get list of comments in a request", () => {
 
   it("should return an empty list of comments", async () => {
     const response = await request(app)
-      .get(`/api/requests/comments/${requestWithoutCommentsId}`)
+      .get(`/api/requests/${requestWithoutCommentsId}/comments`)
       .expect(HTTP_STATUS_CODES.OK);
 
     expect(response.body.data).toEqual([]);

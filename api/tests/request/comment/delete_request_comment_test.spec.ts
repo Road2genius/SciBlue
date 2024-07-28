@@ -8,7 +8,7 @@ import UserModel, { IUser } from "../../../src/models/user/User";
 import RequestModel, { IRequest } from "../../../src/models/requests/Request";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../../src/constants/error/errorCodes";
 
-// DELETE /api/comments/:id
+// DELETE /requests/comments/:commentId
 describe("Delete a comment", () => {
   let userId: mongoose.Types.ObjectId;
   let token: string;

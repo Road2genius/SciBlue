@@ -10,7 +10,6 @@ import { successHandler } from "../../middleware/responseHandler";
 export const submitVoteRequest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { userId, vote } = req.body;
   const requestId: string = req.params.requestId;
-
   try {
     if (!mongoose.Types.ObjectId.isValid(requestId)) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
@@ -36,6 +35,13 @@ export const submitVoteRequest = async (req: Request, res: Response, next: NextF
 
     let voteRequest = await VoteRequestModel.findOne({ userId, requestId });
 
+    if (request.userId.toString() === userId) {
+      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_CANNOT_VOTE_OWN_REQUEST]);
+      error.statusCode = HTTP_STATUS_CODES.FORBIDDEN;
+      error.code = ERROR_CODES.USER_CANNOT_VOTE_OWN_REQUEST;
+      throw error;
+    }
+
     if (voteRequest) {
       if (voteRequest.vote === vote) {
         successHandler<{ message: string }>(
@@ -55,6 +61,32 @@ export const submitVoteRequest = async (req: Request, res: Response, next: NextF
     }
 
     successHandler<IVoteRequest>(req, res, voteRequest, HTTP_STATUS_CODES.CREATED);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// getRequestVotes requests the server to get a list of comments of a request.
+export const getRequestVotes = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const requestId: string = req.params.requestId;
+
+    if (!mongoose.Types.ObjectId.isValid(requestId)) {
+      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
+      error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
+      error.code = ERROR_CODES.VALIDATION_ERROR;
+      throw error;
+    }
+
+    const positiveVotes = await VoteRequestModel.countDocuments({ requestId, vote: "positive" });
+    const negativeVotes = await VoteRequestModel.countDocuments({ requestId, vote: "negative" });
+
+    const voteSummary = {
+      positiveVotes,
+      negativeVotes,
+    };
+
+    successHandler(req, res, voteSummary, HTTP_STATUS_CODES.OK);
   } catch (error) {
     next(error);
   }

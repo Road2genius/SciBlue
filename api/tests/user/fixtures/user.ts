@@ -29,6 +29,19 @@ export const anotherValidUserData: Partial<IUser> = {
   country: "Another Country Name",
 };
 
+export const otherValidUserData: Partial<IUser> = {
+  firstName: "Benj",
+  lastName: "Doe",
+  email: "benj.doe@example.com",
+  password: "hashedPassword123!!",
+  organizationName: "test",
+  organizationAffiliated: [OrganizationAffiliated.AcademicLaboratoryAndInstitute],
+  institution: "Another Institution Name",
+  address: "5678 Another Street Name",
+  city: "Another City Name",
+  country: "Another Country Name",
+};
+
 // createUserFixture create a user for testing environment
 export const createUserFixture = async (userData: Partial<IUser>): Promise<IUser> => {
   const userCopy = { ...userData };

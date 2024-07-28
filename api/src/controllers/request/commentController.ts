@@ -10,8 +10,8 @@ const dot = require("dot-object");
 
 // createRequestComment request the server to create a new comment in a request.
 export const createRequestComment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const { userId, requestId, text } = req.body;
-
+  const { userId, text } = req.body;
+  const requestId = req.params.requestId;
   try {
     const request = await RequestModel.findById(requestId);
     if (!request) {
@@ -119,7 +119,6 @@ export const updateRequestComment = async (req: Request, res: Response, next: Ne
     next(error);
   }
 };
-
 
 // getRequestCommentsList requests the server to get a list of comments of a request.
 export const getRequestCommentsList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

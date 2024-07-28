@@ -25,6 +25,7 @@ export const ERROR_CODES = {
 
   // Request vote
   REQUEST_VOTE_IS_REQUIRED: 1401,
+  USER_CANNOT_VOTE_OWN_REQUEST: 1402,
 };
 
 export const ERROR_MESSAGES = {
@@ -52,6 +53,7 @@ export const ERROR_MESSAGES = {
 
   // Request vote
   [ERROR_CODES.REQUEST_VOTE_IS_REQUIRED]: "Vote is required",
+  [ERROR_CODES.USER_CANNOT_VOTE_OWN_REQUEST]: "User cannot vote to own request",
 };
 
 export const HTTP_STATUS_CODES = {

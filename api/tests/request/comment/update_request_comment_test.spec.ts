@@ -8,7 +8,7 @@ import { createRequestCommentFixture, createRequestFixture, valideRequestData } 
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../../src/constants/error/errorCodes";
 import RequestModel, { IRequest } from "../../../src/models/requests/Request";
 
-// PATCH /api/comments/:id
+// PATCH /requests/comments/:commentId
 describe("Update a request comment", () => {
   let userId: mongoose.Types.ObjectId;
   let token: string;

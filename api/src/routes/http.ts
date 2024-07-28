@@ -21,12 +21,13 @@ export const ENDPOINT = {
     GET_REQUESTS_LIST_PATH: `/requests`,
   },
   REQUEST_COMMENT: {
-    CREATE_REQUEST_COMMENT_PATH: `/requests/comments`,
+    CREATE_REQUEST_COMMENT_PATH: `/requests/:requestId/comments`,
     DELETE_REQUEST_COMMENT_PATH: `/requests/comments/:commentId`,
     UPDATE_REQUEST_COMMENT_PATH: `/requests/comments/:commentId`,
-    GET_REQUEST_COMMENT_LIST_PATH: `/requests/comments/:requestId`,
+    GET_REQUEST_COMMENT_LIST_PATH: `/requests/:requestId/comments`,
   },
   REQUEST_VOTE: {
-    SUBMIT_REQUEST_VOTE_PATH: `/requests/votes/:requestId`,
+    SUBMIT_REQUEST_VOTE_PATH: `/requests/:requestId/votes`,
+    GET_REQUEST_VOTES_PATH: `/requests/:requestId/votes`,
   },
 };

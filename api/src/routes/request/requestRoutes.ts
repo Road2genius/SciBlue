@@ -16,7 +16,7 @@ import {
   updateRequestComment,
   getRequestCommentsList,
 } from "../../controllers/request/commentController";
-import { submitVoteRequest } from "../../controllers/request/voteController";
+import { getRequestVotes, submitVoteRequest } from "../../controllers/request/voteController";
 
 const requestRouter = express.Router();
 
@@ -37,9 +37,10 @@ requestRouter.get(ENDPOINT.REQUEST.GET_REQUESTS_LIST_PATH, getRequestsList);
 requestRouter.post(ENDPOINT.REQUEST_COMMENT.CREATE_REQUEST_COMMENT_PATH, authenticateJWT, createRequestComment);
 requestRouter.delete(ENDPOINT.REQUEST_COMMENT.DELETE_REQUEST_COMMENT_PATH, authenticateJWT, deleteRequestComment);
 requestRouter.patch(ENDPOINT.REQUEST_COMMENT.UPDATE_REQUEST_COMMENT_PATH, authenticateJWT, updateRequestComment);
-requestRouter.get(ENDPOINT.REQUEST_COMMENT.GET_REQUEST_COMMENT_LIST_PATH, getRequestCommentsList); // todo
+requestRouter.get(ENDPOINT.REQUEST_COMMENT.GET_REQUEST_COMMENT_LIST_PATH, getRequestCommentsList);
 
 // vote
-requestRouter.post(ENDPOINT.REQUEST_VOTE.SUBMIT_REQUEST_VOTE_PATH, authenticateJWT, submitVoteRequest); // todo
+requestRouter.post(ENDPOINT.REQUEST_VOTE.SUBMIT_REQUEST_VOTE_PATH, authenticateJWT, submitVoteRequest);
+requestRouter.get(ENDPOINT.REQUEST_VOTE.GET_REQUEST_VOTES_PATH, authenticateJWT, getRequestVotes);
 
 export default requestRouter;
