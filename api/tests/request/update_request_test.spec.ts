@@ -1,10 +1,10 @@
 import request from "supertest";
 import mongoose from "mongoose";
 import app from "../../src/server";
-import User, { IUser } from "../../src/models/user/User";
+import UserModel, { IUser } from "../../src/models/user/User";
 import { createUserFixture, generateTestToken, validUserData } from "../user/fixtures/user";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
-import RequestCollab, { IRequest } from "../../src/models/requests/Request";
+import RequestModel, { IRequest } from "../../src/models/requests/Request";
 import { createRequestFixture, valideRequestData } from "./fixtures/request";
 
 // PATCH /api/requests/:id
@@ -15,9 +15,9 @@ describe("Update a request", () => {
   const updatedData = { project: { projectTitle: newProjectName } };
 
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
     const user: IUser = await createUserFixture(validUserData);
-    await RequestCollab.deleteMany({});
+    await RequestModel.deleteMany({});
     const addUserIdToRequest: Partial<IRequest> = {
       ...valideRequestData,
       userId: user._id,

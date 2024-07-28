@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
-import User, { IUser } from "../../models/user/User";
+import UserModel, { IUser } from "../../models/user/User";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../constants/error/errorCodes";
 import { CustomError } from "../../types/error/customError";
 import mongoose from "mongoose";
@@ -12,7 +12,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    const user: IUser = new User({
+    const user: IUser = new UserModel({
       ...req.body,
       password: hashedPassword,
     });
@@ -36,7 +36,7 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
       throw error;
     }
 
-    const user: IUser | null = await User.findById(userId);
+    const user: IUser | null = await UserModel.findById(userId);
 
     if (!user) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
@@ -62,7 +62,7 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
       throw error;
     }
 
-    const user: IUser | null = await User.findByIdAndDelete(userId);
+    const user: IUser | null = await UserModel.findByIdAndDelete(userId);
 
     if (!user) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
@@ -98,7 +98,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 
     const updatedData: IUser = req.body;
 
-    const user: IUser | null = await User.findByIdAndUpdate(userId, updatedData, {
+    const user: IUser | null = await UserModel.findByIdAndUpdate(userId, updatedData, {
       new: true,
       runValidators: true,
     });
@@ -117,7 +117,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 
 export const getUsersList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const users: IUser[] = await User.find();
+    const users: IUser[] = await UserModel.find();
 
     if (!users.length) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USERS_NOT_FOUND]);

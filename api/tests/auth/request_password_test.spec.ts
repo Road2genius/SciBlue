@@ -1,7 +1,6 @@
-import mongoose from "mongoose";
 import request from "supertest";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
-import User from "../../src/models/user/User";
+import UserModel from "../../src/models/user/User";
 import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
 import app from "../../src/server";
 import { createUserFixture, validUserData } from "../user/fixtures/user";
@@ -11,12 +10,12 @@ describe("Auth request password reset", () => {
   const url: string = BASE_ROUTE + "/" + ENDPOINT.AUTH.REQUEST_PASSWORD_RESET_PATH;
 
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
     await createUserFixture(validUserData);
   });
 
   afterEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
   });
 
   // testing plan mailtrap reached, need to find another plan

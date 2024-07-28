@@ -1,7 +1,7 @@
 import request from "supertest";
 import mongoose from "mongoose";
 import app from "../../src/server";
-import User, { IUser } from "../../src/models/user/User";
+import UserModel, { IUser } from "../../src/models/user/User";
 import { createUserFixture, generateTestToken, validUserData } from "./fixtures/user";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
 
@@ -11,7 +11,7 @@ describe("Update a user", () => {
   let token: string;
 
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
     const user: IUser = await createUserFixture(validUserData);
     userId = user._id.toString();
     token = generateTestToken(user);

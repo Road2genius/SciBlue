@@ -1,8 +1,7 @@
 import request from "supertest";
 import app from "../../src/server";
-import mongoose from "mongoose";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
-import User from "../../src/models/user/User";
+import UserModel from "../../src/models/user/User";
 import { createUserFixture, validUserData } from "../user/fixtures/user";
 import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
 
@@ -11,12 +10,12 @@ describe("Auth login", () => {
   const url: string = BASE_ROUTE + "/" + ENDPOINT.AUTH.LOGIN_PATH;
 
   beforeEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
     await createUserFixture(validUserData);
   });
 
   afterEach(async () => {
-    await User.deleteMany({});
+    await UserModel.deleteMany({});
   });
 
   it("should login successfully with valid credentials", async () => {

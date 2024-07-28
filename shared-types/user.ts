@@ -38,6 +38,16 @@ export enum CollaborationDuration {
   ShortTermOrOneTimeExperiment = "Short term or one time experiment",
 }
 
+export enum CollaborationStatus {
+  open = "open",
+  closed = "closed",
+}
+
+export enum CollaborationVote {
+  positive = "positive",
+  negative = "negative",
+}
+
 export enum FieldsProfessionalActivity {
   ClimateChange = "Climate change",
   Pollution = "Pollution",
