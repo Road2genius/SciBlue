@@ -18,6 +18,15 @@ export const ENDPOINT = {
     GET_REQUEST_BY_ID_PATH: `/requests/:id`,
     DELETE_REQUEST_PATH: `/requests/:id`,
     UPDATE_REQUEST_PATH: `/requests/:id`,
-    GET_REQUESTS_LIST_PATH: `/requests`
+    GET_REQUESTS_LIST_PATH: `/requests`,
+  },
+  REQUEST_COMMENT: {
+    CREATE_REQUEST_COMMENT_PATH: `/requests/comments`,
+    DELETE_REQUEST_COMMENT_PATH: `/requests/comments/:commentId`,
+    UPDATE_REQUEST_COMMENT_PATH: `/requests/comments/:commentId`,
+    GET_REQUEST_COMMENT_LIST_PATH: `/requests/comments/:requestId`,
+  },
+  REQUEST_VOTE: {
+    SUBMIT_REQUEST_VOTE_PATH: `/requests/votes/:requestId`,
   },
 };

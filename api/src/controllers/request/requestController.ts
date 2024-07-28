@@ -121,14 +121,6 @@ export const updateRequest = async (req: Request, res: Response, next: NextFunct
 export const getRequestsList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const requests: IRequest[] = await RequestModel.find();
-
-    if (!requests.length) {
-      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.REQUESTS_NOT_FOUND]);
-      error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
-      error.code = ERROR_CODES.REQUESTS_NOT_FOUND;
-      throw error;
-    }
-
     successHandler<IRequest[]>(req, res, requests, HTTP_STATUS_CODES.OK);
   } catch (error) {
     next(error);

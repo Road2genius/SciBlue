@@ -44,9 +44,8 @@ describe("Get requests list", () => {
   });
 
   it("should return an empty list if no requests are found", async () => {
-    const response = await request(app).get(url).expect(HTTP_STATUS_CODES.NOT_FOUND);
+    const response = await request(app).get(url).expect(HTTP_STATUS_CODES.OK);
 
-    expect(response.body.code).toBe(ERROR_CODES.REQUESTS_NOT_FOUND);
-    expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.REQUESTS_NOT_FOUND]);
+    expect(response.body.data).toEqual([]);
   });
 });

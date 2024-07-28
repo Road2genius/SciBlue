@@ -1,3 +1,4 @@
+import { CommentRequestModel, ICommentRequest } from "../../../src/models/requests/Comment";
 import { FieldsProfessionalActivity, ProjectProgressStatus, TypeOfCollaboration } from "../../../../shared-types/user";
 import RequestModel, { IRequest } from "../../../src/models/requests/Request";
 
@@ -39,4 +40,13 @@ export const createRequestFixture = async (requestData: Partial<IRequest>): Prom
   const request: IRequest = new RequestModel(requestData);
   await request.save();
   return request;
+};
+
+// createRequestCommentFixture create a request for testing environment
+export const createRequestCommentFixture = async (
+  requestCommentData: Partial<ICommentRequest>
+): Promise<ICommentRequest> => {
+  const requestComment: ICommentRequest = new CommentRequestModel(requestCommentData);
+  await requestComment.save();
+  return requestComment;
 };
