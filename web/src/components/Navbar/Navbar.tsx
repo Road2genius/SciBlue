@@ -36,8 +36,11 @@ const Navbar: React.FC = () => {
     onClick: () => void;
   }[] = [
     { name: "Home", onClick: () => navigate("/") },
-    { name: "Discussions", onClick: () => navigate("/discussions/list") },
-    { name: "Request", onClick: () => navigate("/request/list") },
+    {
+      name: "Discussions & Questions",
+      onClick: () => navigate("/discussions/list"),
+    },
+    { name: "Requests", onClick: () => navigate("/request/list") },
     { name: "Community", onClick: () => navigate("/community") },
     { name: "Send feedback", onClick: () => navigate("/feedback") },
   ];
@@ -82,8 +85,9 @@ const Navbar: React.FC = () => {
           marginLeft: "30px",
         }}
       >
-        SciForEarth
+        SciBlue
       </Typography>
+
       <List>
         {buttons.map((button, index) => (
           <ListItem key={index} onClick={button.onClick}>
@@ -103,15 +107,26 @@ const Navbar: React.FC = () => {
       sx={{ borderBottom: "1px solid #e0e0e0" }}
     >
       <Toolbar>
-        <Typography
-          variant="h6"
-          fontWeight={800}
-          sx={{ flexGrow: 1, color: "#00796b", cursor: "pointer" }}
-          onClick={() => navigate("/")}
+        <Box display="flex" flexDirection="column">
+          <Typography
+            variant="h6"
+            fontWeight={800}
+            sx={{ flexGrow: 1, color: "#00796b", cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          >
+            SciBlue
+          </Typography>
+          <Typography variant="subtitle1">
+            Accelerate change through collaboration
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: { xs: "none", md: "flex" },
+            flexGrow: 1,
+            justifyContent: "center",
+          }}
         >
-          SciForEarth
-        </Typography>
-        <Box sx={{ display: { xs: "none", md: "flex" }, flexGrow: 1 }}>
           {buttons.map((button) => (
             <Button
               key={button.name}
@@ -162,6 +177,14 @@ const Navbar: React.FC = () => {
           </>
         ) : (
           <>
+            <Typography
+              variant="body2"
+              mr={5}
+              sx={{ cursor: "pointer" }}
+              onClick={() => console.log("help us improve")}
+            >
+              Help us improve
+            </Typography>
             <Button
               variant="outlined"
               sx={{
