@@ -1,14 +1,15 @@
+import React from "react";
 import {
   Avatar,
   Box,
   Button,
   Chip,
+  Container,
   Divider,
   Grid,
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React from "react";
 import {
   CollaborationDuration,
   FieldsProfessionalActivity,
@@ -39,7 +40,7 @@ const Signup: React.FC = () => {
   const skillsOrTechnicalProperties = getSkillsOrTechnicalProperties(user);
 
   return (
-    <>
+    <Container maxWidth="xl">
       <Box className={classes.root}>
         <Typography variant="h4" fontWeight={700} color="#197278">
           Sign up
@@ -399,7 +400,7 @@ const Signup: React.FC = () => {
           Validate
         </Button>
       </Box>
-    </>
+    </Container>
   );
 };
 

@@ -1,10 +1,10 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from "@mui/styles";
 import React from "react";
-import HeaderImage from "../../../assets/images/header.svg";
+// import HeaderImage from "../../../assets/images/header.svg";
 
 const Header: React.FC = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   return (
     <Box my={15}>
@@ -64,11 +64,12 @@ const Header: React.FC = () => {
               justifyContent="center"
               height="100%"
             >
-              <img
+              {/* <img
                 src={HeaderImage}
+                loading="lazy"
                 alt="Header Image"
                 className={classes.headerImage}
-              />
+              /> */}
             </Box>
           </Grid>
         </Grid>
@@ -79,9 +80,9 @@ const Header: React.FC = () => {
 
 export default Header;
 
-const useStyles = makeStyles({
-  headerImage: {
-    width: "100%",
-    height: "auto",
-  },
-});
+// const useStyles = makeStyles({
+//   headerImage: {
+//     width: "100%",
+//     height: "auto",
+//   },
+// });

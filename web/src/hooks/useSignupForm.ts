@@ -18,6 +18,7 @@ type NestedKeyOf<T> = {
 }[keyof T];
 
 const initialUserState: User = {
+  _id: "",
   firstName: "",
   lastName: "",
   email: "",

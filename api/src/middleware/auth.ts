@@ -9,7 +9,6 @@ interface AuthenticatedRequest extends Request {
 
 export const authenticateJWT = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
   const token = req.headers.authorization?.split(" ")[1];
-
   if (token) {
     jwt.verify(token, "your_jwt_secret_key", (err, payload) => {
       if (err) {

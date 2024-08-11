@@ -3,22 +3,29 @@ import mongoose from "mongoose";
 import app from "../../../src/server";
 import UserModel, { IUser } from "../../../src/models/user/User";
 import RequestModel, { IRequest } from "../../../src/models/requests/Request";
-import { VoteRequestModel } from "../../../src/models/requests/Vote";
-import { anotherValidUserData, createUserFixture, generateTestToken, validUserData } from "../../user/fixtures/user";
+import {
+  anotherValidUserData,
+  createUserFixture,
+  generateTestToken,
+  otherValidUserData,
+  validUserData,
+} from "../../user/fixtures/user";
 import { createRequestFixture, valideRequestData } from "../fixtures/request";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../../src/constants/error/errorCodes";
+import { CollaborationVote } from "../../../../shared-types/user";
 
 describe("Submit a vote", () => {
   let userId: mongoose.Types.ObjectId;
   let userWhoVoteId: mongoose.Types.ObjectId;
+  let otherUserWhoVoteId: mongoose.Types.ObjectId;
   let token: string;
   let tokenWhoVote: string;
+  let otherTokenWhoVote: string;
   let requestId: mongoose.Types.ObjectId;
 
   beforeEach(async () => {
     await UserModel.deleteMany({});
     await RequestModel.deleteMany({});
-    await VoteRequestModel.deleteMany({});
 
     const user: IUser = await createUserFixture(validUserData);
     userId = user._id;
@@ -28,9 +35,19 @@ describe("Submit a vote", () => {
     userWhoVoteId = userWhoVote._id;
     tokenWhoVote = generateTestToken(userWhoVote);
 
+    const otherUserWhoVote: IUser = await createUserFixture(otherValidUserData);
+    otherUserWhoVoteId = otherUserWhoVote._id;
+    otherTokenWhoVote = generateTestToken(otherUserWhoVote);
+
     const addUserIdToRequest = new RequestModel({
       ...valideRequestData,
       userId: userId,
+      votes: [
+        {
+          userId: otherUserWhoVote,
+          vote: CollaborationVote.positive,
+        },
+      ],
     });
 
     const newRequest: IRequest = await createRequestFixture(addUserIdToRequest);
@@ -43,53 +60,35 @@ describe("Submit a vote", () => {
       .set("Authorization", `Bearer ${tokenWhoVote}`)
       .send({
         userId: userWhoVoteId,
-        vote: "positive",
+        vote: CollaborationVote.positive,
       })
       .expect(HTTP_STATUS_CODES.CREATED);
 
-    expect(response.body.data).toHaveProperty("_id");
-    expect(response.body.data.userId).toBe(userWhoVoteId.toString());
-    expect(response.body.data.requestId).toBe(requestId.toString());
-    expect(response.body.data.vote).toBe("positive");
+    expect(response.body.data.votes[1].userId).toBe(userWhoVoteId.toString());
+    expect(response.body.data.votes[1].vote).toBe(CollaborationVote.positive);
   });
 
   it("should update an existing vote", async () => {
-    const newVote = new VoteRequestModel({
-      userId: userWhoVoteId,
-      requestId: requestId,
-      vote: "positive",
-    });
-    await newVote.save();
-
     const response = await request(app)
       .post(`/api/requests/${requestId}/votes/`)
-      .set("Authorization", `Bearer ${tokenWhoVote}`)
+      .set("Authorization", `Bearer ${otherTokenWhoVote}`)
       .send({
-        userId: userWhoVoteId,
-        vote: "negative",
+        userId: otherUserWhoVoteId,
+        vote: CollaborationVote.negative,
       })
-      .expect(HTTP_STATUS_CODES.CREATED);
+      .expect(HTTP_STATUS_CODES.OK);
 
-    expect(response.body.data).toHaveProperty("_id");
-    expect(response.body.data.userId).toBe(userWhoVoteId.toString());
-    expect(response.body.data.requestId).toBe(requestId.toString());
-    expect(response.body.data.vote).toBe("negative");
+    expect(response.body.data.votes[0].userId).toBe(otherUserWhoVoteId.toString());
+    expect(response.body.data.votes[0].vote).toBe(CollaborationVote.negative);
   });
 
   it("should not update if the same vote type is submitted", async () => {
-    const newVote = new VoteRequestModel({
-      userId: userWhoVoteId,
-      requestId: requestId,
-      vote: "positive",
-    });
-    await newVote.save();
-
     const response = await request(app)
       .post(`/api/requests/${requestId}/votes/`)
-      .set("Authorization", `Bearer ${tokenWhoVote}`)
+      .set("Authorization", `Bearer ${otherTokenWhoVote}`)
       .send({
-        userId: userWhoVoteId,
-        vote: "positive",
+        userId: otherUserWhoVoteId,
+        vote: CollaborationVote.positive,
       })
       .expect(HTTP_STATUS_CODES.OK);
 
@@ -102,7 +101,7 @@ describe("Submit a vote", () => {
       .set("Authorization", `Bearer ${tokenWhoVote}`)
       .send({
         userId: userWhoVoteId,
-        vote: "positive",
+        vote: CollaborationVote.positive,
       })
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
 
@@ -118,7 +117,7 @@ describe("Submit a vote", () => {
       .set("Authorization", `Bearer ${tokenWhoVote}`)
       .send({
         userId: userWhoVoteId,
-        vote: "positive",
+        vote: CollaborationVote.positive,
       })
       .expect(HTTP_STATUS_CODES.NOT_FOUND);
 
@@ -145,7 +144,7 @@ describe("Submit a vote", () => {
       .set("Authorization", `Bearer ${token}`)
       .send({
         userId: userId,
-        vote: "positive",
+        vote: CollaborationVote.positive,
       })
       .expect(HTTP_STATUS_CODES.FORBIDDEN);
 

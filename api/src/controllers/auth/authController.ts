@@ -41,6 +41,17 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
     const token = jwt.sign({ userId: user._id }, "your_jwt_secret_key", {
       expiresIn: "1h",
     });
+    const refreshToken = jwt.sign({ userId: user._id }, "refresh_token_key", { expiresIn: "7d" });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    user.refreshToken = refreshToken;
+    await user.save();
 
     successHandler<{ token: string; userId: string; avatar: string }>(
       req,
@@ -49,6 +60,77 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
         token,
         userId: user._id.toString(),
         avatar: user.avatar,
+      },
+      HTTP_STATUS_CODES.OK
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logoutUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { userId } = req.params;
+
+    const user: IUser | null = await UserModel.findById(userId);
+
+    if (!user) {
+      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
+      error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
+      error.code = ERROR_CODES.USER_NOT_FOUND;
+      throw error;
+    }
+
+    user.refreshToken = "";
+    await user.save();
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    });
+
+    successHandler<{ message: string }>(
+      req,
+      res,
+      {
+        message: "Successfully logged out",
+      },
+      HTTP_STATUS_CODES.OK
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
+  const { refreshToken } = req.cookies;
+
+  if (!refreshToken) {
+    const error: CustomError = new Error("Refresh Token not found");
+    error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
+    throw error;
+  }
+
+  try {
+    const payload = jwt.verify(refreshToken, "refresh_token_key") as { userId: string };
+
+    const user = await UserModel.findById(payload.userId);
+    if (!user || user.refreshToken !== refreshToken) {
+      const error: CustomError = new Error("Invalid refresh token");
+      error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
+      throw error;
+    }
+
+    const token = jwt.sign({ userId: user._id }, "your_jwt_secret_key", {
+      expiresIn: "1h",
+    });
+
+    successHandler<{ token: string }>(
+      req,
+      res,
+      {
+        token,
       },
       HTTP_STATUS_CODES.OK
     );

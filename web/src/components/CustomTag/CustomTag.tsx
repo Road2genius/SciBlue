@@ -58,7 +58,8 @@ const CustomTagInput: React.FC<CustomTagInputProps> = ({
                 backgroundColor: "#C8E6C9",
                 border: "1px solid black",
                 borderRadius: "8px",
-                margin: "5px",
+                marginRight: "10px",
+                marginTop: "10px",
                 "&:hover": {
                   backgroundColor: "#C8E6C9",
                 },
@@ -74,7 +75,8 @@ const CustomTagInput: React.FC<CustomTagInputProps> = ({
               backgroundColor: "#fff",
               border: "1px solid black",
               borderRadius: "8px",
-              margin: "5px",
+              marginRight: "10px",
+              marginTop: "10px",
               "&:hover": {
                 backgroundColor: "#C8E6C9",
               },

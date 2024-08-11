@@ -10,10 +10,11 @@ export enum OrganizationAffiliated {
 
 export enum TypeOfCollaboration {
   PartnershipForGrant = "Partnership for a grant",
-  DirectFunding = "Direct funding",
-  ExpertAnalysis = "Expert analysis/bibliographic research",
+  Sponsoring = "Sponsoring",
+  ExpertOpinion = "Expert opinion / literature review",
+  ConductResearch = "Conduct research",
   CommunicationCampaign = "Communication campaign",
-  ExperimentConducting = "Experiment conducting",
+  JobPosition = "Job position",
 }
 
 export enum TypeOfOrganization {
@@ -21,16 +22,21 @@ export enum TypeOfOrganization {
   AcademicTechnologyPlatform = "Academic technology platform",
   NgoNonProfitOrganizationFoundation = "NGO, non-profit organization, foundation",
   Government = "Government",
-  CroAndPrivateTechnologyPlatform = "CRO and private technology platform",
-  Corporation = "Corporation",
-  Freelancer = "Freelancer",
+  PrivateResearchOrganizations = "Private research organizations",
+  FreelanceScientist = "Freelance scientist",
 }
 
 export enum ProjectProgressStatus {
-  NotFunded = "Not funded",
-  FundedButNotStarted = "Funded but not started",
+  ConceptualizationOrDesign = "Conceptualization/Design",
+  Starting = "Starting",
   Ongoing = "Ongoing",
-  NearingCompletion = "Nearing completion, i.e. manuscript being written or under review",
+  NearingCompletion = "Nearing completion",
+}
+
+export enum ProjectFunding {
+  NotFunded = "Not funded",
+  LookingForFunding = "Looking for funding",
+  Funded = "Funded",
 }
 
 export enum CollaborationDuration {
@@ -39,8 +45,8 @@ export enum CollaborationDuration {
 }
 
 export enum CollaborationStatus {
-  open = "open",
-  closed = "closed",
+  open = "Open",
+  closed = "Closed",
 }
 
 export enum CollaborationVote {
@@ -52,12 +58,16 @@ export enum FieldsProfessionalActivity {
   ClimateChange = "Climate change",
   Pollution = "Pollution",
   Biodiversity = "Biodiversity",
-  RenewableEnergy = "Renewable energy",
-  AgriFood = "Agri-food",
-  AquaticEcosystems = "Aquatic ecosystems",
+  Energy = "Energy",
+  WasteManagement = "Waste management",
+  MarineConservation = "Marine conservation",
   Transportation = "Transportation",
   ChemicalScience = "Chemical science",
-  PopulationMovement = "Population movement",
+  PopulationImpact = "Population impact",
+  Health = "Health",
+  AgriFood = "Agri-food",
+  RessourcesManagement = "Ressources management",
+  Forestry = "Forestry",
 }
 
 export type SkillsOrTechnicalKeys =
