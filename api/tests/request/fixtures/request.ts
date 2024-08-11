@@ -1,6 +1,12 @@
 import { CommentRequestModel, ICommentRequest } from "../../../src/models/requests/Comment";
-import { FieldsProfessionalActivity, ProjectProgressStatus, TypeOfCollaboration } from "../../../../shared-types/user";
+import {
+  CollaborationVote,
+  FieldsProfessionalActivity,
+  ProjectProgressStatus,
+  TypeOfCollaboration,
+} from "../../../../shared-types/user";
 import RequestModel, { IRequest } from "../../../src/models/requests/Request";
+import mongoose from "mongoose";
 
 export const valideRequestData: Partial<IRequest> = {
   project: {
@@ -10,13 +16,14 @@ export const valideRequestData: Partial<IRequest> = {
       generic: [FieldsProfessionalActivity.ClimateChange, FieldsProfessionalActivity.AgriFood],
       custom: ["test"],
     },
-    projectProgressStatus: ProjectProgressStatus.NotFunded,
+    projectProgressStatus: ProjectProgressStatus.Starting,
   },
   kindOfCollaborationWanted: {
     typeOfCollaboration: [TypeOfCollaboration.PartnershipForGrant],
     requestTitle: "request title",
     description: "this is a description",
   },
+  votes: [{ userId: new mongoose.Types.ObjectId(), vote: CollaborationVote.positive, createdAt: new Date() }],
 };
 
 export const anotherValideRequestData: Partial<IRequest> = {
@@ -26,7 +33,7 @@ export const anotherValideRequestData: Partial<IRequest> = {
     fieldsProfessionalActivity: {
       generic: [FieldsProfessionalActivity.ClimateChange, FieldsProfessionalActivity.AgriFood],
     },
-    projectProgressStatus: ProjectProgressStatus.NotFunded,
+    projectProgressStatus: ProjectProgressStatus.Starting,
   },
   kindOfCollaborationWanted: {
     typeOfCollaboration: [TypeOfCollaboration.PartnershipForGrant],

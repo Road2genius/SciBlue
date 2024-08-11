@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
   userId: string;
@@ -8,6 +8,7 @@ interface User {
 interface UserContextType {
   userContext: User | null;
   setUserContext: React.Dispatch<React.SetStateAction<User | null>>;
+  loading: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -16,8 +17,18 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [userContext, setUserContext] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("userContext");
+    if (storedUser) {
+      setUserContext(JSON.parse(storedUser));
+    }
+    setLoading(false);
+  }, []);
+
   return (
-    <UserContext.Provider value={{ userContext, setUserContext }}>
+    <UserContext.Provider value={{ userContext, setUserContext, loading }}>
       {children}
     </UserContext.Provider>
   );

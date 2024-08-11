@@ -6,6 +6,8 @@ import { CustomError } from "../../types/error/customError";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../constants/error/errorCodes";
 import { convertToPlainObject } from "../../utils/convertPlainObject";
 import mongoose from "mongoose";
+import { io } from "../../server";
+import UserModel from "../../models/user/User";
 const dot = require("dot-object");
 
 // createRequestComment request the server to create a new comment in a request.
@@ -43,6 +45,26 @@ export const createRequestComment = async (req: Request, res: Response, next: Ne
     request.comments.push(comment._id);
     await request.save();
 
+    const user = await UserModel.findById(userId);
+
+    io.emit("commentCreated", {
+      requestId,
+      comment: {
+        _id: comment._id,
+        userId: comment.userId,
+        text: comment.text,
+        votes: comment.votes,
+        createdAt: comment.createdAt,
+        user: {
+          id: user?._id,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
+          avatar: user?.avatar,
+          organizationAffiliated: user?.organizationAffiliated,
+        },
+      },
+    });
+
     successHandler<ICommentRequest>(req, res, convertToPlainObject(comment), HTTP_STATUS_CODES.CREATED);
   } catch (error) {
     next(error);
@@ -69,6 +91,12 @@ export const deleteRequestComment = async (req: Request, res: Response, next: Ne
       error.code = ERROR_CODES.REQUEST_COMMENT_NOT_FOUND;
       throw error;
     }
+
+    await RequestModel.findByIdAndUpdate(comment.requestId, {
+      $pull: { comments: comment._id },
+    });
+
+    io.emit("commentDeleted", { commentId: comment._id });
 
     successHandler<{ message: string }>(
       req,
@@ -113,6 +141,25 @@ export const updateRequestComment = async (req: Request, res: Response, next: Ne
       error.code = ERROR_CODES.REQUEST_COMMENT_NOT_FOUND;
       throw error;
     }
+
+    const user = await UserModel.findById(comment.userId);
+
+    io.emit("commentUpdated", {
+      comment: {
+        _id: comment._id,
+        userId: comment.userId,
+        text: comment.text,
+        votes: comment.votes,
+        createdAt: comment.createdAt,
+        user: {
+          id: user?._id,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
+          avatar: user?.avatar,
+          organizationAffiliated: user?.organizationAffiliated,
+        },
+      },
+    });
 
     successHandler<ICommentRequest>(req, res, convertToPlainObject(comment), HTTP_STATUS_CODES.OK);
   } catch (error) {

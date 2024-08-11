@@ -10,6 +10,8 @@ export const ENDPOINT = {
   },
   AUTH: {
     LOGIN_PATH: `/login`,
+    LOGOUT_PATH: `/logout/:userId`,
+    REFRESH_TOKEN_PATH: `/refresh-token`,
     REQUEST_PASSWORD_RESET_PATH: `/request-password-reset`,
     RESET_PASSWORD_PATH: `/reset-password`,
   },
@@ -28,6 +30,8 @@ export const ENDPOINT = {
   },
   REQUEST_VOTE: {
     SUBMIT_REQUEST_VOTE_PATH: `/requests/:requestId/votes`,
-    GET_REQUEST_VOTES_PATH: `/requests/:requestId/votes`,
+  },
+  COMMENT_VOTE: {
+    SUBMIT_COMMENT_VOTE_PATH: `/comments/:commentId/votes`,
   },
 };

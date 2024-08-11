@@ -3,21 +3,51 @@ import {
   FieldsProfessionalActivity,
   ProjectProgressStatus,
   TypeOfCollaboration,
-  OrganizationAffiliated,
+  TypeOfOrganization,
   CollaborationStatus,
+  ProjectFunding,
+  CollaborationVote,
 } from "../../../../shared-types/user";
+import { Discipline } from "../../../../shared-types/requestData";
+import {
+  AgriculturalScienceSubDisciplines,
+  AnthropologySubDisciplines,
+  BiologySubDisciplines,
+  ChemistrySubDisciplines,
+  ComputerScienceSubDisciplines,
+  DesignSubDisciplines,
+  EconomicsSubDisciplines,
+  EducationSubDisciplines,
+  EngineeringSubDisciplines,
+  EntertainmentandArtsSubDisciplines,
+  GeoscienceSubDisciplines,
+  HistorySubDisciplines,
+  LawSubDisciplines,
+  LinguisticsSubDisciplines,
+  LiteratureSubDisciplines,
+  MathematicsSubDisciplines,
+  MedicineSubDisciplines,
+  PhilosophySubDisciplines,
+  PhysicsSubDisciplines,
+  PoliticalScienceSubDisciplines,
+  PrimaryDiscipline,
+  PsychologySubDisciplines,
+  ReligiousStudiesSubDisciplines,
+  SocialScienceSubDisciplines,
+  SpaceScienceSubDisciplines,
+} from "../../../../shared-types/disciplines";
 export interface IFieldsProfessionalActivity {
-  generic?: string[];
+  generic?: FieldsProfessionalActivity[];
   custom?: string[];
 }
 
 export interface IProject {
   projectTitle: string;
-  summary?: string;
+  summary: string;
   fieldsProfessionalActivity: IFieldsProfessionalActivity;
   projectProgressStatus: ProjectProgressStatus;
   projectStartEndEstimation?: Date[];
-  projectFunding?: ProjectProgressStatus;
+  projectFunding?: ProjectFunding;
 }
 
 export interface IKindOfCollaborationWanted {
@@ -27,8 +57,8 @@ export interface IKindOfCollaborationWanted {
 }
 
 export interface ISpecificsSkills {
-  organizationRequested: OrganizationAffiliated[];
-  disciplines: string[];
+  organizationRequested: TypeOfOrganization[];
+  disciplines: Discipline[];
   expertisesAndSkills: string[];
 }
 
@@ -42,7 +72,12 @@ export interface IRequest extends Document {
   positiveVotes: number;
   negativeVotes: number;
   comments: mongoose.Types.ObjectId[];
-  votes: mongoose.Types.ObjectId[];
+  votes: Array<{
+    userId: mongoose.Types.ObjectId;
+    vote: CollaborationVote;
+    createdAt: Date;
+    updatedAt?: Date;
+  }>;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -57,9 +92,48 @@ const fieldsProfessionalActivitySchema: Schema<IFieldsProfessionalActivity> = ne
   },
 });
 
+const disciplineSchema = new Schema({
+  primary: {
+    type: String,
+    enum: Object.values(PrimaryDiscipline),
+    required: true,
+  },
+  secondary: [
+    {
+      type: String,
+      enum: [
+        ...Object.values(AgriculturalScienceSubDisciplines),
+        ...Object.values(AnthropologySubDisciplines),
+        ...Object.values(BiologySubDisciplines),
+        ...Object.values(ChemistrySubDisciplines),
+        ...Object.values(ComputerScienceSubDisciplines),
+        ...Object.values(DesignSubDisciplines),
+        ...Object.values(EconomicsSubDisciplines),
+        ...Object.values(EducationSubDisciplines),
+        ...Object.values(EngineeringSubDisciplines),
+        ...Object.values(EntertainmentandArtsSubDisciplines),
+        ...Object.values(GeoscienceSubDisciplines),
+        ...Object.values(HistorySubDisciplines),
+        ...Object.values(LawSubDisciplines),
+        ...Object.values(LinguisticsSubDisciplines),
+        ...Object.values(LiteratureSubDisciplines),
+        ...Object.values(MathematicsSubDisciplines),
+        ...Object.values(MedicineSubDisciplines),
+        ...Object.values(PhilosophySubDisciplines),
+        ...Object.values(PhysicsSubDisciplines),
+        ...Object.values(PoliticalScienceSubDisciplines),
+        ...Object.values(PsychologySubDisciplines),
+        ...Object.values(ReligiousStudiesSubDisciplines),
+        ...Object.values(SocialScienceSubDisciplines),
+        ...Object.values(SpaceScienceSubDisciplines),
+      ],
+    },
+  ],
+});
+
 const projectSchema: Schema<IProject> = new Schema({
   projectTitle: { type: String, required: true },
-  summary: { type: String },
+  summary: { type: String, required: true },
   fieldsProfessionalActivity: {
     type: fieldsProfessionalActivitySchema,
     required: true,
@@ -72,7 +146,7 @@ const projectSchema: Schema<IProject> = new Schema({
   projectStartEndEstimation: { type: [Date] },
   projectFunding: {
     type: String,
-    enum: Object.values(ProjectProgressStatus),
+    enum: Object.values(ProjectFunding),
   },
 });
 
@@ -93,15 +167,22 @@ const requestSchema: Schema<IRequest> = new Schema(
       description: { type: String, required: true },
     },
     specificsSkills: {
-      organizationRequested: { type: [String], enum: Object.values(OrganizationAffiliated) },
-      disciplines: { type: [String] },
+      organizationRequested: { type: [String], enum: Object.values(TypeOfOrganization) },
+      disciplines: [disciplineSchema],
       expertisesAndSkills: { type: [String] },
     },
     collaborationStatus: { type: String, enum: Object.values(CollaborationStatus) },
     positiveVotes: { type: Number, default: 0 },
     negativeVotes: { type: Number, default: 0 },
     comments: [{ type: Schema.Types.ObjectId, ref: "CommentRequest" }],
-    votes: [{ type: Schema.Types.ObjectId, ref: "VoteRequest" }],
+    votes: [
+      {
+        userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+        vote: { type: String, required: true },
+        createdAt: { type: Date, default: Date.now },
+        updatedAt: { type: Date },
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -114,6 +195,15 @@ fieldsProfessionalActivitySchema.pre("validate", function (next) {
   } else {
     next();
   }
+});
+
+requestSchema.pre("save", function (next) {
+  const request = this as IRequest;
+
+  request.positiveVotes = request.votes.filter((vote) => vote.vote === "positive").length;
+  request.negativeVotes = request.votes.filter((vote) => vote.vote === "negative").length;
+
+  next();
 });
 
 export const RequestModel = mongoose.model<IRequest>("Request", requestSchema);

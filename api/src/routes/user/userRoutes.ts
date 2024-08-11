@@ -19,7 +19,7 @@ userRouter.post(
   checkUserExists,
   createUser
 );
-userRouter.get(ENDPOINT.USER.GET_USER_BY_ID_PATH, authenticateJWT, getUserById);
+userRouter.get(ENDPOINT.USER.GET_USER_BY_ID_PATH, getUserById);
 userRouter.delete(ENDPOINT.USER.DELETE_USER_PATH, authenticateJWT, deleteUser);
 userRouter.patch(
   ENDPOINT.USER.UPDATE_USER_PATH,

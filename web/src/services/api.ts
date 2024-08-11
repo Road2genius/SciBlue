@@ -4,6 +4,7 @@ export const api = {
   get: async <T>(url: string, options?: RequestInit): Promise<T> => {
     const response = await fetch(`${API_URL}${url}`, {
       method: "GET",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         ...(options?.headers || {}),
@@ -16,11 +17,17 @@ export const api = {
     }
     return data;
   },
-  post: async <T, U>(url: string, data: U): Promise<T> => {
+  post: async <T, U>(
+    url: string,
+    data: U,
+    headers: Record<string, string> = {}
+  ): Promise<T> => {
     const response = await fetch(`${API_URL}${url}`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        ...headers,
       },
       body: JSON.stringify(data),
     });
@@ -32,11 +39,17 @@ export const api = {
     }
     return responseData.data;
   },
-  patch: async <T, U>(url: string, data: U): Promise<T> => {
+  patch: async <T, U>(
+    url: string,
+    data: U,
+    headers: Record<string, string>
+  ): Promise<T> => {
     const response = await fetch(`${API_URL}${url}`, {
       method: "PATCH",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        ...headers,
       },
       body: JSON.stringify(data),
     });
@@ -46,11 +59,16 @@ export const api = {
     }
     return responseData;
   },
-  delete: async <T>(url: string): Promise<T> => {
+  delete: async <T>(
+    url: string,
+    headers: Record<string, string> = {}
+  ): Promise<T> => {
     const response = await fetch(`${API_URL}${url}`, {
       method: "DELETE",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        ...headers,
       },
     });
     if (!response.ok) {

@@ -1,36 +1,50 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense } from "react";
 import {
   Outlet,
   Route,
   BrowserRouter as Router,
   Routes,
 } from "react-router-dom";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import Navbar from "./components/Navbar/Navbar";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import CreateRequest from "./pages/CreateRequest";
+import RequestsList from "./pages/RequestsList";
+import RequestDetails from "./pages/RequestDetails";
+import Footer from "./components/LandingPage/Footer/Footer";
+import EditRequest from "./pages/EditRequest";
 
-const Navbar: React.LazyExoticComponent<React.FC<object>> = lazy(
-  () => import("./components/Navbar/Navbar")
-);
-const Footer: React.LazyExoticComponent<React.FC<object>> = lazy(
-  () => import("./components/LandingPage/Footer/Footer")
-);
-const Home: React.LazyExoticComponent<React.FC<object>> = lazy(
-  () => import("./pages/Home")
-);
+// const Navbar: React.LazyExoticComponent<React.FC<object>> = lazy(
+//   () => import("./components/Navbar/Navbar")
+// );
+// const Footer: React.LazyExoticComponent<React.FC<object>> = lazy(
+//   () => import("./components/LandingPage/Footer/Footer")
+// );
+// const Home: React.LazyExoticComponent<React.FC<object>> = lazy(
+//   () => import("./pages/Home")
+// );
 
-const Login: React.LazyExoticComponent<React.FC<object>> = lazy(
-  () => import("./pages/Login")
-);
+// const Login: React.LazyExoticComponent<React.FC<object>> = lazy(
+//   () => import("./pages/Login")
+// );
 
-const Signup: React.LazyExoticComponent<React.FC<object>> = lazy(
-  () => import("./pages/Signup")
-);
+// const Signup: React.LazyExoticComponent<React.FC<object>> = lazy(
+//   () => import("./pages/Signup")
+// );
 
-const CreateRequest: React.LazyExoticComponent<React.FC<object>> = lazy(
-  () => import("./pages/CreateRequest")
-);
+// const CreateRequest: React.LazyExoticComponent<React.FC<object>> = lazy(
+//   () => import("./pages/CreateRequest")
+// );
 
-const RequestsList: React.LazyExoticComponent<React.FC<object>> = lazy(
-  () => import("./pages/RequestsList")
-);
+// const RequestsList: React.LazyExoticComponent<React.FC<object>> = lazy(
+//   () => import("./pages/RequestsList")
+// );
+
+// const RequestDetails: React.LazyExoticComponent<React.FC<object>> = lazy(
+//   () => import("./pages/RequestDetails")
+// );
 
 const MainLayout = (): JSX.Element => <Outlet />;
 
@@ -44,8 +58,19 @@ const App: React.FC = () => {
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/request/create" element={<CreateRequest />} />
+          <Route
+            path="/request/create"
+            element={<PrivateRoute element={<CreateRequest />} />}
+          />
+          <Route
+            path="/request/edit/:id"
+            element={<PrivateRoute element={<EditRequest />} />}
+          />
           <Route path="/request/list" element={<RequestsList />} />
+          <Route
+            path="/request/details/:id"
+            element={<PrivateRoute element={<RequestDetails />} />}
+          />
         </Routes>
       </Suspense>
       <Footer />

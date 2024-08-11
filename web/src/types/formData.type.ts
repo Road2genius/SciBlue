@@ -1,3 +1,6 @@
+import { RequestReqInterface, RequestResInterface } from "../../../shared-types/requestData";
+import { CollaborationStatus, ProjectFunding, ProjectProgressStatus, TypeOfOrganization } from "../../../shared-types/user";
+
 export type formData = {
   firstName: string;
   lastName: string;
@@ -9,4 +12,83 @@ export type formData = {
   city: string;
   country: string;
   professionalActivity: string;
+};
+
+export const initialRequestState: RequestReqInterface = {
+  userId: "",
+  project: {
+    projectTitle: "",
+    summary: "",
+    fieldsProfessionalActivity: {
+      generic: [],
+      custom: [],
+    },
+    projectStartEndEstimation: [],
+    projectProgressStatus: "" as ProjectProgressStatus,
+    projectFunding: "" as ProjectFunding,
+  },
+  kindOfCollaborationWanted: {
+    typeOfCollaboration: [],
+    requestTitle: "",
+    description: "",
+  },
+  specificsSkills: {
+    organizationRequested: [
+      TypeOfOrganization.AcademicLaboratoryAndInstitute,
+      TypeOfOrganization.AcademicTechnologyPlatform,
+      TypeOfOrganization.FreelanceScientist,
+      TypeOfOrganization.Government,
+      TypeOfOrganization.NgoNonProfitOrganizationFoundation,
+      TypeOfOrganization.PrivateResearchOrganizations,
+    ],
+    disciplines: [],
+    expertisesAndSkills: [],
+  },
+  collaborationStatus: "" as CollaborationStatus,
+  positiveVotes: 0,
+  negativeVotes: 0,
+  comments: [],
+  votes: [],
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+export const initialResponseState: RequestResInterface = {
+  _id: "",
+  userId: "",
+  project: {
+    projectTitle: "",
+    summary: "",
+    fieldsProfessionalActivity: {
+      generic: [],
+      custom: [],
+    },
+    projectStartEndEstimation: [],
+    projectProgressStatus: "" as ProjectProgressStatus,
+    projectFunding: "" as ProjectFunding,
+  },
+  kindOfCollaborationWanted: {
+    typeOfCollaboration: [],
+    requestTitle: "",
+    description: "",
+  },
+  specificsSkills: {
+    organizationRequested: [
+      TypeOfOrganization.AcademicLaboratoryAndInstitute,
+      TypeOfOrganization.AcademicTechnologyPlatform,
+      TypeOfOrganization.FreelanceScientist,
+      TypeOfOrganization.Government,
+      TypeOfOrganization.NgoNonProfitOrganizationFoundation,
+      TypeOfOrganization.PrivateResearchOrganizations,
+    ],
+    disciplines: [],
+    expertisesAndSkills: [],
+  },
+  collaborationStatus: "" as CollaborationStatus,
+  positiveVotes: 0,
+  negativeVotes: 0,
+  comments: [],
+  votes: [],
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };

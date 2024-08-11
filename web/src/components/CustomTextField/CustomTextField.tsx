@@ -32,14 +32,18 @@ const CustomTextField: React.FC<TextFieldProps> = ({
       value={value}
       onChange={onChange}
       multiline={multiline}
-      rows={multiline ? 5 : undefined}
+      rows={multiline ? 4 : undefined}
+      fullWidth
       sx={{
         marginBottom: "20px",
-        width: "100%",
-        maxWidth: multiline ? "100%" : "500px",
-        minWidth: multiline
-          ? { xs: "100%", sm: "100%", md: "900px" }
-          : { xs: "100%", sm: "100%", md: "0" },
+        maxWidth: "100%",
+        minWidth: {
+          xs: "100%",
+          sm: "100%",
+          md: "100%",
+          lg: "100%",
+          xl: "1200px",
+        },
       }}
     />
   </>

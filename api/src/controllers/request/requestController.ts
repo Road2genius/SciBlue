@@ -5,6 +5,8 @@ import { convertToPlainObject } from "../../utils/convertPlainObject";
 import mongoose from "mongoose";
 import { CustomError } from "../../types/error/customError";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../constants/error/errorCodes";
+import { CommentRequestModel } from "../../models/requests/Comment";
+import { io } from "../../server";
 const dot = require("dot-object");
 
 // createRequest requests the server to create a new collaboration request
@@ -61,6 +63,8 @@ export const deleteRequest = async (req: Request, res: Response, next: NextFunct
 
     const request: IRequest | null = await RequestModel.findByIdAndDelete(requestId);
 
+    await CommentRequestModel.deleteMany({ requestId });
+
     if (!request) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.REQUEST_NOT_FOUND]);
       error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
@@ -111,6 +115,11 @@ export const updateRequest = async (req: Request, res: Response, next: NextFunct
       error.code = ERROR_CODES.REQUEST_NOT_FOUND;
       throw error;
     }
+
+    io.emit("requestUpdated", {
+      updatedRequest: request,
+    });
+
     successHandler<IRequest>(req, res, convertToPlainObject(request), HTTP_STATUS_CODES.OK);
   } catch (error) {
     next(error);

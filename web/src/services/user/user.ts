@@ -6,5 +6,13 @@ export const createUser = async (dataUser: User): Promise<User> => {
 };
 
 export const getUserById = async (userId: string): Promise<User> => {
-  return api.get<User>(`/users/${userId}`);
+  const response: { success: boolean; data: User } = await api.get<{
+    success: boolean;
+    data: User;
+  }>(`/users/${userId}`);
+  return response.data;
+};
+
+export const getUsersList = async (): Promise<User[]> => {
+  return api.get<User[]>(`/users/`);
 };

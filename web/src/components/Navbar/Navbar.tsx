@@ -20,6 +20,7 @@ import { NavigateFunction, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserContext";
 import { avatars, getAvatarKey } from "./avatar";
 import { useSnackbar } from "notistack";
+import { logoutUser } from "../../actions/auth/auth";
 
 const Navbar: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -51,9 +52,11 @@ const Navbar: React.FC = () => {
       setDrawerOpen(open);
     };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    if (userContext?.userId) {
+      await logoutUser(userContext?.userId);
+    }
     setUserContext(null);
-    localStorage.removeItem("token");
     enqueueSnackbar("Logout successful", { variant: "warning" });
     navigate("/login");
     setAnchorEl(null);

@@ -6,12 +6,14 @@ import NgoNonProfitAvatar from "../../assets/avatars/ngo-non-profit.svg";
 import CorporationAvatar from "../../assets/avatars/corporation.svg";
 import GovernmentAvatar from "../../assets/avatars/government.svg";
 
-export const getAvatarKey = (url: string): string => {
-    const parts = url.split('/');
+export const getAvatarKey = (url?: string): string => {
+  if (url) {
+    const parts = url.split("/");
     const filename = parts[parts.length - 1];
-    return filename.replace('.svg', '');
-  };
-  
+    return filename.replace(".svg", "");
+  }
+  return "";
+};
 
 export const avatars: { [key: string]: string } = {
   "multi-target": MultiAvatar,

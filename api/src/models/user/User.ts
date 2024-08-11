@@ -39,6 +39,7 @@ export interface IUser extends Document {
     collaborationDuration: CollaborationDuration;
   };
   avatar: string;
+  refreshToken: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -93,6 +94,7 @@ const userSchema: Schema = new Schema(
       },
     },
     avatar: { type: String },
+    refreshToken: { type: String },
   },
   { timestamps: true }
 );
