@@ -8,6 +8,7 @@ import {
   IconButton,
   Grid,
   Paper,
+  Button,
 } from "@mui/material";
 import OpenInNew from "@mui/icons-material/OpenInNew";
 import {
@@ -20,7 +21,8 @@ import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import { UserRequest } from "../../pages/RequestsList";
 import { avatars, getAvatarKey } from "../Navbar/avatar";
 import { useNavigate } from "react-router-dom";
-import { truncateText } from "../../utils/utils";
+import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
+import { formatDate, truncateText } from "../../utils/utils";
 
 const RequestCard: React.FC<{
   requestId: string;
@@ -121,16 +123,23 @@ const RequestCard: React.FC<{
               {comments?.length} answers
             </Typography>
             <Chip
+              size="small"
               label={collaborationStatus}
+              icon={
+                collaborationStatus === CollaborationStatus.closed ? (
+                  <DoneRoundedIcon
+                    sx={{ color: "#197278", marginRight: "2px" }}
+                  />
+                ) : undefined
+              }
               sx={{
-                backgroundColor: "#fff",
                 border: "1px solid black",
                 borderRadius: "8px",
                 marginTop: "7px",
-                "&:hover": {
-                  backgroundColor: "#C8E6C9",
-                  flexWrap: "nowrap",
-                },
+                backgroundColor:
+                  collaborationStatus === CollaborationStatus.closed
+                    ? "#C8E6C9"
+                    : "transparent",
               }}
             />
           </Box>
@@ -234,10 +243,34 @@ const RequestCard: React.FC<{
                   >
                     {requestTitle}
                   </Typography>
-                  <Typography variant="body2" paragraph>
-                    Request description:{" "}
-                    {truncateText(description, 3.5, lineHeight, containerWidth)}
-                  </Typography>
+                  <Box display="flex">
+                    <Typography variant="body2" paragraph>
+                      Request description:{" "}
+                      {truncateText(
+                        description,
+                        3.5,
+                        lineHeight,
+                        containerWidth
+                      )}
+                      <Button
+                        onClick={handleOpenRequestDetails}
+                        sx={{
+                          textTransform: "none",
+                          color: "#008080",
+                          fontWeight: 700,
+                          textDecoration: "underline",
+                          marginLeft: "3px",
+                          marginTop: "-3.9px",
+                          padding: "0",
+                          "&:hover": {
+                            background: "none",
+                          },
+                        }}
+                      >
+                        See more
+                      </Button>
+                    </Typography>
+                  </Box>
                 </Box>
                 <Box
                   display="flex"
@@ -256,22 +289,12 @@ const RequestCard: React.FC<{
                           </Typography>
                           <Chip
                             size="small"
-                            label={new Date(
-                              projectStartEndEstimation[0]
-                            ).toLocaleDateString("en-GB", {
-                              day: "2-digit",
-                              month: "2-digit",
-                              year: "2-digit",
-                            })}
+                            label={formatDate(projectStartEndEstimation[0])}
                             sx={{
                               backgroundColor: "#fff",
                               border: "1px solid black",
                               borderRadius: "8px",
-                              marginTop: "7px",
-                              "&:hover": {
-                                backgroundColor: "#C8E6C9",
-                                flexWrap: "nowrap",
-                              },
+                              marginTop: "5px",
                             }}
                           />
                           <Typography
@@ -282,22 +305,12 @@ const RequestCard: React.FC<{
                           </Typography>
                           <Chip
                             size="small"
-                            label={new Date(
-                              projectStartEndEstimation[1]
-                            ).toLocaleDateString("en-GB", {
-                              day: "2-digit",
-                              month: "2-digit",
-                              year: "2-digit",
-                            })}
+                            label={formatDate(projectStartEndEstimation[1])}
                             sx={{
                               backgroundColor: "#fff",
                               border: "1px solid black",
                               borderRadius: "8px",
-                              marginTop: "7px",
-                              "&:hover": {
-                                backgroundColor: "#C8E6C9",
-                                flexWrap: "nowrap",
-                              },
+                              marginTop: "5px",
                             }}
                           />
                         </Box>

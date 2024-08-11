@@ -394,12 +394,19 @@ const RequestsDetail: React.FC = () => {
               size="small"
               label={requestDetails.collaborationStatus}
               icon={
-                <DoneRoundedIcon
-                  sx={{ color: "#197278", marginRight: "2px" }}
-                />
+                requestDetails.collaborationStatus ===
+                CollaborationStatus.closed ? (
+                  <DoneRoundedIcon
+                    sx={{ color: "#197278", marginRight: "2px" }}
+                  />
+                ) : undefined
               }
               sx={{
-                backgroundColor: "#C8E6C9",
+                backgroundColor:
+                  requestDetails.collaborationStatus ===
+                  CollaborationStatus.closed
+                    ? "#C8E6C9"
+                    : "transparent",
                 border: "1px solid black",
                 borderRadius: "8px",
                 marginLeft: "5px",

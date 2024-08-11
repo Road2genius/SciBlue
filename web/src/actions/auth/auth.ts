@@ -16,6 +16,7 @@ export const logoutUser = async (userId: string): Promise<void> => {
   try {
     await logout(userId);
     sessionStorage.removeItem("your_jwt_secret_key");
+    localStorage.removeItem("userContext");
   } catch (error) {
     throw new Error("Failed to log in");
   }
