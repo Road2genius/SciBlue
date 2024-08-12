@@ -4,7 +4,7 @@ import { LocalizationProvider, DateField } from "@mui/x-date-pickers";
 import CustomTextField from "../../components/CustomTextField/CustomTextField";
 import CustomTagInput from "../../components/CustomTag/CustomTag";
 import {
-  FieldsProfessionalActivity,
+  FieldsEnvironmentalArea,
   ProjectFunding,
   ProjectProgressStatus,
 } from "../../../../shared-types/user";
@@ -103,14 +103,14 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
       </Typography>
       <Box className={classes.chipContainer} mb={2}>
         <>
-          {Object.values(FieldsProfessionalActivity).map((label) => (
+          {Object.values(FieldsEnvironmentalArea).map((label) => (
             <Chip
               key={label}
               label={label}
               onClick={() =>
                 handleDoubleNestedChip(
                   "project",
-                  "fieldsProfessionalActivity",
+                  "fieldsEnvironmentalArea",
                   "generic",
                   label
                 )
@@ -119,14 +119,14 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 marginRight: "10px",
                 marginTop: "10px",
                 backgroundColor:
-                  request.project.fieldsProfessionalActivity.generic.includes(
-                    label as FieldsProfessionalActivity
+                  request.project.fieldsEnvironmentalArea.generic.includes(
+                    label as FieldsEnvironmentalArea
                   )
                     ? "#C8E6C9"
                     : "transparent",
                 color:
-                  request.project.fieldsProfessionalActivity.generic.includes(
-                    label as FieldsProfessionalActivity
+                  request.project.fieldsEnvironmentalArea.generic.includes(
+                    label as FieldsEnvironmentalArea
                   )
                     ? "#000"
                     : "",
@@ -141,11 +141,11 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           ))}
           <CustomTagInput
             label="add your tag"
-            customTags={request.project.fieldsProfessionalActivity.custom ?? []}
+            customTags={request.project.fieldsEnvironmentalArea.custom ?? []}
             setCustomTags={(newCustomTags) =>
               handleDoubleNestedChange(
                 "project",
-                "fieldsProfessionalActivity",
+                "fieldsEnvironmentalArea",
                 "custom",
                 newCustomTags
               )

@@ -1,7 +1,7 @@
 import { CommentRequestModel, ICommentRequest } from "../../../src/models/requests/Comment";
 import {
   CollaborationVote,
-  FieldsProfessionalActivity,
+  FieldsEnvironmentalArea,
   ProjectProgressStatus,
   TypeOfCollaboration,
 } from "../../../../shared-types/user";
@@ -12,8 +12,8 @@ export const valideRequestData: Partial<IRequest> = {
   project: {
     projectTitle: "testProject2",
     summary: "this is a test",
-    fieldsProfessionalActivity: {
-      generic: [FieldsProfessionalActivity.ClimateChange, FieldsProfessionalActivity.AgriFood],
+    fieldsEnvironmentalArea: {
+      generic: [FieldsEnvironmentalArea.ClimateChange, FieldsEnvironmentalArea.AgriFood],
       custom: ["test"],
     },
     projectProgressStatus: ProjectProgressStatus.Starting,
@@ -30,8 +30,8 @@ export const anotherValideRequestData: Partial<IRequest> = {
   project: {
     projectTitle: "testProject1337",
     summary: "this is a test again",
-    fieldsProfessionalActivity: {
-      generic: [FieldsProfessionalActivity.ClimateChange, FieldsProfessionalActivity.AgriFood],
+    fieldsEnvironmentalArea: {
+      generic: [FieldsEnvironmentalArea.ClimateChange, FieldsEnvironmentalArea.AgriFood],
     },
     projectProgressStatus: ProjectProgressStatus.Starting,
   },

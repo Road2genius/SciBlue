@@ -2,28 +2,25 @@ import React from "react";
 import {
   Avatar,
   Box,
-  Button,
-  Chip,
+  // Button,
   Container,
   Divider,
+  // Divider,
   Grid,
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import {
-  CollaborationDuration,
-  FieldsProfessionalActivity,
-  OrganizationAffiliated,
-  ProjectProgressStatus,
-  SkillsOrTechnicalKeys,
-  TypeOfCollaboration,
-  TypeOfOrganization,
-} from "../../../shared-types/user";
-import CustomTextField from "../components/CustomTextField/CustomTextField";
+// import CustomTextField from "../components/CustomTextField/CustomTextField";
 import { getTextFieldsConfig } from "../components/CustomTextField/getTextFieldsConfig";
-import { getSkillsOrTechnicalProperties } from "../components/CustomTag/skillsOrTechnicalProperties";
+// import { getSkillsOrTechnicalProperties } from "../components/CustomTag/skillsOrTechnicalProperties";
 import useSignupForm from "../hooks/useSignupForm";
-import CustomTagInput from "../components/CustomTag/CustomTag";
+// import CustomTextField from "../components/CustomTextField/CustomTextField";
+import OrganizationChips from "../components/OrganizationChips/OrganizationChips";
+import PrivacyLevel from "../components/PrivacyLevel/PrivacyLevel";
+// import CustomTextField from "../components/CustomTextField/CustomTextField";
+import LoginInformation from "../components/LoginInformation/LoginInformation";
+import ConditionalTextFields from "../components/ConditionalTextFields/ConditionalTextFields";
+// import CustomTagInput from "../components/CustomTag/CustomTag";
 
 const Signup: React.FC = () => {
   const classes = useStyles();
@@ -31,90 +28,139 @@ const Signup: React.FC = () => {
     user,
     getAvatarByOrganization,
     handleChangeChip,
+    organizationIsResearcher,
     handleChange,
-    handleNestedChip,
+    // handleNestedChip,
     handleNestedChange,
-    handleValidate,
+    // handleValidate,
   } = useSignupForm();
   const textFields = getTextFieldsConfig(user);
-  const skillsOrTechnicalProperties = getSkillsOrTechnicalProperties(user);
-
+  // const skillsOrTechnicalProperties = getSkillsOrTechnicalProperties(user);
   return (
     <Container maxWidth="xl">
-      <Box className={classes.root}>
+      <Box
+        className={classes.root}
+        sx={{
+          minWidth: {
+            xs: "100%",
+            sm: "100%",
+            md: "100%",
+            lg: "100%",
+            xl: "1200px",
+          },
+        }}
+      >
         <Typography variant="h4" fontWeight={700} color="#197278">
           Sign up
         </Typography>
         <Typography variant="body2" mb={4} color="grey">
-          * information requested
+          *Required information
         </Typography>
         <Grid container>
-          <Grid item xs={10}>
-            <Typography variant="h5" fontWeight={600} mb={4}>
-              General information
+          <Grid item xs={12} md={9}>
+            <Typography variant="h5" fontWeight={600} my={2}>
+              Type of organization you are affiliated with*
             </Typography>
-            {textFields.slice(0, 4).map((field, index) => (
-              <CustomTextField
-                key={index}
-                label={field.label}
-                placeholder={field.placeholder}
-                type={field.type}
-                value={field.value}
-                onChange={(e) =>
-                  handleChange(
-                    field.textfield as keyof typeof user,
-                    e.target.value
-                  )
-                }
-                required={field.required}
+            <OrganizationChips
+              selectedOrganizations={user.organizationAffiliated}
+              handleChange={(label) =>
+                handleChangeChip("organizationAffiliated", label)
+              }
+            />
+            <Box mt={8} mb={5} ml={8}>
+              <Divider
+                variant="fullWidth"
+                sx={{
+                  borderBottomWidth: 1.5,
+                  minWidth: {
+                    xs: "100%",
+                    sm: "100%",
+                    md: "100%",
+                    lg: "100%",
+                    xl: "1250px",
+                  },
+                }}
               />
-            ))}
-            <Typography variant="h5" fontWeight={600} mt={1}>
-              Professional activity and expertise
-            </Typography>
-            <Typography variant="body1" fontWeight={600} mt={4}>
-              What type of organization are you affiliated with?
-            </Typography>
-            <Box className={classes.chipContainer}>
-              {Object.values(OrganizationAffiliated).map((label) => (
-                <Chip
-                  key={label}
-                  label={label}
-                  onClick={() => {
-                    handleChangeChip("organizationAffiliated", label);
-                  }}
-                  sx={{
-                    margin: "5px",
-                    backgroundColor: user.organizationAffiliated.includes(
-                      label as OrganizationAffiliated
-                    )
-                      ? "#C8E6C9"
-                      : "transparent",
-                    color: user.organizationAffiliated.includes(
-                      label as OrganizationAffiliated
-                    )
-                      ? "#000"
-                      : "",
-                    border: "1px solid black",
-                    borderRadius: "8px",
-                    "&:hover": {
-                      backgroundColor: "#C8E6C9",
-                    },
-                  }}
-                  clickable
-                />
-              ))}
             </Box>
+            {organizationIsResearcher(user.organizationAffiliated) && (
+              <PrivacyLevel
+                privacyMode={user.privacyLevel.mode}
+                username={user.privacyLevel.username}
+                handlePrivacyModeChange={(checked) =>
+                  handleNestedChange("privacyLevel", "mode", checked)
+                }
+                handleUsernameChange={(username) =>
+                  handleNestedChange("privacyLevel", "username", username)
+                }
+              />
+            )}
+            <LoginInformation
+              textFields={textFields}
+              handleChange={handleChange}
+              user={user}
+            />
+            <ConditionalTextFields
+              user={user}
+              handleChange={handleChange}
+              organizationIsResearcher={organizationIsResearcher(
+                user.organizationAffiliated
+              )}
+            />
           </Grid>
-          <Grid item xs={2}>
+          <Grid
+            item
+            xs={12}
+            md={3}
+            justifyContent="center"
+            sx={{ display: "flex" }}
+          >
             <Avatar
               variant="square"
               src={getAvatarByOrganization(user.organizationAffiliated)}
-              sx={{ width: 146, height: 146, borderRadius: "8px" }}
+              sx={{ width: 146, height: 146, borderRadius: "5px" }}
             ></Avatar>
           </Grid>
         </Grid>
-        <Box my={3}>
+
+        {/* <Box>
+          <Typography variant="h5" fontWeight={600} mb={2}>
+            Login information
+          </Typography>
+          {textFields.slice(0, 2).map((field, index) => (
+            <CustomTextField
+              short={true}
+              key={index + 4}
+              label={field.label}
+              placeholder={field.placeholder}
+              type={field.type}
+              value={field.value}
+              onChange={(e) =>
+                handleChange(
+                  field.textfield as keyof typeof user,
+                  e.target.value
+                )
+              }
+              required={field.required}
+              multiline={field.multiline}
+            />
+          ))}
+          <Box mt={8} mb={5} ml={8}>
+            <Divider
+              variant="fullWidth"
+              sx={{
+                borderBottomWidth: 1.5,
+                minWidth: {
+                  xs: "100%",
+                  sm: "100%",
+                  md: "100%",
+                  lg: "100%",
+                  xl: "1250px",
+                },
+              }}
+            />
+          </Box>
+        </Box> */}
+        {/* <Box my={3}>
           {textFields.slice(4).map((field, index) => (
             <CustomTextField
               key={index + 4}
@@ -146,13 +192,13 @@ const Signup: React.FC = () => {
         </Typography>
         <Box className={classes.chipContainer} my={2}>
           <>
-            {Object.values(FieldsProfessionalActivity).map((label) => (
+            {Object.values(FieldsEnvironmentalArea).map((label) => (
               <Chip
                 key={label}
                 label={label}
                 onClick={() =>
                   handleNestedChip(
-                    "fieldsProfessionalActivity",
+                    "fieldsEnvironmentalArea",
                     "generic",
                     label
                   )
@@ -160,13 +206,13 @@ const Signup: React.FC = () => {
                 sx={{
                   margin: "5px",
                   backgroundColor:
-                    user.fieldsProfessionalActivity.generic.includes(
-                      label as FieldsProfessionalActivity
+                    user.fieldsEnvironmentalArea.generic.includes(
+                      label as FieldsEnvironmentalArea
                     )
                       ? "#C8E6C9"
                       : "transparent",
-                  color: user.fieldsProfessionalActivity.generic.includes(
-                    label as FieldsProfessionalActivity
+                  color: user.fieldsEnvironmentalArea.generic.includes(
+                    label as FieldsEnvironmentalArea
                   )
                     ? "#000"
                     : "",
@@ -181,10 +227,10 @@ const Signup: React.FC = () => {
             ))}
             <CustomTagInput
               label="add your tag"
-              customTags={user.fieldsProfessionalActivity.custom ?? []}
+              customTags={user.fieldsEnvironmentalArea.custom ?? []}
               setCustomTags={(newCustomTags) =>
                 handleNestedChange(
-                  "fieldsProfessionalActivity",
+                  "fieldsEnvironmentalArea",
                   "custom",
                   newCustomTags
                 )
@@ -398,7 +444,7 @@ const Signup: React.FC = () => {
           onClick={() => handleValidate()}
         >
           Validate
-        </Button>
+        </Button> */}
       </Box>
     </Container>
   );
@@ -409,16 +455,15 @@ export default Signup;
 const useStyles = makeStyles({
   root: {
     marginTop: "40px",
-    margin: "20px",
-    maxWidth: "980px",
     minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
+    margin: "auto",
   },
   chipContainer: {
+    maxWidth: "900px",
     display: "flex",
     flexWrap: "wrap",
-    marginTop: "5px",
     marginBottom: "5px",
     alignItems: "center",
   },

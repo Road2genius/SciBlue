@@ -13,7 +13,7 @@ import {
 import OpenInNew from "@mui/icons-material/OpenInNew";
 import {
   CollaborationStatus,
-  FieldsProfessionalActivity,
+  FieldsEnvironmentalArea,
   TypeOfCollaboration,
 } from "../../../../shared-types/user";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
@@ -31,7 +31,7 @@ const RequestCard: React.FC<{
   typeOfCollaboration: TypeOfCollaboration[];
   projectStartEndEstimation?: Date[];
   fieldsOfApplicationCustom?: string[];
-  fieldsOfApplicationGeneric?: FieldsProfessionalActivity[];
+  fieldsOfApplicationGeneric?: FieldsEnvironmentalArea[];
   comments?: string[];
   positiveVotes: number;
   negativeVotes: number;

@@ -1,11 +1,11 @@
 import {
   CollaborationStatus,
-  FieldsProfessionalActivity,
   TypeOfOrganization,
   ProjectFunding,
   ProjectProgressStatus,
   TypeOfCollaboration,
   CollaborationVote,
+  FieldsEnvironmentalArea,
 } from "./user";
 import {
   AgriculturalScienceSubDisciplines,
@@ -80,8 +80,8 @@ type SpecificsSkills = {
 export type Project = {
   projectTitle: string;
   summary: string;
-  fieldsProfessionalActivity: {
-    generic: FieldsProfessionalActivity[];
+  fieldsEnvironmentalArea: {
+    generic: FieldsEnvironmentalArea[];
     custom: string[];
   };
   projectStartEndEstimation: Date[];

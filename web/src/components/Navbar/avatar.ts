@@ -1,10 +1,8 @@
-import MultiAvatar from "../../assets/avatars/multi-target.svg";
 import AcademicAvatar from "../../assets/avatars/academic.svg";
-import CroPrivateAvatar from "../../assets/avatars/cro-private.svg";
-import FreelanceAvatar from "../../assets/avatars/freelance.svg";
-import NgoNonProfitAvatar from "../../assets/avatars/ngo-non-profit.svg";
-import CorporationAvatar from "../../assets/avatars/corporation.svg";
+import FreelanceAvatar from "../../assets/avatars/freelancer.svg";
 import GovernmentAvatar from "../../assets/avatars/government.svg";
+import OngAvatar from "../../assets/avatars/ong.svg";
+import PrivateAvatar from "../../assets/avatars/privateResearch.svg";
 
 export const getAvatarKey = (url?: string): string => {
   if (url) {
@@ -16,11 +14,9 @@ export const getAvatarKey = (url?: string): string => {
 };
 
 export const avatars: { [key: string]: string } = {
-  "multi-target": MultiAvatar,
   academic: AcademicAvatar,
-  "cro-private": CroPrivateAvatar,
-  freelance: FreelanceAvatar,
-  "ngo-non-profit": NgoNonProfitAvatar,
-  corporation: CorporationAvatar,
+  freelancer: FreelanceAvatar,
   government: GovernmentAvatar,
+  ong: OngAvatar,
+  privateResearch: PrivateAvatar,
 };

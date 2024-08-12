@@ -21,7 +21,7 @@ import TuneRoundedIcon from "@mui/icons-material/TuneRounded";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import {
   CollaborationStatus,
-  FieldsProfessionalActivity,
+ FieldsEnvironmentalArea,
   ProjectFunding,
   ProjectProgressStatus,
   TypeOfCollaboration,
@@ -37,7 +37,7 @@ interface TabPanelProps {
 type FilterSelection = {
   collaborationStatus?: CollaborationStatus;
   collaborationType?: TypeOfCollaboration[];
-  fieldsProfessionalActivity?: FieldsProfessionalActivity[];
+  fieldsEnvironmentalArea?: FieldsEnvironmentalArea[];
   projectProgressStatus?: ProjectProgressStatus;
   projectFunding?: ProjectFunding;
   organizationRequested?: TypeOfOrganization[];
@@ -45,13 +45,13 @@ type FilterSelection = {
 
 type FilterSelectionArrays =
   | TypeOfCollaboration
-  | FieldsProfessionalActivity
+  | FieldsEnvironmentalArea
   | TypeOfOrganization;
 
 const filterSelectionInitial: FilterSelection = {
   collaborationStatus: undefined,
   collaborationType: [],
-  fieldsProfessionalActivity: [],
+  fieldsEnvironmentalArea: [],
   projectProgressStatus: undefined,
   projectFunding: undefined,
   organizationRequested: [],
@@ -99,12 +99,12 @@ const applyFilters = (
 
     // Filtre sur les domaines d'activité professionnelle
     if (
-      filters.fieldsProfessionalActivity &&
-      filters.fieldsProfessionalActivity.length > 0
+      filters.fieldsEnvironmentalArea &&
+      filters.fieldsEnvironmentalArea.length > 0
     ) {
       if (
-        !filters.fieldsProfessionalActivity.some((field) =>
-          request.project.fieldsProfessionalActivity.generic.includes(field)
+        !filters.fieldsEnvironmentalArea.some((field) =>
+          request.project.fieldsEnvironmentalArea.generic.includes(field)
         )
       ) {
         return false;
@@ -326,10 +326,10 @@ const TabsComponent: React.FC<{
                   request.project.projectStartEndEstimation
                 }
                 fieldsOfApplicationCustom={
-                  request.project.fieldsProfessionalActivity.custom
+                  request.project.fieldsEnvironmentalArea.custom
                 }
                 fieldsOfApplicationGeneric={
-                  request.project.fieldsProfessionalActivity.generic
+                  request.project.fieldsEnvironmentalArea.generic
                 }
                 comments={request.comments}
                 positiveVotes={request.positiveVotes}
@@ -355,10 +355,10 @@ const TabsComponent: React.FC<{
                   request.project.projectStartEndEstimation
                 }
                 fieldsOfApplicationCustom={
-                  request.project.fieldsProfessionalActivity.custom
+                  request.project.fieldsEnvironmentalArea.custom
                 }
                 fieldsOfApplicationGeneric={
-                  request.project.fieldsProfessionalActivity.generic
+                  request.project.fieldsEnvironmentalArea.generic
                 }
                 comments={request.comments}
                 positiveVotes={request.positiveVotes}
@@ -384,10 +384,10 @@ const TabsComponent: React.FC<{
                   request.project.projectStartEndEstimation
                 }
                 fieldsOfApplicationCustom={
-                  request.project.fieldsProfessionalActivity.custom
+                  request.project.fieldsEnvironmentalArea.custom
                 }
                 fieldsOfApplicationGeneric={
-                  request.project.fieldsProfessionalActivity.generic
+                  request.project.fieldsEnvironmentalArea.generic
                 }
                 comments={request.comments}
                 positiveVotes={request.positiveVotes}
@@ -499,7 +499,7 @@ const TabsComponent: React.FC<{
             Application area
           </Typography>
           <Box display="flex" sx={{ flexWrap: "wrap" }}>
-            {Object.values(FieldsProfessionalActivity).map((label) => (
+            {Object.values(FieldsEnvironmentalArea).map((label) => (
               <Chip
                 key={label}
                 label={label}
@@ -508,13 +508,13 @@ const TabsComponent: React.FC<{
                   marginTop: "10px",
                   border: "1px solid black",
                   backgroundColor:
-                    filterRequest.fieldsProfessionalActivity?.includes(
-                      label as FieldsProfessionalActivity
+                    filterRequest.fieldsEnvironmentalArea?.includes(
+                      label as FieldsEnvironmentalArea
                     )
                       ? "#C8E6C9"
                       : "transparent",
-                  color: filterRequest.fieldsProfessionalActivity?.includes(
-                    label as FieldsProfessionalActivity
+                  color: filterRequest.fieldsEnvironmentalArea?.includes(
+                    label as FieldsEnvironmentalArea
                   )
                     ? "#000"
                     : "",
@@ -524,7 +524,7 @@ const TabsComponent: React.FC<{
                   },
                 }}
                 onClick={() =>
-                  handleFilterArrayRequest("fieldsProfessionalActivity", label)
+                  handleFilterArrayRequest("fieldsEnvironmentalArea", label)
                 }
                 clickable
               />

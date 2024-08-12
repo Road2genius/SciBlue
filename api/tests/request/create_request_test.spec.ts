@@ -37,11 +37,11 @@ describe("Create a request", () => {
     expect(response.body.data.userId).toBe(userId.toString());
     expect(response.body.data.project.projectTitle).toBe(valideRequestData.project?.projectTitle);
     expect(response.body.data.project.summary).toBe(valideRequestData.project?.summary);
-    expect(response.body.data.project.fieldsProfessionalActivity.generic).toEqual(
-      valideRequestData.project?.fieldsProfessionalActivity.generic
+    expect(response.body.data.project.fieldsEnvironmentalArea.generic).toEqual(
+      valideRequestData.project?.fieldsEnvironmentalArea.generic
     );
-    expect(response.body.data.project.fieldsProfessionalActivity.custom).toEqual(
-      valideRequestData.project?.fieldsProfessionalActivity.custom
+    expect(response.body.data.project.fieldsEnvironmentalArea.custom).toEqual(
+      valideRequestData.project?.fieldsEnvironmentalArea.custom
     );
   });
 

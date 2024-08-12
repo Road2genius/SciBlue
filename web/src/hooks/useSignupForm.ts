@@ -1,54 +1,65 @@
 import { useEffect, useState } from "react";
 import { User } from "../../../shared-types/userData";
-import { OrganizationAffiliated } from "../../../shared-types/user";
-import MultiAvatar from "../assets/avatars/multi-target.svg";
 import AcademicAvatar from "../assets/avatars/academic.svg";
-import CroPrivateAvatar from "../assets/avatars/cro-private.svg";
-import FreelanceAvatar from "../assets/avatars/freelance.svg";
-import NgoNonProfitAvatar from "../assets/avatars/ngo-non-profit.svg";
-import CorporationAvatar from "../assets/avatars/corporation.svg";
+import FreelanceAvatar from "../assets/avatars/freelancer.svg";
 import GovernmentAvatar from "../assets/avatars/government.svg";
+import OngAvatar from "../assets/avatars/ong.svg";
+import PrivateAvatar from "../assets/avatars/privateResearch.svg";
 import { createUserAction } from "../actions/user/user";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../utils/handleError";
 import { useSnackbar } from "notistack";
-
-type NestedKeyOf<T> = {
-  [K in keyof T]: T[K] extends object ? K : never;
-}[keyof T];
+import {
+  ProjectFunding,
+  ProjectProgressStatus,
+  TypeOfOrganization,
+} from "../../../shared-types/user";
+import { NestedKeyOf } from "../../../shared-types/requestData";
 
 const initialUserState: User = {
   _id: "",
-  firstName: "",
-  lastName: "",
+  organizationAffiliated: "" as TypeOfOrganization,
+  privacyLevel: {
+    mode: false,
+    username: "",
+  },
   email: "",
   password: "",
-  organizationAffiliated: [],
+  firstName: "",
+  lastName: "",
   organizationName: "",
-  institution: "",
-  address: "",
-  city: "",
+  typeOfOrganizationSpecific: "",
   country: "",
-  description: "",
-  keywordsActivity: [],
-  fieldsProfessionalActivity: {
-    generic: [],
-    custom: [],
+  languages: [],
+  institution: "",
+  profileVerificationInfo: "",
+  researchActivityAndExpertise: {
+    description: "",
+    disciplines: [],
+    expertisesAndSkills: [],
+    fieldsEnvironmentalArea: {
+      generic: [],
+      custom: [],
+    },
+    fieldsApplicationArea: [],
   },
-  skillsOrTechnical: {
-    specificTechnicsNames: [],
-    equipment: [],
-    models: [],
-    chemicalAndBiologicalProducts: [],
-    otherSkills: [],
+  professionalActivityAndExpertise: {
+    fieldsEnvironmentalArea: {
+      generic: [],
+      custom: [],
+    },
+    description: "",
+    expertisesAndSkills: [],
   },
   kindOfCollaborationWanted: {
-    typeOfCollaboration: [],
     typeOfOrganization: [],
-    projectProgressStatus: undefined,
-    collaborationDuration: undefined,
+    projectProgressStatus: "" as ProjectProgressStatus,
+    projectFunding: "" as ProjectFunding,
   },
   avatar: "",
+  refreshToken: "",
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
 
 const useSignupForm = () => {
@@ -56,59 +67,66 @@ const useSignupForm = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  const avatarUrls: { [key in OrganizationAffiliated]: string } = {
-    [OrganizationAffiliated.AcademicLaboratoryAndInstitute]: AcademicAvatar,
-    [OrganizationAffiliated.AcademicTechnologyPlatform]: AcademicAvatar,
-    [OrganizationAffiliated.CroAndPrivateTechnologyPlatform]: CroPrivateAvatar,
-    [OrganizationAffiliated.Freelancer]: FreelanceAvatar,
-    [OrganizationAffiliated.NgoNonProfitOrganizationFoundation]:
-      NgoNonProfitAvatar,
-    [OrganizationAffiliated.Corporation]: CorporationAvatar,
-    [OrganizationAffiliated.Government]: GovernmentAvatar,
+  const avatarUrls: { [key in TypeOfOrganization]: string } = {
+    [TypeOfOrganization.AcademicLaboratoryAndInstitute]: AcademicAvatar,
+    [TypeOfOrganization.AcademicTechnologyPlatform]: AcademicAvatar,
+    [TypeOfOrganization.FreelanceScientist]: FreelanceAvatar,
+    [TypeOfOrganization.Government]: GovernmentAvatar,
+    [TypeOfOrganization.NgoNonProfitOrganizationFoundation]: OngAvatar,
+    [TypeOfOrganization.PrivateResearchOrganizations]: PrivateAvatar,
   };
-
-  const isAcademicAnyway = (organization: OrganizationAffiliated[]) =>
-    (organization[0] ===
-      OrganizationAffiliated.AcademicLaboratoryAndInstitute ||
-      organization[0] === OrganizationAffiliated.AcademicTechnologyPlatform) &&
-    (organization[1] ===
-      OrganizationAffiliated.AcademicLaboratoryAndInstitute ||
-      organization[1] === OrganizationAffiliated.AcademicTechnologyPlatform);
 
   const getAvatarByOrganization = (
-    organization: OrganizationAffiliated[]
-  ): string => {
-    const avatar: string =
-      organization.length > 1 && !isAcademicAnyway(organization)
-        ? MultiAvatar
-        : avatarUrls[organization[0]];
-    return avatar;
+    organization?: TypeOfOrganization
+  ): string | undefined => {
+    if (organization) {
+      return avatarUrls[organization];
+    }
   };
 
+  const organizationIsResearcher = (organization: string): boolean =>
+    organization === TypeOfOrganization.AcademicLaboratoryAndInstitute ||
+    organization === TypeOfOrganization.AcademicTechnologyPlatform ||
+    organization === TypeOfOrganization.PrivateResearchOrganizations ||
+    organization === TypeOfOrganization.FreelanceScientist;
+
   useEffect(() => {
-    const avatarUrl = getAvatarByOrganization(user.organizationAffiliated);
-    setUser((prevUser) => ({
-      ...prevUser,
-      avatar: avatarUrl,
-    }));
+    const avatarUrl = getAvatarByOrganization(
+      user.organizationAffiliated ?? undefined
+    );
+    if (user.organizationAffiliated && avatarUrl) {
+      setUser((prevUser) => ({
+        ...prevUser,
+        avatar: avatarUrl,
+      }));
+    }
   }, [user.organizationAffiliated]);
 
   const handleChange = <K extends keyof User>(field: K, value: User[K]) => {
     setUser({ ...user, [field]: value });
   };
 
-  const handleChangeChip = <K extends keyof User>(
-    field: K,
-    item: User[K] extends Array<infer U> ? U : never
-  ) => {
-    setUser((prevUser) => {
-      const currentArray = prevUser[field] as unknown as Array<typeof item>;
-      const newArray = currentArray.includes(item)
-        ? currentArray.filter((i) => i !== item)
-        : [...currentArray, item];
+  // const handleChangeChip = <T>(
+  //   field: keyof User,
+  //   item: T
+  // ) => {
+  //   setUser((prevUser) => {
+  //     const currentArray = (prevUser[field] as unknown as T[]) || [];
 
-      return { ...prevUser, [field]: newArray };
-    });
+  //     const newArray = currentArray.includes(item)
+  //       ? currentArray.filter((i) => i !== item)
+  //       : [...currentArray, item];
+
+  //     return { ...prevUser, [field]: newArray };
+  //   });
+  // };
+
+
+  const handleChangeChip = <T>(field: keyof User, item: T) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      [field]: item,
+    }));
   };
 
   const handleNestedChange = <
@@ -185,6 +203,7 @@ const useSignupForm = () => {
     handleChange,
     handleNestedChange,
     handleValidate,
+    organizationIsResearcher,
   };
 };
 

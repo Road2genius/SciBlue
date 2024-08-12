@@ -1,42 +1,48 @@
 import {
   CollaborationDuration,
-  FieldsProfessionalActivity,
-  OrganizationAffiliated,
+  FieldsEnvironmentalArea,
+  Languages,
+  ProjectFunding,
   ProjectProgressStatus,
   TypeOfCollaboration,
   TypeOfOrganization,
 } from "../../../../shared-types/user";
 import mongoose, { Document, Schema } from "mongoose";
+import { disciplineSchema, IFieldsEnvironmentalArea } from "../requests/Request";
+import { Discipline } from "../../../../shared-types/requestData";
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
-  firstName: string;
-  lastName: string;
+  organizationAffiliated: TypeOfOrganization;
+  privacyLevel: {
+    mode: boolean;
+    username: string;
+  };
   email: string;
   password: string;
-  organizationAffiliated: OrganizationAffiliated[];
+  firstName: string;
+  lastName: string;
   organizationName: string;
-  institution: string;
-  address: string;
-  city: string;
+  typeOfOrganizationSpecific: string;
   country: string;
-  description: string;
-  keywordsActivity: string[];
-  fieldsProfessionalActivity: {
-    generic: FieldsProfessionalActivity[];
-    custom: string[];
+  languages: Languages[];
+  institution: string;
+  profileVerificationInfo: string;
+  researchActivityAndExpertise: {
+    description: string;
+    disciplines: Discipline[];
+    expertisesAndSkills: string[];
+    fieldsEnvironmentalArea?: IFieldsEnvironmentalArea;
+    fieldsApplicationArea: string[];
   };
-  skillsOrTechnical: {
-    specificTechnicsNames: string[];
-    equipment: string[];
-    models: string[];
-    chemicalAndBiologicalProducts: string[];
-    otherSkills: string[];
+  professionalActivityAndExpertise: {
+    fieldsEnvironmentalArea?: IFieldsEnvironmentalArea;
+    description: string;
+    expertisesAndSkills: string[];
   };
   kindOfCollaborationWanted: {
-    typeOfCollaboration: TypeOfCollaboration[];
     typeOfOrganization: TypeOfOrganization[];
     projectProgressStatus: ProjectProgressStatus;
-    collaborationDuration: CollaborationDuration;
+    projectFunding?: ProjectFunding;
   };
   avatar: string;
   refreshToken: string;
@@ -46,51 +52,55 @@ export interface IUser extends Document {
 
 const userSchema: Schema = new Schema(
   {
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
     organizationAffiliated: {
-      type: [{ type: String, enum: OrganizationAffiliated }],
+      type: String,
+      enum: Object.values(TypeOfOrganization),
       required: true,
     },
-    organizationName: { type: String, required: true },
-    institution: { type: String },
-    address: { type: String, required: true },
-    city: { type: String, required: true },
-    country: { type: String, required: true },
-    description: { type: String },
-    keywordsActivity: { type: [String] },
-    fieldsProfessionalActivity: {
-      generic: {
-        type: [String],
-        enum: FieldsProfessionalActivity,
-      },
-      custom: { type: [String] },
+    privacyLevel: {
+      mode: { type: Boolean, required: true },
+      username: { type: String, required: true },
     },
-    skillsOrTechnical: {
-      specificTechnicsNames: { type: [String] },
-      equipment: { type: [String] },
-      models: { type: [String] },
-      chemicalAndBiologicalProducts: { type: [String] },
-      otherSkills: { type: [String] },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    organizationName: { type: String, required: true },
+    typeOfOrganizationSpecific: { type: String, required: true },
+    country: { type: String, required: true },
+    languages: {
+      type: [String],
+      enum: Object.values(Languages),
+      required: true,
+    },
+    institution: { type: String, required: true },
+    profileVerificationInfo: { type: String },
+    researchActivityAndExpertise: {
+      description: { type: String, required: true },
+      disciplines: [disciplineSchema],
+      expertisesAndSkills: { type: [String], required: true },
+      fieldsEnvironmentalArea: { type: Schema.Types.Mixed },
+      fieldsApplicationArea: { type: [String], required: true },
+    },
+    professionalActivityAndExpertise: {
+      fieldsEnvironmentalArea: { type: Schema.Types.Mixed },
+      description: { type: String, required: true },
+      expertisesAndSkills: { type: [String], required: true },
     },
     kindOfCollaborationWanted: {
-      typeOfCollaboration: {
-        type: [String],
-        enum: TypeOfCollaboration,
-      },
       typeOfOrganization: {
         type: [String],
-        enum: TypeOfOrganization,
+        enum: Object.values(TypeOfOrganization),
+        required: true,
       },
       projectProgressStatus: {
-        type: [String],
-        enum: ProjectProgressStatus,
+        type: String,
+        enum: Object.values(ProjectProgressStatus),
+        required: true,
       },
-      collaborationDuration: {
-        type: [String],
-        enum: CollaborationDuration,
+      projectFunding: {
+        type: String,
+        enum: Object.values(ProjectFunding),
       },
     },
     avatar: { type: String },

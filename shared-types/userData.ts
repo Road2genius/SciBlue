@@ -1,7 +1,9 @@
+import { Discipline } from "./requestData";
 import {
   CollaborationDuration,
-  FieldsProfessionalActivity,
-  OrganizationAffiliated,
+  FieldsEnvironmentalArea,
+  Languages,
+  ProjectFunding,
   ProjectProgressStatus,
   TypeOfCollaboration,
   TypeOfOrganization,
@@ -9,34 +11,46 @@ import {
 
 export type User = {
   _id: string;
-  firstName: string;
-  lastName: string;
+  organizationAffiliated: TypeOfOrganization;
+  privacyLevel: {
+    mode: boolean;
+    username: string;
+  };
   email: string;
   password: string;
-  organizationAffiliated: OrganizationAffiliated[];
+  firstName: string;
+  lastName: string;
   organizationName: string;
-  institution: string;
-  address: string;
-  city: string;
+  typeOfOrganizationSpecific: string;
   country: string;
-  description: string;
-  keywordsActivity: string[];
-  fieldsProfessionalActivity: {
-    generic: FieldsProfessionalActivity[];
-    custom: string[];
+  languages: Languages[];
+  institution: string;
+  profileVerificationInfo: string;
+  researchActivityAndExpertise: {
+    description: string;
+    disciplines: Discipline[];
+    expertisesAndSkills: string[];
+    fieldsEnvironmentalArea: {
+      generic: FieldsEnvironmentalArea[];
+      custom: string[];
+    };
+    fieldsApplicationArea: string[];
   };
-  skillsOrTechnical: {
-    specificTechnicsNames: string[];
-    equipment: string[];
-    models: string[];
-    chemicalAndBiologicalProducts: string[];
-    otherSkills: string[];
+  professionalActivityAndExpertise: {
+    fieldsEnvironmentalArea: {
+      generic: FieldsEnvironmentalArea[];
+      custom: string[];
+    };
+    description: string;
+    expertisesAndSkills: string[];
   };
   kindOfCollaborationWanted: {
-    typeOfCollaboration: TypeOfCollaboration[];
     typeOfOrganization: TypeOfOrganization[];
-    projectProgressStatus?: ProjectProgressStatus;
-    collaborationDuration?: CollaborationDuration;
+    projectProgressStatus: ProjectProgressStatus;
+    projectFunding: ProjectFunding;
   };
   avatar: string;
+  refreshToken: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
