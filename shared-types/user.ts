@@ -1,13 +1,3 @@
-// export enum OrganizationAffiliated {
-//   AcademicLaboratoryAndInstitute = "Academic laboratory and institute",
-//   AcademicTechnologyPlatform = "Academic technology platform",
-//   NgoNonProfitOrganizationFoundation = "NGO, non-profit organization, foundation",
-//   Government = "Government",
-//   CroAndPrivateTechnologyPlatform = "CRO and private technology platform",
-//   Corporation = "Corporation",
-//   Freelancer = "Freelancer",
-// }
-
 export enum TypeOfCollaboration {
   PartnershipForGrant = "Partnership for a grant",
   Sponsoring = "Sponsoring",
@@ -31,12 +21,14 @@ export enum ProjectProgressStatus {
   Starting = "Starting",
   Ongoing = "Ongoing",
   NearingCompletion = "Nearing completion",
+  None = ""
 }
 
 export enum ProjectFunding {
   NotFunded = "Not funded",
   LookingForFunding = "Looking for funding",
   Funded = "Funded",
+  None = ""
 }
 
 export enum CollaborationDuration {

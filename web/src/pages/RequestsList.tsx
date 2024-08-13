@@ -8,15 +8,16 @@ import {
 } from "../actions/request/request";
 import { RequestResInterface } from "../../../shared-types/requestData";
 import { getUserByIdAction } from "../actions/user/user";
-import { OrganizationAffiliated } from "../../../shared-types/user";
+import { TypeOfOrganization } from "../../../shared-types/user";
 import { useUserContext } from "../context/UserContext";
+import { UserRes } from "../../../shared-types/userData";
 
 export interface UserRequest {
   id: string;
   firstName: string;
   lastName: string;
   avatar?: string;
-  organization?: OrganizationAffiliated;
+  organization?: TypeOfOrganization;
 }
 
 const RequestsList: React.FC = () => {
@@ -50,14 +51,14 @@ const RequestsList: React.FC = () => {
 
         const usersMap: { [key: string]: UserRequest } = requests.reduce(
           (acc, request) => {
-            const user = usersData.find((user) => user._id === request.userId);
+            const user = usersData.find((user: UserRes) => user._id === request.userId);
             if (user) {
               acc[request._id] = {
                 id: user._id,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 avatar: user.avatar,
-                organization: user.organizationAffiliated[0],
+                organization: user.organizationAffiliated,
               };
             }
             return acc;

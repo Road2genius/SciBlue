@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { User } from "../../../shared-types/userData";
+import { UserReq } from "../../../shared-types/userData";
 import AcademicAvatar from "../assets/avatars/academic.svg";
 import FreelanceAvatar from "../assets/avatars/freelancer.svg";
 import GovernmentAvatar from "../assets/avatars/government.svg";
 import OngAvatar from "../assets/avatars/ong.svg";
 import PrivateAvatar from "../assets/avatars/privateResearch.svg";
 import { createUserAction } from "../actions/user/user";
-import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../utils/handleError";
 import { useSnackbar } from "notistack";
 import {
@@ -14,10 +13,9 @@ import {
   ProjectProgressStatus,
   TypeOfOrganization,
 } from "../../../shared-types/user";
-import { NestedKeyOf } from "../../../shared-types/requestData";
+import { Discipline, NestedKeyOf } from "../../../shared-types/requestData";
 
-const initialUserState: User = {
-  _id: "",
+const initialUserState: UserReq = {
   organizationAffiliated: "" as TypeOfOrganization,
   privacyLevel: {
     mode: false,
@@ -56,16 +54,20 @@ const initialUserState: User = {
     projectProgressStatus: "" as ProjectProgressStatus,
     projectFunding: "" as ProjectFunding,
   },
+  funder: false,
   avatar: "",
   refreshToken: "",
   createdAt: new Date(),
   updatedAt: new Date(),
 };
 
-const useSignupForm = () => {
-  const [user, setUser] = useState<User>(initialUserState);
+interface UseUserFormProps {
+  onSuccessSignIn?: () => void;
+}
+
+const useSignupForm = ({ onSuccessSignIn }: UseUserFormProps) => {
+  const [user, setUser] = useState<UserReq>(initialUserState);
   const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
 
   const avatarUrls: { [key in TypeOfOrganization]: string } = {
     [TypeOfOrganization.AcademicLaboratoryAndInstitute]: AcademicAvatar,
@@ -102,27 +104,57 @@ const useSignupForm = () => {
     }
   }, [user.organizationAffiliated]);
 
-  const handleChange = <K extends keyof User>(field: K, value: User[K]) => {
+  const handleChange = <K extends keyof UserReq>(
+    field: K,
+    value: UserReq[K]
+  ) => {
     setUser({ ...user, [field]: value });
   };
 
-  // const handleChangeChip = <T>(
-  //   field: keyof User,
-  //   item: T
-  // ) => {
-  //   setUser((prevUser) => {
-  //     const currentArray = (prevUser[field] as unknown as T[]) || [];
+  const handleDeleteChipLanguage = (langToDelete: string) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      languages: prevUser.languages.filter((lang) => lang !== langToDelete),
+    }));
+  };
 
-  //     const newArray = currentArray.includes(item)
-  //       ? currentArray.filter((i) => i !== item)
-  //       : [...currentArray, item];
+  const handleDeleteChipDiscipline = (disciplineToDelete: Discipline) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      researchActivityAndExpertise: {
+        ...prevUser.researchActivityAndExpertise,
+        disciplines: prevUser.researchActivityAndExpertise.disciplines.filter(
+          (discipline) =>
+            !(
+              discipline.primary === disciplineToDelete.primary &&
+              discipline.secondary === disciplineToDelete.secondary
+            )
+        ),
+      },
+    }));
+  };
 
-  //     return { ...prevUser, [field]: newArray };
-  //   });
-  // };
+  const handleChangeLanguage = <K extends keyof UserReq>(
+    field: K,
+    value: UserReq[K]
+  ) => {
+    setUser((prevUser) => {
+      const currentArray = (prevUser[field] as unknown as Array<unknown>) || [];
 
+      const newArray = Array.isArray(value) ? value : [value];
 
-  const handleChangeChip = <T>(field: keyof User, item: T) => {
+      const updatedArray = [...currentArray, ...newArray].filter(
+        (item, index, self) => self.indexOf(item) === index
+      );
+
+      return {
+        ...prevUser,
+        [field]: updatedArray as UserReq[K],
+      };
+    });
+  };
+
+  const handleChangeChip = <T>(field: keyof UserReq, item: T) => {
     setUser((prevUser) => ({
       ...prevUser,
       [field]: item,
@@ -130,37 +162,133 @@ const useSignupForm = () => {
   };
 
   const handleNestedChange = <
-    K extends NestedKeyOf<User>,
-    NK extends keyof User[K],
+    K extends NestedKeyOf<UserReq>,
+    NK extends keyof UserReq[K],
   >(
     section: K,
     field: NK,
-    value: User[K][NK]
+    value: UserReq[K][NK]
   ) => {
     setUser({
       ...user,
       [section]: {
         ...user[section],
         [field]: value,
-      } as User[K],
+      } as UserReq[K],
     });
   };
 
-  const handleNestedChip = <K extends keyof User, NK extends keyof User[K]>(
+  const handleNestedArrayChange = <
+    K extends NestedKeyOf<UserReq>,
+    NK extends keyof UserReq[K],
+  >(
     section: K,
     field: NK,
-    item: User[K][NK] extends Array<infer U> ? U : never
+    value: UserReq[K][NK] extends Array<infer U> ? U[] : never
+  ) => {
+    setUser((prevUser) => {
+      const currentArray =
+        (prevUser[section][field] as unknown as UserReq[K][NK] extends Array<
+          infer U
+        >
+          ? U[]
+          : never) || [];
+
+      const newArray = currentArray.some((item) => value.includes(item))
+        ? currentArray.filter((item) => !value.includes(item))
+        : [...currentArray, ...value];
+
+      return {
+        ...prevUser,
+        [section]: {
+          ...prevUser[section],
+          [field]: newArray,
+        } as UserReq[K],
+      };
+    });
+  };
+
+  const handleNestedChip = <
+    K extends keyof UserReq,
+    NK extends keyof UserReq[K],
+  >(
+    section: K,
+    field: NK,
+    item: UserReq[K][NK] extends Array<infer U> ? U : UserReq[K][NK]
   ) => {
     setUser((prevUser) => {
       const sectionValue = prevUser[section];
 
       if (
+        sectionValue &&
+        typeof sectionValue === "object" &&
+        !Array.isArray(sectionValue)
+      ) {
+        const fieldValue = sectionValue[field];
+
+        if (Array.isArray(fieldValue)) {
+          const currentArray = fieldValue as unknown as Array<
+            UserReq[K][NK] extends Array<infer U> ? U : UserReq[K][NK]
+          >;
+
+          const newArray = currentArray.includes(item)
+            ? currentArray.filter((i) => i !== item)
+            : [...currentArray, item];
+
+          return {
+            ...prevUser,
+            [section]: {
+              ...sectionValue,
+              [field]: newArray,
+            } as UserReq[K],
+          };
+        } else if (typeof fieldValue === "object" && fieldValue !== null) {
+          return {
+            ...prevUser,
+            [section]: {
+              ...sectionValue,
+              [field]: { ...fieldValue, item },
+            } as UserReq[K],
+          };
+        } else {
+          return {
+            ...prevUser,
+            [section]: {
+              ...sectionValue,
+              [field]: item,
+            } as UserReq[K],
+          };
+        }
+      } else {
+        return prevUser;
+      }
+    });
+  };
+
+  const handleDoubleNestedChip = <
+    K extends keyof UserReq,
+    NK extends keyof UserReq[K],
+    NK2 extends keyof UserReq[K][NK],
+  >(
+    section: K,
+    nestedSection: NK,
+    field: NK2,
+    item: UserReq[K][NK][NK2] extends Array<infer U> ? U : never
+  ) => {
+    setUser((prevUser: UserReq) => {
+      const sectionValue = prevUser[section];
+
+      if (
         typeof sectionValue === "object" &&
         sectionValue !== null &&
-        Array.isArray(sectionValue[field])
+        typeof sectionValue[nestedSection] === "object" &&
+        sectionValue[nestedSection] !== null &&
+        Array.isArray(sectionValue[nestedSection][field])
       ) {
-        const currentArray = sectionValue[field] as unknown as Array<
-          User[K][NK] extends Array<infer U> ? U : never
+        const currentArray = sectionValue[nestedSection][
+          field
+        ] as unknown as Array<
+          UserReq[K][NK][NK2] extends Array<infer U> ? U : never
         >;
 
         const newArray = currentArray.includes(item)
@@ -171,8 +299,11 @@ const useSignupForm = () => {
           ...prevUser,
           [section]: {
             ...sectionValue,
-            [field]: newArray,
-          } as User[K],
+            [nestedSection]: {
+              ...sectionValue[nestedSection],
+              [field]: newArray,
+            } as UserReq[K][NK],
+          } as UserReq[K],
         };
       } else {
         return prevUser;
@@ -180,18 +311,49 @@ const useSignupForm = () => {
     });
   };
 
+  const handleDoubleNestedChange = <
+    K extends keyof UserReq,
+    NK extends keyof UserReq[K],
+    NK2 extends keyof UserReq[K][NK],
+  >(
+    section: K,
+    nestedSection: NK,
+    field: NK2,
+    value: UserReq[K][NK][NK2]
+  ) => {
+    setUser((prevUser: UserReq) => {
+      const sectionValue = prevUser[section];
+      if (
+        typeof sectionValue === "object" &&
+        sectionValue !== null &&
+        typeof sectionValue[nestedSection] === "object" &&
+        sectionValue[nestedSection] !== null
+      ) {
+        return {
+          ...prevUser,
+          [section]: {
+            ...sectionValue,
+            [nestedSection]: {
+              ...sectionValue[nestedSection],
+              [field]: value,
+            },
+          },
+        };
+      }
+      return prevUser;
+    });
+  };
+
   const handleValidate = async (): Promise<void> => {
     try {
       await createUserAction(user);
-      enqueueSnackbar("Signup successful", { variant: "success" });
-      navigate("/login");
+      onSuccessSignIn && onSuccessSignIn();
     } catch (err) {
       const errorMessages = getErrorMessage(err).split(",");
       errorMessages.forEach((message) =>
         enqueueSnackbar(message, { variant: "error" })
       );
     }
-    console.log("user:", user);
   };
 
   return {
@@ -204,6 +366,12 @@ const useSignupForm = () => {
     handleNestedChange,
     handleValidate,
     organizationIsResearcher,
+    handleChangeLanguage,
+    handleDeleteChipLanguage,
+    handleNestedArrayChange,
+    handleDeleteChipDiscipline,
+    handleDoubleNestedChip,
+    handleDoubleNestedChange,
   };
 };
 

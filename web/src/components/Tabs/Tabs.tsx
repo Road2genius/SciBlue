@@ -325,10 +325,10 @@ const TabsComponent: React.FC<{
                 projectStartEndEstimation={
                   request.project.projectStartEndEstimation
                 }
-                fieldsOfApplicationCustom={
+                fieldsEnvironmentalAreaCustom={
                   request.project.fieldsEnvironmentalArea.custom
                 }
-                fieldsOfApplicationGeneric={
+                fieldsEnvironmentalAreaGeneric={
                   request.project.fieldsEnvironmentalArea.generic
                 }
                 comments={request.comments}
@@ -354,10 +354,10 @@ const TabsComponent: React.FC<{
                 projectStartEndEstimation={
                   request.project.projectStartEndEstimation
                 }
-                fieldsOfApplicationCustom={
+                fieldsEnvironmentalAreaCustom={
                   request.project.fieldsEnvironmentalArea.custom
                 }
-                fieldsOfApplicationGeneric={
+                fieldsEnvironmentalAreaGeneric={
                   request.project.fieldsEnvironmentalArea.generic
                 }
                 comments={request.comments}
@@ -383,10 +383,10 @@ const TabsComponent: React.FC<{
                 projectStartEndEstimation={
                   request.project.projectStartEndEstimation
                 }
-                fieldsOfApplicationCustom={
+                fieldsEnvironmentalAreaCustom={
                   request.project.fieldsEnvironmentalArea.custom
                 }
-                fieldsOfApplicationGeneric={
+                fieldsEnvironmentalAreaGeneric={
                   request.project.fieldsEnvironmentalArea.generic
                 }
                 comments={request.comments}

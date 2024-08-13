@@ -4,10 +4,9 @@ import { Request, Response, NextFunction } from "express";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../constants/error/errorCodes";
 import { CustomError } from "../types/error/customError";
 import { isStrongPassword, isValidEmail } from "../utils/validators";
+import { TypeOfOrganization } from "../../../shared-types/user";
 
 export const createUserValidationRules = (): ValidationChain[] => [
-  body("firstName").notEmpty().withMessage("First Name is required"),
-  body("lastName").notEmpty().withMessage("Last Name is required"),
   body("email")
     .notEmpty()
     .withMessage("Email is required")
@@ -28,33 +27,58 @@ export const createUserValidationRules = (): ValidationChain[] => [
         - Contain at least one special character
       `
     ),
-  body("organizationAffiliated").custom((value) => {
-    if (value.length === 0) {
-      throw new Error("Organization affiliated is required");
+  body("firstName").notEmpty().withMessage("First Name is required"),
+  body("lastName").notEmpty().withMessage("Last Name is required"),
+  body("country").notEmpty().withMessage("Country is required"),
+  body("organizationAffiliated")
+    .notEmpty()
+    .withMessage("Organization affiliated is required")
+    .isIn(Object.values(TypeOfOrganization)),
+  body("organizationAffiliated").custom((organization, { req }) => {
+    if (
+      [
+        TypeOfOrganization.AcademicLaboratoryAndInstitute,
+        TypeOfOrganization.AcademicTechnologyPlatform,
+        TypeOfOrganization.PrivateResearchOrganizations,
+        TypeOfOrganization.FreelanceScientist,
+      ].includes(organization)
+    ) {
+      if (req.body.privacyLevel?.mode) {
+        body("privacyLevel.username")
+          .notEmpty()
+          .withMessage("Username is required when privacy mode is enabled")
+          .run(req);
+      }
+      body("profileVerificationInfo").notEmpty().withMessage("Profile verification information is required").run(req);
+    } else if (
+      [TypeOfOrganization.NgoNonProfitOrganizationFoundation, TypeOfOrganization.Government].includes(organization)
+    ) {
+      body("organizationName").notEmpty().withMessage("Organization name is required").run(req);
+      body("typeOfOrganizationSpecific").notEmpty().withMessage("Type of organization is required").run(req);
     }
     return true;
   }),
-  body("address").notEmpty().withMessage("Address is required"),
-  body("city").notEmpty().withMessage("City is required"),
-  body("country").notEmpty().withMessage("Country is required"),
 ];
 
 export const updateUserValidationRules = (): ValidationChain[] => [
-  body("firstName").optional().notEmpty().withMessage("First Name is required"),
-  body("lastName").optional().notEmpty().withMessage("Last Name is required"),
+  body("firstName").optional().notEmpty().withMessage("First Name is required if provided"),
+
+  body("lastName").optional().notEmpty().withMessage("Last Name is required if provided"),
+
   body("email")
     .optional()
     .notEmpty()
-    .withMessage("Email is required")
+    .withMessage("Email is required if provided")
     .bail()
-    .custom((value) => isValidEmail(value))
+    .custom(isValidEmail)
     .withMessage("Invalid email format"),
+
   body("password")
     .optional()
     .notEmpty()
-    .withMessage("Password is required")
+    .withMessage("Password is required if provided")
     .bail()
-    .custom((value) => isStrongPassword(value))
+    .custom(isStrongPassword)
     .withMessage(
       `Password must:
         - Be at least 8 characters long
@@ -64,17 +88,35 @@ export const updateUserValidationRules = (): ValidationChain[] => [
         - Contain at least one special character
       `
     ),
+
   body("organizationAffiliated")
     .optional()
-    .custom((value) => {
-      if (value.length === 0) {
-        throw new Error("Organization affiliated is required");
+    .custom((value, { req }) => {
+      if (
+        [
+          TypeOfOrganization.AcademicLaboratoryAndInstitute,
+          TypeOfOrganization.AcademicTechnologyPlatform,
+          TypeOfOrganization.PrivateResearchOrganizations,
+          TypeOfOrganization.FreelanceScientist,
+        ].includes(value)
+      ) {
+        if (req.body.privacyLevel?.mode) {
+          body("privacyLevel.username")
+            .notEmpty()
+            .withMessage("Username is required when privacy mode is enabled")
+            .run(req);
+        }
+        body("profileVerificationInfo").notEmpty().withMessage("Profile verification information is required").run(req);
+      } else if (
+        [TypeOfOrganization.NgoNonProfitOrganizationFoundation, TypeOfOrganization.Government].includes(value)
+      ) {
+        body("organizationName").notEmpty().withMessage("Organization name is required").run(req);
+        body("typeOfOrganizationSpecific").notEmpty().withMessage("Type of organization is required").run(req);
       }
       return true;
     }),
-  body("address").optional().notEmpty().withMessage("Address is required"),
-  body("city").optional().notEmpty().withMessage("City is required"),
-  body("country").optional().notEmpty().withMessage("Country is required"),
+
+  body("country").optional().notEmpty().withMessage("Country is required if provided"),
 ];
 
 // Middleware to check for validation errors

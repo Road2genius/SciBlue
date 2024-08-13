@@ -1,18 +1,23 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Chip, Divider, Typography } from "@mui/material";
 import CustomTextField from "../CustomTextField/CustomTextField";
 import { getTextFieldsConfig } from "../CustomTextField/getTextFieldsConfig";
-import { User } from "../../../../shared-types/userData";
+import { UserReq } from "../../../../shared-types/userData";
+import LanguageSelector from "../LanguageSelection/LanguageSelection";
 
 interface ConditionalTextFieldsProps {
-  user: User;
-  handleChange: (field: keyof User, value: string) => void;
+  user: UserReq;
+  handleChange: (field: keyof UserReq, value: string) => void;
+  handleChangeLanguage: (field: keyof UserReq, value: UserReq[keyof UserReq]) => void;
+  handleDeleteChipLanguage: (lang: string) => void;
   organizationIsResearcher: boolean;
 }
 
 const ConditionalTextFields: React.FC<ConditionalTextFieldsProps> = ({
   user,
   handleChange,
+  handleChangeLanguage,
+  handleDeleteChipLanguage,
   organizationIsResearcher,
 }) => {
   const textFields = getTextFieldsConfig(user).filter((field) => {
@@ -47,21 +52,67 @@ const ConditionalTextFields: React.FC<ConditionalTextFieldsProps> = ({
             type={field.type}
             value={field.value}
             onChange={(e) =>
-              handleChange(field.textfield as keyof User, e.target.value)
+              handleChange(field.textfield as keyof UserReq, e.target.value)
             }
             required={field.required}
             multiline={field.multiline}
             short={true}
           />
           {field.textfield === "country" && (
-            <p>Language component todo</p>
-            // <Language
-            //   languages={user.languages}
-            //   handleChangeLanguages={handleChangeLanguages}
-            // />
+            <Box sx={{ marginBottom: "20px" }}>
+              <Typography
+                variant="subtitle2"
+                fontWeight={600}
+                sx={{ marginBottom: "5px" }}
+              >
+                Spoken languages:
+              </Typography>
+              <Box display="flex">
+                <Box>
+                  {user.languages?.map((lang, index) => (
+                    <Chip
+                      key={index}
+                      label={lang}
+                      onDelete={() => handleDeleteChipLanguage(lang)}
+                      sx={{
+                        backgroundColor: "#C8E6C9",
+                        border: "1px solid black",
+                        borderRadius: "8px",
+                        marginRight: "10px",
+                        marginTop: "10px",
+                        "&:hover": {
+                          backgroundColor: "#C8E6C9",
+                        },
+                      }}
+                    />
+                  ))}
+                  <LanguageSelector
+                    languages={user.languages}
+                    handleChangeLanguages={(newLanguages) =>
+                      handleChangeLanguage("languages", newLanguages)
+                    }
+                  />
+                </Box>
+              </Box>
+            </Box>
           )}
         </React.Fragment>
       ))}
+      <Box mt={8} mb={5} ml={8}>
+        <Divider
+          variant="fullWidth"
+          sx={{
+            borderBottomWidth: 1.5,
+            minWidth: {
+              xs: "100%",
+              sm: "100%",
+              md: "100%",
+              lg: "100%",
+              xl: "1250px",
+            },
+          }}
+        />
+      </Box>
     </Box>
   );
 };

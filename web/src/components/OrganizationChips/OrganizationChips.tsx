@@ -21,7 +21,8 @@ const OrganizationChips: React.FC<OrganizationChipsProps> = ({
           label={label}
           onClick={() => handleChange(label)}
           sx={{
-            margin: "5px",
+            marginRight: "10px",
+            marginTop: "10px",
             marginLeft: "0",
             backgroundColor: selectedOrganizations.includes(label)
               ? "#C8E6C9"

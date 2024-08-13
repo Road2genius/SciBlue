@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import CustomTextField from "../CustomTextField/CustomTextField";
-import { User } from "../../../../shared-types/userData";
+import { UserReq } from "../../../../shared-types/userData";
 
 interface LoginField {
   label: string;
@@ -15,8 +15,8 @@ interface LoginField {
 
 interface LoginInformationProps {
   textFields: LoginField[];
-  handleChange: (field: keyof User, value: string) => void;
-  user: User;
+  handleChange: (field: keyof UserReq, value: string) => void;
+  user: UserReq;
 }
 
 const LoginInformation: React.FC<LoginInformationProps> = ({

@@ -1,6 +1,6 @@
-import { User } from "../../../../shared-types/userData";
+import { UserReq } from "../../../../shared-types/userData";
 
-export const getTextFieldsConfig = (user: User) => [
+export const getTextFieldsConfig = (user: UserReq) => [
   {
     label: "Mail address",
     placeholder: "Enter mail address",
@@ -56,7 +56,7 @@ export const getTextFieldsConfig = (user: User) => [
     placeholder: "",
     type: "text",
     value: user.typeOfOrganizationSpecific,
-    textfield: "organizationName",
+    textfield: "typeOfOrganizationSpecific",
     required: true,
     professionalLayout: true,
   },
@@ -81,8 +81,8 @@ export const getTextFieldsConfig = (user: User) => [
     label: "Laboratory/department or organization name",
     placeholder: "",
     type: "text",
-    value: user.organizationName,
-    textfield: "organizationName",
+    value: user.typeOfOrganizationSpecific,
+    textfield: "typeOfOrganizationSpecific",
     researcherLayout: true,
   },
   {
@@ -91,7 +91,7 @@ export const getTextFieldsConfig = (user: User) => [
       "ORCID iD, ResearchGate or LinkedIn account, link to articles published, link to your website laboratory/department where you appear ...",
     type: "text",
     value: user.profileVerificationInfo,
-    textfield: "description",
+    textfield: "profileVerificationInfo",
     multiline: true,
     researcherLayout: true,
     required: true,

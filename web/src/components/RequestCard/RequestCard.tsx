@@ -30,8 +30,8 @@ const RequestCard: React.FC<{
   description: string;
   typeOfCollaboration: TypeOfCollaboration[];
   projectStartEndEstimation?: Date[];
-  fieldsOfApplicationCustom?: string[];
-  fieldsOfApplicationGeneric?: FieldsEnvironmentalArea[];
+  fieldsEnvironmentalAreaCustom?: string[];
+  fieldsEnvironmentalAreaGeneric?: FieldsEnvironmentalArea[];
   comments?: string[];
   positiveVotes: number;
   negativeVotes: number;
@@ -44,8 +44,8 @@ const RequestCard: React.FC<{
   description,
   typeOfCollaboration,
   projectStartEndEstimation,
-  fieldsOfApplicationCustom,
-  fieldsOfApplicationGeneric,
+  fieldsEnvironmentalAreaCustom,
+  fieldsEnvironmentalAreaGeneric,
   comments,
   positiveVotes,
   negativeVotes,
@@ -182,12 +182,12 @@ const RequestCard: React.FC<{
                         }}
                       />
                     ))}
-                    {fieldsOfApplicationCustom?.map(
-                      (customApplication, index) => (
+                    {fieldsEnvironmentalAreaCustom?.map(
+                      (customEnvironmental, index) => (
                         <Chip
                           size="small"
                           key={index}
-                          label={customApplication}
+                          label={customEnvironmental}
                           variant="outlined"
                           sx={{
                             backgroundColor: "#C8E6C9",
@@ -197,12 +197,12 @@ const RequestCard: React.FC<{
                         />
                       )
                     )}
-                    {fieldsOfApplicationGeneric?.map(
-                      (genericApplication, index) => (
+                    {fieldsEnvironmentalAreaGeneric?.map(
+                      (genericEnvironmental, index) => (
                         <Chip
                           size="small"
                           key={index}
-                          label={genericApplication}
+                          label={genericEnvironmental}
                           variant="outlined"
                           sx={{
                             backgroundColor: "#C8E6C9",
@@ -324,7 +324,7 @@ const RequestCard: React.FC<{
                         ]
                       }
                       alt="User Avatar"
-                      sx={{ marginRight: "10px" }}
+                      sx={{ marginRight: "10px", border: "solid 1px gray" }}
                     />
                     <Box display="flex" flexDirection="column">
                       <Typography variant="body2">
@@ -341,7 +341,7 @@ const RequestCard: React.FC<{
                         {usersRequest[requestId]?.lastName}
                       </Typography>
                       <Typography variant="caption" flexWrap="wrap" width="80%">
-                        {usersRequest[requestId]?.organization?.split(",")[0]}
+                        {usersRequest[requestId]?.organization}
                       </Typography>
                     </Box>
                   </Box>

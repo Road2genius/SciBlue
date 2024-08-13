@@ -55,7 +55,7 @@ describe("Create a request", () => {
     expect(response.body.code).toBe(ERROR_CODES.VALIDATION_ERROR);
     expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
     expect(response.body.details).toContain("User ID is required");
-    expect(response.body.details).toContain("Fields of application is required");
+    expect(response.body.details).toContain("Fields of environmental area is required");
     expect(response.body.details).toContain("Project progress status is required");
     expect(response.body.details).toContain("Type of collaboration is required");
     expect(response.body.details).toContain("Request title is required");
