@@ -63,7 +63,7 @@ describe("Update a user", () => {
       .set("Authorization", `Bearer ${token}`)
       .send(updatedData)
       .expect(HTTP_STATUS_CODES.BAD_REQUEST);
-    console.log("response.body", response.body);
+
     expect(response.body.code).toBe(ERROR_CODES.VALIDATION_ERROR);
     expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
     expect(response.body.details).toContain(
