@@ -37,7 +37,7 @@ const Navbar: React.FC = () => {
     { name: "Discussions", onClick: () => console.log("Discussions") },
     { name: "Request", onClick: () => navigate("/request/list") },
     { name: "Community", onClick: () => console.log("Community") },
-    { name: "Send feedback", onClick: () => console.log("Send feedback") },
+    { name: "Send feedback", onClick: () => navigate("/feedback") },
   ];
 
   const toggleDrawer =

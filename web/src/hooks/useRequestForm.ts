@@ -47,8 +47,6 @@ interface UseRequestFormProps {
   initialRequest?: RequestResInterface;
 }
 
-
-
 const useRequestForm = ({
   onSuccessCreateRequest,
   onErrorCreateRequest,
@@ -242,7 +240,7 @@ const useRequestForm = ({
       return prevRequest;
     });
   };
-
+  
   // requests action
   const handleCreateRequest = async (): Promise<void> => {
     try {

@@ -1,7 +1,7 @@
 import UserModel, { IUser } from "../../../src/models/user/User";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { OrganizationAffiliated } from "../../../../shared-types/user";
+import { TypeOfOrganization } from "../../../../shared-types/user";
 
 export const validUserData: Partial<IUser> = {
   firstName: "John",
@@ -9,10 +9,9 @@ export const validUserData: Partial<IUser> = {
   email: "john.doe@example.com",
   password: "hashedPassword123!",
   organizationName: "test",
-  organizationAffiliated: [OrganizationAffiliated.AcademicLaboratoryAndInstitute],
+  organizationAffiliated: TypeOfOrganization.AcademicLaboratoryAndInstitute,
   institution: "Institution Name",
-  address: "1234 Street Name",
-  city: "City Name",
+  profileVerificationInfo: "test",
   country: "Country Name",
 };
 
@@ -22,10 +21,9 @@ export const anotherValidUserData: Partial<IUser> = {
   email: "jane.doe@example.com",
   password: "hashedPassword123!!",
   organizationName: "test",
-  organizationAffiliated: [OrganizationAffiliated.AcademicLaboratoryAndInstitute],
+  organizationAffiliated: TypeOfOrganization.AcademicLaboratoryAndInstitute,
   institution: "Another Institution Name",
-  address: "5678 Another Street Name",
-  city: "Another City Name",
+  profileVerificationInfo: "test",
   country: "Another Country Name",
 };
 
@@ -35,10 +33,9 @@ export const otherValidUserData: Partial<IUser> = {
   email: "benj.doe@example.com",
   password: "hashedPassword123!!",
   organizationName: "test",
-  organizationAffiliated: [OrganizationAffiliated.AcademicLaboratoryAndInstitute],
+  organizationAffiliated: TypeOfOrganization.Government,
+  typeOfOrganizationSpecific: "test",
   institution: "Another Institution Name",
-  address: "5678 Another Street Name",
-  city: "Another City Name",
   country: "Another Country Name",
 };
 

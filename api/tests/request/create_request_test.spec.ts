@@ -37,11 +37,11 @@ describe("Create a request", () => {
     expect(response.body.data.userId).toBe(userId.toString());
     expect(response.body.data.project.projectTitle).toBe(valideRequestData.project?.projectTitle);
     expect(response.body.data.project.summary).toBe(valideRequestData.project?.summary);
-    expect(response.body.data.project.fieldsProfessionalActivity.generic).toEqual(
-      valideRequestData.project?.fieldsProfessionalActivity.generic
+    expect(response.body.data.project.fieldsEnvironmentalArea.generic).toEqual(
+      valideRequestData.project?.fieldsEnvironmentalArea.generic
     );
-    expect(response.body.data.project.fieldsProfessionalActivity.custom).toEqual(
-      valideRequestData.project?.fieldsProfessionalActivity.custom
+    expect(response.body.data.project.fieldsEnvironmentalArea.custom).toEqual(
+      valideRequestData.project?.fieldsEnvironmentalArea.custom
     );
   });
 
@@ -55,7 +55,7 @@ describe("Create a request", () => {
     expect(response.body.code).toBe(ERROR_CODES.VALIDATION_ERROR);
     expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
     expect(response.body.details).toContain("User ID is required");
-    expect(response.body.details).toContain("Fields of application is required");
+    expect(response.body.details).toContain("Fields of environmental area is required");
     expect(response.body.details).toContain("Project progress status is required");
     expect(response.body.details).toContain("Type of collaboration is required");
     expect(response.body.details).toContain("Request title is required");

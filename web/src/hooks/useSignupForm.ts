@@ -1,148 +1,294 @@
 import { useEffect, useState } from "react";
-import { User } from "../../../shared-types/userData";
-import { OrganizationAffiliated } from "../../../shared-types/user";
-import MultiAvatar from "../assets/avatars/multi-target.svg";
+import { UserReq } from "../../../shared-types/userData";
 import AcademicAvatar from "../assets/avatars/academic.svg";
-import CroPrivateAvatar from "../assets/avatars/cro-private.svg";
-import FreelanceAvatar from "../assets/avatars/freelance.svg";
-import NgoNonProfitAvatar from "../assets/avatars/ngo-non-profit.svg";
-import CorporationAvatar from "../assets/avatars/corporation.svg";
+import FreelanceAvatar from "../assets/avatars/freelancer.svg";
 import GovernmentAvatar from "../assets/avatars/government.svg";
+import OngAvatar from "../assets/avatars/ong.svg";
+import PrivateAvatar from "../assets/avatars/privateResearch.svg";
 import { createUserAction } from "../actions/user/user";
-import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../utils/handleError";
 import { useSnackbar } from "notistack";
+import {
+  ProjectFunding,
+  ProjectProgressStatus,
+  TypeOfOrganization,
+} from "../../../shared-types/user";
+import { Discipline, NestedKeyOf } from "../../../shared-types/requestData";
 
-type NestedKeyOf<T> = {
-  [K in keyof T]: T[K] extends object ? K : never;
-}[keyof T];
-
-const initialUserState: User = {
-  _id: "",
-  firstName: "",
-  lastName: "",
+const initialUserState: UserReq = {
+  organizationAffiliated: "" as TypeOfOrganization,
+  privacyLevel: {
+    mode: false,
+    username: "",
+  },
   email: "",
   password: "",
-  organizationAffiliated: [],
+  firstName: "",
+  lastName: "",
   organizationName: "",
-  institution: "",
-  address: "",
-  city: "",
+  typeOfOrganizationSpecific: "",
   country: "",
-  description: "",
-  keywordsActivity: [],
-  fieldsProfessionalActivity: {
-    generic: [],
-    custom: [],
+  languages: [],
+  institution: "",
+  profileVerificationInfo: "",
+  researchActivityAndExpertise: {
+    description: "",
+    disciplines: [],
+    expertisesAndSkills: [],
+    fieldsEnvironmentalArea: {
+      generic: [],
+      custom: [],
+    },
+    fieldsApplicationArea: [],
   },
-  skillsOrTechnical: {
-    specificTechnicsNames: [],
-    equipment: [],
-    models: [],
-    chemicalAndBiologicalProducts: [],
-    otherSkills: [],
+  professionalActivityAndExpertise: {
+    fieldsEnvironmentalArea: {
+      generic: [],
+      custom: [],
+    },
+    description: "",
+    expertisesAndSkills: [],
   },
   kindOfCollaborationWanted: {
-    typeOfCollaboration: [],
     typeOfOrganization: [],
-    projectProgressStatus: undefined,
-    collaborationDuration: undefined,
+    projectProgressStatus: "" as ProjectProgressStatus,
+    projectFunding: "" as ProjectFunding,
   },
+  funder: false,
   avatar: "",
+  refreshToken: "",
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
 
-const useSignupForm = () => {
-  const [user, setUser] = useState<User>(initialUserState);
+interface UseUserFormProps {
+  onSuccessSignIn?: () => void;
+}
+
+const useSignupForm = ({ onSuccessSignIn }: UseUserFormProps) => {
+  const [user, setUser] = useState<UserReq>(initialUserState);
   const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
 
-  const avatarUrls: { [key in OrganizationAffiliated]: string } = {
-    [OrganizationAffiliated.AcademicLaboratoryAndInstitute]: AcademicAvatar,
-    [OrganizationAffiliated.AcademicTechnologyPlatform]: AcademicAvatar,
-    [OrganizationAffiliated.CroAndPrivateTechnologyPlatform]: CroPrivateAvatar,
-    [OrganizationAffiliated.Freelancer]: FreelanceAvatar,
-    [OrganizationAffiliated.NgoNonProfitOrganizationFoundation]:
-      NgoNonProfitAvatar,
-    [OrganizationAffiliated.Corporation]: CorporationAvatar,
-    [OrganizationAffiliated.Government]: GovernmentAvatar,
+  const avatarUrls: { [key in TypeOfOrganization]: string } = {
+    [TypeOfOrganization.AcademicLaboratoryAndInstitute]: AcademicAvatar,
+    [TypeOfOrganization.AcademicTechnologyPlatform]: AcademicAvatar,
+    [TypeOfOrganization.FreelanceScientist]: FreelanceAvatar,
+    [TypeOfOrganization.Government]: GovernmentAvatar,
+    [TypeOfOrganization.NgoNonProfitOrganizationFoundation]: OngAvatar,
+    [TypeOfOrganization.PrivateResearchOrganizations]: PrivateAvatar,
   };
-
-  const isAcademicAnyway = (organization: OrganizationAffiliated[]) =>
-    (organization[0] ===
-      OrganizationAffiliated.AcademicLaboratoryAndInstitute ||
-      organization[0] === OrganizationAffiliated.AcademicTechnologyPlatform) &&
-    (organization[1] ===
-      OrganizationAffiliated.AcademicLaboratoryAndInstitute ||
-      organization[1] === OrganizationAffiliated.AcademicTechnologyPlatform);
 
   const getAvatarByOrganization = (
-    organization: OrganizationAffiliated[]
-  ): string => {
-    const avatar: string =
-      organization.length > 1 && !isAcademicAnyway(organization)
-        ? MultiAvatar
-        : avatarUrls[organization[0]];
-    return avatar;
+    organization?: TypeOfOrganization
+  ): string | undefined => {
+    if (organization) {
+      return avatarUrls[organization];
+    }
   };
 
+  const organizationIsResearcher = (organization: string): boolean =>
+    organization === TypeOfOrganization.AcademicLaboratoryAndInstitute ||
+    organization === TypeOfOrganization.AcademicTechnologyPlatform ||
+    organization === TypeOfOrganization.PrivateResearchOrganizations ||
+    organization === TypeOfOrganization.FreelanceScientist;
+
   useEffect(() => {
-    const avatarUrl = getAvatarByOrganization(user.organizationAffiliated);
-    setUser((prevUser) => ({
-      ...prevUser,
-      avatar: avatarUrl,
-    }));
+    const avatarUrl = getAvatarByOrganization(
+      user.organizationAffiliated ?? undefined
+    );
+    if (user.organizationAffiliated && avatarUrl) {
+      setUser((prevUser) => ({
+        ...prevUser,
+        avatar: avatarUrl,
+      }));
+    }
   }, [user.organizationAffiliated]);
 
-  const handleChange = <K extends keyof User>(field: K, value: User[K]) => {
+  const handleChange = <K extends keyof UserReq>(
+    field: K,
+    value: UserReq[K]
+  ) => {
     setUser({ ...user, [field]: value });
   };
 
-  const handleChangeChip = <K extends keyof User>(
+  const handleDeleteChipLanguage = (langToDelete: string) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      languages: prevUser.languages.filter((lang) => lang !== langToDelete),
+    }));
+  };
+
+  const handleDeleteChipDiscipline = (disciplineToDelete: Discipline) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      researchActivityAndExpertise: {
+        ...prevUser.researchActivityAndExpertise,
+        disciplines: prevUser.researchActivityAndExpertise.disciplines.filter(
+          (discipline) =>
+            !(
+              discipline.primary === disciplineToDelete.primary &&
+              discipline.secondary === disciplineToDelete.secondary
+            )
+        ),
+      },
+    }));
+  };
+
+  const handleChangeLanguage = <K extends keyof UserReq>(
     field: K,
-    item: User[K] extends Array<infer U> ? U : never
+    value: UserReq[K]
   ) => {
     setUser((prevUser) => {
-      const currentArray = prevUser[field] as unknown as Array<typeof item>;
-      const newArray = currentArray.includes(item)
-        ? currentArray.filter((i) => i !== item)
-        : [...currentArray, item];
+      const currentArray = (prevUser[field] as unknown as Array<unknown>) || [];
 
-      return { ...prevUser, [field]: newArray };
+      const newArray = Array.isArray(value) ? value : [value];
+
+      const updatedArray = [...currentArray, ...newArray].filter(
+        (item, index, self) => self.indexOf(item) === index
+      );
+
+      return {
+        ...prevUser,
+        [field]: updatedArray as UserReq[K],
+      };
     });
   };
 
+  const handleChangeChip = <T>(field: keyof UserReq, item: T) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      [field]: item,
+    }));
+  };
+
   const handleNestedChange = <
-    K extends NestedKeyOf<User>,
-    NK extends keyof User[K],
+    K extends NestedKeyOf<UserReq>,
+    NK extends keyof UserReq[K],
   >(
     section: K,
     field: NK,
-    value: User[K][NK]
+    value: UserReq[K][NK]
   ) => {
     setUser({
       ...user,
       [section]: {
         ...user[section],
         [field]: value,
-      } as User[K],
+      } as UserReq[K],
     });
   };
 
-  const handleNestedChip = <K extends keyof User, NK extends keyof User[K]>(
+  const handleNestedArrayChange = <
+    K extends NestedKeyOf<UserReq>,
+    NK extends keyof UserReq[K],
+  >(
     section: K,
     field: NK,
-    item: User[K][NK] extends Array<infer U> ? U : never
+    value: UserReq[K][NK] extends Array<infer U> ? U[] : never
+  ) => {
+    setUser((prevUser) => {
+      const currentArray =
+        (prevUser[section][field] as unknown as UserReq[K][NK] extends Array<
+          infer U
+        >
+          ? U[]
+          : never) || [];
+
+      const newArray = currentArray.some((item) => value.includes(item))
+        ? currentArray.filter((item) => !value.includes(item))
+        : [...currentArray, ...value];
+
+      return {
+        ...prevUser,
+        [section]: {
+          ...prevUser[section],
+          [field]: newArray,
+        } as UserReq[K],
+      };
+    });
+  };
+
+  const handleNestedChip = <
+    K extends keyof UserReq,
+    NK extends keyof UserReq[K],
+  >(
+    section: K,
+    field: NK,
+    item: UserReq[K][NK] extends Array<infer U> ? U : UserReq[K][NK]
   ) => {
     setUser((prevUser) => {
       const sectionValue = prevUser[section];
 
       if (
+        sectionValue &&
+        typeof sectionValue === "object" &&
+        !Array.isArray(sectionValue)
+      ) {
+        const fieldValue = sectionValue[field];
+
+        if (Array.isArray(fieldValue)) {
+          const currentArray = fieldValue as unknown as Array<
+            UserReq[K][NK] extends Array<infer U> ? U : UserReq[K][NK]
+          >;
+
+          const newArray = currentArray.includes(item)
+            ? currentArray.filter((i) => i !== item)
+            : [...currentArray, item];
+
+          return {
+            ...prevUser,
+            [section]: {
+              ...sectionValue,
+              [field]: newArray,
+            } as UserReq[K],
+          };
+        } else if (typeof fieldValue === "object" && fieldValue !== null) {
+          return {
+            ...prevUser,
+            [section]: {
+              ...sectionValue,
+              [field]: { ...fieldValue, item },
+            } as UserReq[K],
+          };
+        } else {
+          return {
+            ...prevUser,
+            [section]: {
+              ...sectionValue,
+              [field]: item,
+            } as UserReq[K],
+          };
+        }
+      } else {
+        return prevUser;
+      }
+    });
+  };
+
+  const handleDoubleNestedChip = <
+    K extends keyof UserReq,
+    NK extends keyof UserReq[K],
+    NK2 extends keyof UserReq[K][NK],
+  >(
+    section: K,
+    nestedSection: NK,
+    field: NK2,
+    item: UserReq[K][NK][NK2] extends Array<infer U> ? U : never
+  ) => {
+    setUser((prevUser: UserReq) => {
+      const sectionValue = prevUser[section];
+
+      if (
         typeof sectionValue === "object" &&
         sectionValue !== null &&
-        Array.isArray(sectionValue[field])
+        typeof sectionValue[nestedSection] === "object" &&
+        sectionValue[nestedSection] !== null &&
+        Array.isArray(sectionValue[nestedSection][field])
       ) {
-        const currentArray = sectionValue[field] as unknown as Array<
-          User[K][NK] extends Array<infer U> ? U : never
+        const currentArray = sectionValue[nestedSection][
+          field
+        ] as unknown as Array<
+          UserReq[K][NK][NK2] extends Array<infer U> ? U : never
         >;
 
         const newArray = currentArray.includes(item)
@@ -153,8 +299,11 @@ const useSignupForm = () => {
           ...prevUser,
           [section]: {
             ...sectionValue,
-            [field]: newArray,
-          } as User[K],
+            [nestedSection]: {
+              ...sectionValue[nestedSection],
+              [field]: newArray,
+            } as UserReq[K][NK],
+          } as UserReq[K],
         };
       } else {
         return prevUser;
@@ -162,18 +311,49 @@ const useSignupForm = () => {
     });
   };
 
+  const handleDoubleNestedChange = <
+    K extends keyof UserReq,
+    NK extends keyof UserReq[K],
+    NK2 extends keyof UserReq[K][NK],
+  >(
+    section: K,
+    nestedSection: NK,
+    field: NK2,
+    value: UserReq[K][NK][NK2]
+  ) => {
+    setUser((prevUser: UserReq) => {
+      const sectionValue = prevUser[section];
+      if (
+        typeof sectionValue === "object" &&
+        sectionValue !== null &&
+        typeof sectionValue[nestedSection] === "object" &&
+        sectionValue[nestedSection] !== null
+      ) {
+        return {
+          ...prevUser,
+          [section]: {
+            ...sectionValue,
+            [nestedSection]: {
+              ...sectionValue[nestedSection],
+              [field]: value,
+            },
+          },
+        };
+      }
+      return prevUser;
+    });
+  };
+
   const handleValidate = async (): Promise<void> => {
     try {
       await createUserAction(user);
-      enqueueSnackbar("Signup successful", { variant: "success" });
-      navigate("/login");
+      onSuccessSignIn && onSuccessSignIn();
     } catch (err) {
       const errorMessages = getErrorMessage(err).split(",");
       errorMessages.forEach((message) =>
         enqueueSnackbar(message, { variant: "error" })
       );
     }
-    console.log("user:", user);
   };
 
   return {
@@ -185,6 +365,13 @@ const useSignupForm = () => {
     handleChange,
     handleNestedChange,
     handleValidate,
+    organizationIsResearcher,
+    handleChangeLanguage,
+    handleDeleteChipLanguage,
+    handleNestedArrayChange,
+    handleDeleteChipDiscipline,
+    handleDoubleNestedChip,
+    handleDoubleNestedChange,
   };
 };
 

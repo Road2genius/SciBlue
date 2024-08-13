@@ -202,7 +202,6 @@ const SpecificsDetails: React.FC<SpecificsDetailsProps> = ({
           />
         )}
       />
-
       <Typography variant="body2" fontWeight={600} mt={2}>
         Expertises & Skills
       </Typography>

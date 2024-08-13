@@ -4,7 +4,7 @@ import { LocalizationProvider, DateField } from "@mui/x-date-pickers";
 import CustomTextField from "../../components/CustomTextField/CustomTextField";
 import CustomTagInput from "../../components/CustomTag/CustomTag";
 import {
-  FieldsProfessionalActivity,
+  FieldsEnvironmentalArea,
   ProjectFunding,
   ProjectProgressStatus,
 } from "../../../../shared-types/user";
@@ -103,14 +103,14 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
       </Typography>
       <Box className={classes.chipContainer} mb={2}>
         <>
-          {Object.values(FieldsProfessionalActivity).map((label) => (
+          {Object.values(FieldsEnvironmentalArea).map((label) => (
             <Chip
               key={label}
               label={label}
               onClick={() =>
                 handleDoubleNestedChip(
                   "project",
-                  "fieldsProfessionalActivity",
+                  "fieldsEnvironmentalArea",
                   "generic",
                   label
                 )
@@ -119,62 +119,13 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 marginRight: "10px",
                 marginTop: "10px",
                 backgroundColor:
-                  request.project.fieldsProfessionalActivity.generic.includes(
-                    label as FieldsProfessionalActivity
+                  request.project.fieldsEnvironmentalArea.generic.includes(
+                    label as FieldsEnvironmentalArea
                   )
                     ? "#C8E6C9"
                     : "transparent",
-                color:
-                  request.project.fieldsProfessionalActivity.generic.includes(
-                    label as FieldsProfessionalActivity
-                  )
-                    ? "#000"
-                    : "",
-                border: "1px solid black",
-                borderRadius: "8px",
-                "&:hover": {
-                  backgroundColor: "#C8E6C9",
-                },
-              }}
-              clickable
-            />
-          ))}
-          <CustomTagInput
-            label="add your tag"
-            customTags={request.project.fieldsProfessionalActivity.custom ?? []}
-            setCustomTags={(newCustomTags) =>
-              handleDoubleNestedChange(
-                "project",
-                "fieldsProfessionalActivity",
-                "custom",
-                newCustomTags
-              )
-            }
-          />
-        </>
-      </Box>
-      <Typography variant="body2" fontWeight={600} mt={3}>
-        Project&apos;s progress status *
-      </Typography>
-      <Box className={classes.chipContainer} mb={2}>
-        <>
-          {Object.values(ProjectProgressStatus).map((label) => (
-            <Chip
-              key={label}
-              label={label}
-              onClick={() =>
-                handleNestedChip("project", "projectProgressStatus", label)
-              }
-              sx={{
-                marginRight: "10px",
-                marginTop: "10px",
-                backgroundColor: request.project.projectProgressStatus.includes(
-                  label as ProjectProgressStatus
-                )
-                  ? "#C8E6C9"
-                  : "transparent",
-                color: request.project.projectProgressStatus.includes(
-                  label as ProjectProgressStatus
+                color: request.project.fieldsEnvironmentalArea.generic.includes(
+                  label as FieldsEnvironmentalArea
                 )
                   ? "#000"
                   : "",
@@ -187,6 +138,57 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
               clickable
             />
           ))}
+          <CustomTagInput
+            label="add your tag"
+            customTags={request.project.fieldsEnvironmentalArea.custom ?? []}
+            setCustomTags={(newCustomTags) =>
+              handleDoubleNestedChange(
+                "project",
+                "fieldsEnvironmentalArea",
+                "custom",
+                newCustomTags
+              )
+            }
+          />
+        </>
+      </Box>
+      <Typography variant="body2" fontWeight={600} mt={3}>
+        Project&apos;s progress status *
+      </Typography>
+      <Box className={classes.chipContainer} mb={2}>
+        <>
+          {Object.values(ProjectProgressStatus)
+            .filter((label) => label !== "")
+            .map((label) => (
+              <Chip
+                key={label}
+                label={label}
+                onClick={() =>
+                  handleNestedChip("project", "projectProgressStatus", label)
+                }
+                sx={{
+                  marginRight: "10px",
+                  marginTop: "10px",
+                  backgroundColor:
+                    request.project.projectProgressStatus.includes(
+                      label as ProjectProgressStatus
+                    )
+                      ? "#C8E6C9"
+                      : "transparent",
+                  color: request.project.projectProgressStatus.includes(
+                    label as ProjectProgressStatus
+                  )
+                    ? "#000"
+                    : "",
+                  border: "1px solid black",
+                  borderRadius: "8px",
+                  "&:hover": {
+                    backgroundColor: "#C8E6C9",
+                  },
+                }}
+                clickable
+              />
+            ))}
         </>
       </Box>
       <Typography variant="body2" fontWeight={600} mt={3}>
@@ -231,35 +233,37 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
       </Typography>
       <Box className={classes.chipContainer} mb={2}>
         <>
-          {Object.values(ProjectFunding).map((label) => (
-            <Chip
-              key={label}
-              label={label}
-              onClick={() =>
-                handleNestedChip("project", "projectFunding", label)
-              }
-              sx={{
-                marginRight: "10px",
-                marginTop: "10px",
-                backgroundColor: request.project.projectFunding.includes(
-                  label as ProjectFunding
-                )
-                  ? "#C8E6C9"
-                  : "transparent",
-                color: request.project.projectFunding.includes(
-                  label as ProjectFunding
-                )
-                  ? "#000"
-                  : "",
-                border: "1px solid black",
-                borderRadius: "8px",
-                "&:hover": {
-                  backgroundColor: "#C8E6C9",
-                },
-              }}
-              clickable
-            />
-          ))}
+          {Object.values(ProjectFunding)
+            .filter((label) => label !== "")
+            .map((label) => (
+              <Chip
+                key={label}
+                label={label}
+                onClick={() =>
+                  handleNestedChip("project", "projectFunding", label)
+                }
+                sx={{
+                  marginRight: "10px",
+                  marginTop: "10px",
+                  backgroundColor: request.project.projectFunding.includes(
+                    label as ProjectFunding
+                  )
+                    ? "#C8E6C9"
+                    : "transparent",
+                  color: request.project.projectFunding.includes(
+                    label as ProjectFunding
+                  )
+                    ? "#000"
+                    : "",
+                  border: "1px solid black",
+                  borderRadius: "8px",
+                  "&:hover": {
+                    backgroundColor: "#C8E6C9",
+                  },
+                }}
+                clickable
+              />
+            ))}
         </>
       </Box>
     </Box>

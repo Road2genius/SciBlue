@@ -19,7 +19,7 @@ export const initialRequestState: RequestReqInterface = {
   project: {
     projectTitle: "",
     summary: "",
-    fieldsProfessionalActivity: {
+    fieldsEnvironmentalArea: {
       generic: [],
       custom: [],
     },
@@ -59,7 +59,7 @@ export const initialResponseState: RequestResInterface = {
   project: {
     projectTitle: "",
     summary: "",
-    fieldsProfessionalActivity: {
+    fieldsEnvironmentalArea: {
       generic: [],
       custom: [],
     },

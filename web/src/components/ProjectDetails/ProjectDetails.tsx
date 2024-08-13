@@ -14,7 +14,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
         Concerning the project we will be working on
       </Typography>
       <Box display="flex" gap={1} my={1} flexWrap="wrap">
-        {project.fieldsProfessionalActivity.custom?.map(
+        {project.fieldsEnvironmentalArea.custom?.map(
           (customField, index) => (
             <Chip
               size="small"
@@ -29,7 +29,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
             />
           )
         )}
-        {project.fieldsProfessionalActivity.generic?.map(
+        {project.fieldsEnvironmentalArea.generic?.map(
           (genericField, index) => (
             <Chip
               size="small"

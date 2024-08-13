@@ -26,7 +26,12 @@ const UserInfo: React.FC<UserInfoProps> = ({
         <Avatar
           src={avatars[getAvatarKey(avatar)]}
           alt="User Avatar"
-          sx={{ width: 64, height: 64, marginRight: "10px" }}
+          sx={{
+            width: 64,
+            height: 64,
+            marginRight: "10px",
+            border: "solid 1px gray",
+          }}
         />
         <Box display="flex" flexDirection="column">
           <Typography variant="subtitle2" color="grey">

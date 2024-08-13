@@ -216,7 +216,7 @@ const RequestsDetail: React.FC = () => {
             firstName: responseUser.firstName,
             lastName: responseUser.lastName,
             avatar: responseUser.avatar,
-            organization: responseUser.organizationAffiliated[0],
+            organization: responseUser.organizationAffiliated,
           });
         }
       } catch (error) {

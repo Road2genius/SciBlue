@@ -15,6 +15,7 @@ import RequestsList from "./pages/RequestsList";
 import RequestDetails from "./pages/RequestDetails";
 import Footer from "./components/LandingPage/Footer/Footer";
 import EditRequest from "./pages/EditRequest";
+import Feedback from "./pages/Feedback";
 
 // const Navbar: React.LazyExoticComponent<React.FC<object>> = lazy(
 //   () => import("./components/Navbar/Navbar")
@@ -71,6 +72,7 @@ const App: React.FC = () => {
             path="/request/details/:id"
             element={<PrivateRoute element={<RequestDetails />} />}
           />
+          <Route path="/feedback" element={<Feedback />} />
         </Routes>
       </Suspense>
       <Footer />

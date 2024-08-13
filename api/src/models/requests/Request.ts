@@ -1,12 +1,12 @@
 import mongoose, { Document, Schema } from "mongoose";
 import {
-  FieldsProfessionalActivity,
   ProjectProgressStatus,
   TypeOfCollaboration,
   TypeOfOrganization,
   CollaborationStatus,
   ProjectFunding,
   CollaborationVote,
+  FieldsEnvironmentalArea,
 } from "../../../../shared-types/user";
 import { Discipline } from "../../../../shared-types/requestData";
 import {
@@ -36,15 +36,15 @@ import {
   SocialScienceSubDisciplines,
   SpaceScienceSubDisciplines,
 } from "../../../../shared-types/disciplines";
-export interface IFieldsProfessionalActivity {
-  generic?: FieldsProfessionalActivity[];
+export interface IFieldsEnvironmentalArea {
+  generic?: FieldsEnvironmentalArea[];
   custom?: string[];
 }
 
 export interface IProject {
   projectTitle: string;
   summary: string;
-  fieldsProfessionalActivity: IFieldsProfessionalActivity;
+  fieldsEnvironmentalArea: IFieldsEnvironmentalArea;
   projectProgressStatus: ProjectProgressStatus;
   projectStartEndEstimation?: Date[];
   projectFunding?: ProjectFunding;
@@ -82,17 +82,17 @@ export interface IRequest extends Document {
   updatedAt?: Date;
 }
 
-const fieldsProfessionalActivitySchema: Schema<IFieldsProfessionalActivity> = new Schema({
+const fieldsEnvironmentalAreaSchema: Schema<IFieldsEnvironmentalArea> = new Schema({
   generic: {
     type: [String],
-    enum: Object.values(FieldsProfessionalActivity),
+    enum: Object.values(FieldsEnvironmentalArea),
   },
   custom: {
     type: [String],
   },
 });
 
-const disciplineSchema = new Schema({
+export const disciplineSchema = new Schema({
   primary: {
     type: String,
     enum: Object.values(PrimaryDiscipline),
@@ -134,8 +134,8 @@ const disciplineSchema = new Schema({
 const projectSchema: Schema<IProject> = new Schema({
   projectTitle: { type: String, required: true },
   summary: { type: String, required: true },
-  fieldsProfessionalActivity: {
-    type: fieldsProfessionalActivitySchema,
+  fieldsEnvironmentalArea: {
+    type: fieldsEnvironmentalAreaSchema,
     required: true,
   },
   projectProgressStatus: {
@@ -188,10 +188,10 @@ const requestSchema: Schema<IRequest> = new Schema(
 );
 
 // Add validation to ensure at least one of 'generic' or 'custom' is non-empty
-fieldsProfessionalActivitySchema.pre("validate", function (next) {
-  const value = this as IFieldsProfessionalActivity;
+fieldsEnvironmentalAreaSchema.pre("validate", function (next) {
+  const value = this as IFieldsEnvironmentalArea;
   if (!value.generic?.length && !value.custom?.length) {
-    next(new Error("fieldsProfessionalActivity must have at least one non-empty field: generic or custom."));
+    next(new Error("fields environmental area must have at least one non-empty field: generic or custom."));
   } else {
     next();
   }
