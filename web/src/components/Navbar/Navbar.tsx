@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
     { name: "Home", onClick: () => navigate("/") },
     { name: "Discussions", onClick: () => console.log("Discussions") },
     { name: "Request", onClick: () => navigate("/request/list") },
-    { name: "Community", onClick: () => console.log("Community") },
+    { name: "Community", onClick: () => navigate("/community") },
     { name: "Send feedback", onClick: () => navigate("/feedback") },
   ];
 
