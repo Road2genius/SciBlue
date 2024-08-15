@@ -21,7 +21,7 @@ import TuneRoundedIcon from "@mui/icons-material/TuneRounded";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import {
   CollaborationStatus,
- FieldsEnvironmentalArea,
+  FieldsEnvironmentalArea,
   ProjectFunding,
   ProjectProgressStatus,
   TypeOfCollaboration,
@@ -78,7 +78,6 @@ const applyFilters = (
   filters: FilterSelection
 ): RequestResInterface[] => {
   return requestList.filter((request) => {
-    // Filtre sur le statut de collaboration
     if (
       filters.collaborationStatus &&
       request.collaborationStatus !== filters.collaborationStatus
@@ -86,7 +85,6 @@ const applyFilters = (
       return false;
     }
 
-    // Filtre sur le type de collaboration
     if (filters.collaborationType && filters.collaborationType.length > 0) {
       if (
         !filters.collaborationType.some((type) =>
@@ -97,7 +95,6 @@ const applyFilters = (
       }
     }
 
-    // Filtre sur les domaines d'activité professionnelle
     if (
       filters.fieldsEnvironmentalArea &&
       filters.fieldsEnvironmentalArea.length > 0
@@ -111,7 +108,6 @@ const applyFilters = (
       }
     }
 
-    // Filtre sur le statut de progression du projet
     if (
       filters.projectProgressStatus &&
       request.project.projectProgressStatus !== filters.projectProgressStatus
@@ -119,7 +115,6 @@ const applyFilters = (
       return false;
     }
 
-    // Filtre sur le financement du projet
     if (
       filters.projectFunding &&
       request.project.projectFunding !== filters.projectFunding
@@ -127,7 +122,6 @@ const applyFilters = (
       return false;
     }
 
-    // Filtre sur l'organisation demandée
     if (
       filters.organizationRequested &&
       filters.organizationRequested.length > 0
@@ -141,7 +135,6 @@ const applyFilters = (
       }
     }
 
-    // Si tous les filtres passent, on garde l'élément dans la liste
     return true;
   });
 };
@@ -534,68 +527,72 @@ const TabsComponent: React.FC<{
             Project&apos;s progress status
           </Typography>
           <Box display="flex">
-            {Object.values(ProjectProgressStatus).map((label) => (
-              <Chip
-                key={label}
-                label={label}
-                sx={{
-                  marginRight: "10px",
-                  marginTop: "10px",
-                  border: "1px solid black",
-                  backgroundColor:
-                    filterRequest.projectProgressStatus?.includes(
+            {Object.values(ProjectProgressStatus)
+              .filter((label) => label !== "")
+              .map((label) => (
+                <Chip
+                  key={label}
+                  label={label}
+                  sx={{
+                    marginRight: "10px",
+                    marginTop: "10px",
+                    border: "1px solid black",
+                    backgroundColor:
+                      filterRequest.projectProgressStatus?.includes(
+                        label as ProjectProgressStatus
+                      )
+                        ? "#C8E6C9"
+                        : "transparent",
+                    color: filterRequest.projectProgressStatus?.includes(
                       label as ProjectProgressStatus
                     )
-                      ? "#C8E6C9"
-                      : "transparent",
-                  color: filterRequest.projectProgressStatus?.includes(
-                    label as ProjectProgressStatus
-                  )
-                    ? "#000"
-                    : "",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: "#C8E6C9",
-                  },
-                }}
-                onClick={() =>
-                  handleFilterRequest("projectProgressStatus", label)
-                }
-                clickable
-              />
-            ))}
+                      ? "#000"
+                      : "",
+                    borderRadius: "8px",
+                    "&:hover": {
+                      backgroundColor: "#C8E6C9",
+                    },
+                  }}
+                  onClick={() =>
+                    handleFilterRequest("projectProgressStatus", label)
+                  }
+                  clickable
+                />
+              ))}
           </Box>
           <Typography variant="body2" fontWeight={600} mt={3}>
             Project&apos;s funding
           </Typography>
           <Box display="flex">
-            {Object.values(ProjectFunding).map((label) => (
-              <Chip
-                key={label}
-                label={label}
-                sx={{
-                  marginRight: "10px",
-                  marginTop: "10px",
-                  border: "1px solid black",
-                  backgroundColor: filterRequest.projectFunding?.includes(
-                    label as ProjectFunding
-                  )
-                    ? "#C8E6C9"
-                    : "transparent",
-                  color: filterRequest.projectFunding?.includes(
-                    label as ProjectFunding
-                  )
-                    ? "#000"
-                    : "",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: "#C8E6C9",
-                  },
-                }}
-                onClick={() => handleFilterRequest("projectFunding", label)}
-                clickable
-              />
-            ))}
+            {Object.values(ProjectFunding)
+              .filter((label) => label !== "")
+              .map((label) => (
+                <Chip
+                  key={label}
+                  label={label}
+                  sx={{
+                    marginRight: "10px",
+                    marginTop: "10px",
+                    border: "1px solid black",
+                    backgroundColor: filterRequest.projectFunding?.includes(
+                      label as ProjectFunding
+                    )
+                      ? "#C8E6C9"
+                      : "transparent",
+                    color: filterRequest.projectFunding?.includes(
+                      label as ProjectFunding
+                    )
+                      ? "#000"
+                      : "",
+                    borderRadius: "8px",
+                    "&:hover": {
+                      backgroundColor: "#C8E6C9",
+                    },
+                  }}
+                  onClick={() => handleFilterRequest("projectFunding", label)}
+                  clickable
+                />
+              ))}
           </Box>
           <Typography variant="body2" fontWeight={600} mt={3}>
             Organization requested

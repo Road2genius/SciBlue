@@ -21,9 +21,6 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import {
   FieldsEnvironmentalArea,
   Languages,
-  ProjectFunding,
-  ProjectProgressStatus,
-  TypeOfOrganization,
 } from "../../../../shared-types/user";
 import useSignupForm from "../../hooks/useSignupForm";
 import { UserRes } from "../../../../shared-types/userData";
@@ -401,24 +398,21 @@ const UserDialog: React.FC<{
               collaborate?
             </Typography>
             <Box className={classes.chipContainer} mb={2}>
-              {Object.values(TypeOfOrganization).map((organization, index) => (
-                <Chip
-                  key={index}
-                  label={organization}
-                  sx={{
-                    backgroundColor:
-                      user.kindOfCollaborationWanted.typeOfOrganization.includes(
-                        organization as TypeOfOrganization
-                      )
-                        ? "#C8E6C9"
-                        : "transparent",
-                    border: "1px solid black",
-                    borderRadius: "8px",
-                    marginRight: "10px",
-                    marginTop: " 8px",
-                  }}
-                />
-              ))}
+              {user.kindOfCollaborationWanted.typeOfOrganization.map(
+                (organization, index) => (
+                  <Chip
+                    key={index}
+                    label={organization}
+                    sx={{
+                      backgroundColor: "transparent",
+                      border: "1px solid black",
+                      borderRadius: "8px",
+                      marginRight: "10px",
+                      marginTop: " 8px",
+                    }}
+                  />
+                )
+              )}
             </Box>
             <Typography
               variant="body1"
@@ -428,34 +422,17 @@ const UserDialog: React.FC<{
               Project&apos;s progress status
             </Typography>
             <Box className={classes.chipContainer} mb={2}>
-              <>
-                {Object.values(ProjectProgressStatus)
-                  .filter((label) => label !== "")
-                  .map((label) => (
-                    <Chip
-                      key={label}
-                      label={label}
-                      sx={{
-                        marginRight: "10px",
-                        backgroundColor:
-                          user.kindOfCollaborationWanted.projectProgressStatus.includes(
-                            label as ProjectProgressStatus
-                          )
-                            ? "#C8E6C9"
-                            : "transparent",
-                        color:
-                          user.kindOfCollaborationWanted.projectProgressStatus.includes(
-                            label as ProjectProgressStatus
-                          )
-                            ? "#000"
-                            : "",
-                        border: "1px solid black",
-                        borderRadius: "8px",
-                        marginTop: " 8px",
-                      }}
-                    />
-                  ))}
-              </>
+              <Chip
+                key={user.kindOfCollaborationWanted.projectProgressStatus}
+                label={user.kindOfCollaborationWanted.projectProgressStatus}
+                sx={{
+                  marginRight: "10px",
+                  backgroundColor: "transparent",
+                  border: "1px solid black",
+                  borderRadius: "8px",
+                  marginTop: " 8px",
+                }}
+              />
             </Box>
             <Typography
               variant="body1"
@@ -465,34 +442,18 @@ const UserDialog: React.FC<{
               Project&apos;s funding
             </Typography>
             <Box className={classes.chipContainer} mb={2}>
-              <>
-                {Object.values(ProjectFunding)
-                  .filter((label) => label !== "")
-                  .map((label) => (
-                    <Chip
-                      key={label}
-                      label={label}
-                      sx={{
-                        marginRight: "10px",
-                        backgroundColor:
-                          user.kindOfCollaborationWanted.projectFunding.includes(
-                            label as ProjectFunding
-                          )
-                            ? "#C8E6C9"
-                            : "transparent",
-                        color:
-                          user.kindOfCollaborationWanted.projectFunding.includes(
-                            label as ProjectFunding
-                          )
-                            ? "#000"
-                            : "",
-                        border: "1px solid black",
-                        borderRadius: "8px",
-                        marginTop: " 8px",
-                      }}
-                    />
-                  ))}
-              </>
+              <Chip
+                key={user.kindOfCollaborationWanted.projectFunding}
+                label={user.kindOfCollaborationWanted.projectFunding}
+                sx={{
+                  marginRight: "10px",
+                  backgroundColor: "transparent",
+
+                  border: "1px solid black",
+                  borderRadius: "8px",
+                  marginTop: " 8px",
+                }}
+              />
             </Box>
           </Box>
         </Container>
