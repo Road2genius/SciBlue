@@ -3,6 +3,7 @@ import connectDB from "./config/db";
 import userRoutes from "./routes/user/userRoutes";
 import authRoutes from "./routes/auth/authRoutes";
 import requestRoutes from "./routes/request/requestRoutes";
+import questionRouter from "./routes/question/questionRoutes";
 import cors from "cors";
 import { errorHandler } from "./middleware/responseHandler";
 import bodyParser from "body-parser";
@@ -37,6 +38,7 @@ app.use(bodyParser.json());
 app.use(BASE_ROUTE, userRoutes);
 app.use(BASE_ROUTE, authRoutes);
 app.use(BASE_ROUTE, requestRoutes);
+app.use(BASE_ROUTE, questionRouter);
 
 app.get("/", (req, res) => {
   res.send("");

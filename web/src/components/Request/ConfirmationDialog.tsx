@@ -12,11 +12,13 @@ import {
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 
 interface ConfirmationDialogProps {
+  entity: string;
   openDialog: boolean;
   handleCloseDialog: () => void;
 }
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
+  entity,
   openDialog,
   handleCloseDialog,
 }) => {
@@ -45,7 +47,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
         <DialogContentText>
           <Box display="flex" my={1}>
             <DoneRoundedIcon sx={{ color: "#197278", marginRight: "2px" }} />{" "}
-            You can edit, close, or delete your request at any time.
+            You can edit, close, or delete your {entity} at any time.
           </Box>
         </DialogContentText>
       </DialogContent>

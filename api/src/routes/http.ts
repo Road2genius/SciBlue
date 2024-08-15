@@ -31,7 +31,26 @@ export const ENDPOINT = {
   REQUEST_VOTE: {
     SUBMIT_REQUEST_VOTE_PATH: `/requests/:requestId/votes`,
   },
-  COMMENT_VOTE: {
-    SUBMIT_COMMENT_VOTE_PATH: `/comments/:commentId/votes`,
+  REQUEST_COMMENT_VOTE: {
+    SUBMIT_REQUEST_COMMENT_VOTE_PATH: `/comments/:commentId/votes`,
+  },
+  QUESTION: {
+    CREATE_QUESTION_PATH: `/questions`,
+    GET_QUESTION_BY_ID_PATH: `/questions/:questionId`,
+    DELETE_QUESTION_PATH: `/questions/:questionId`,
+    UPDATE_QUESTION_PATH: `/questions/:questionId`,
+    GET_QUESTIONS_LIST_PATH: `/questions`,
+  },
+  QUESTION_COMMENT: {
+    CREATE_QUESTION_COMMENT_PATH: `/questions/:questionId/comments`,
+    DELETE_QUESTION_COMMENT_PATH: `/questions/comments/:commentId`,
+    UPDATE_QUESTION_COMMENT_PATH: `/questions/comments/:commentId`,
+    GET_QUESTION_COMMENT_LIST_PATH: `/questions/:questionId/comments`,
+  },
+  QUESTION_VOTE: {
+    SUBMIT_QUESTION_VOTE_PATH: `/questions/:questionId/votes`,
+  },
+  QUESTION_COMMENT_VOTE: {
+    SUBMIT_QUESTION_COMMENT_VOTE_PATH: `/comments/:commentId/votes`,
   },
 };

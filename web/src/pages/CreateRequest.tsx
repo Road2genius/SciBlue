@@ -105,6 +105,7 @@ const CreateRequest: React.FC = () => {
         </Box>
       </Container>
       <ConfirmationDialog
+        entity="request"
         openDialog={openDialog}
         handleCloseDialog={handleCloseDialog}
       />

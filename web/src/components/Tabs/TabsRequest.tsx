@@ -138,7 +138,7 @@ const applyFilters = (
   });
 };
 
-const TabsComponent: React.FC<{
+const TabsRequestComponent: React.FC<{
   titles: string[];
   requestsList: RequestResInterface[];
   userCommentedRequests: RequestResInterface[];
@@ -670,4 +670,4 @@ const TabsComponent: React.FC<{
   );
 };
 
-export default TabsComponent;
+export default TabsRequestComponent;

@@ -18,6 +18,8 @@ import EditRequest from "./pages/EditRequest";
 import Feedback from "./pages/Feedback";
 import Community from "./pages/Community";
 import ProfileInformation from "./pages/ProfileInformation";
+import CreateQuestion from "./pages/CreateQuestion";
+import QuestionsList from "./pages/QuestionsList";
 
 const MainLayout = (): JSX.Element => <Outlet />;
 
@@ -50,6 +52,11 @@ const App: React.FC = () => {
           />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/community" element={<Community />} />
+          <Route
+            path="/question/create"
+            element={<PrivateRoute element={<CreateQuestion />} />}
+          />
+          <Route path="/discussions/list" element={<QuestionsList />} />
         </Routes>
       </Suspense>
       <Footer />
