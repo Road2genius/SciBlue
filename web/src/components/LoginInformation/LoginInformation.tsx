@@ -17,16 +17,29 @@ interface LoginInformationProps {
   textFields: LoginField[];
   handleChange: (field: keyof UserReq, value: string) => void;
   user: UserReq;
+  fromProfileInformation?: boolean;
 }
 
 const LoginInformation: React.FC<LoginInformationProps> = ({
   textFields,
   handleChange,
   user,
+  fromProfileInformation,
 }) => {
   if (!user.organizationAffiliated) {
     return;
   }
+
+  const getGoodLabel = (field: LoginField) => {
+    if (field.label === "Password") {
+      if (fromProfileInformation) {
+        field.value = "";
+        return "New Password";
+      } else return "Password";
+    }
+    return field.label;
+  };
+
   return (
     <>
       <Typography variant="h5" fontWeight={600} mb={2}>
@@ -35,10 +48,10 @@ const LoginInformation: React.FC<LoginInformationProps> = ({
       {textFields.slice(0, 2).map((field, index) => (
         <CustomTextField
           key={index + 4}
-          label={field.label}
+          label={getGoodLabel(field)}
           placeholder={field.placeholder}
           type={field.type}
-          value={field.value}
+          value={field.value ?? ""}
           onChange={(e) =>
             handleChange(field.textfield as keyof typeof user, e.target.value)
           }

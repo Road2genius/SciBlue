@@ -20,3 +20,20 @@ export const getUsersList = async (): Promise<UserRes[]> => {
   }>(`/users/`);
   return response.data;
 };
+
+export const updateUser = async (
+  userId: string,
+  dataUser: Partial<UserRes>
+): Promise<UserRes> => {
+  const token = sessionStorage.getItem("your_jwt_secret_key");
+  return api.patch<UserRes, Partial<UserReq>>(`/users/${userId}`, dataUser, {
+    Authorization: `Bearer ${token}`,
+  });
+};
+
+export const deleteUser = async (userId: string): Promise<void> => {
+  const token = sessionStorage.getItem("your_jwt_secret_key");
+  await api.delete<string>(`/users/${userId}`, {
+    Authorization: `Bearer ${token}`,
+  });
+};

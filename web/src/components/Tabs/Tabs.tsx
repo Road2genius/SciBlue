@@ -12,7 +12,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import { makeStyles } from "@mui/styles";
 import React, { SyntheticEvent, useMemo, useState } from "react";
 import { RequestResInterface } from "../../../../shared-types/requestData";
 import RequestCard from "../RequestCard/RequestCard";
@@ -152,7 +151,6 @@ const TabsComponent: React.FC<{
   userSubmittedRequests,
   usersRequest,
 }) => {
-  const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [value, setValue] = useState(0);
@@ -222,7 +220,7 @@ const TabsComponent: React.FC<{
 
   return (
     <>
-      <Box className={classes.root}>
+      <Box>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -671,14 +669,5 @@ const TabsComponent: React.FC<{
     </>
   );
 };
-
-const useStyles = makeStyles({
-  root: {
-    // minHeight: "100vh",
-    // display: "flex",
-    // flexDirection: "column",
-    // padding: "10px",
-  },
-});
 
 export default TabsComponent;

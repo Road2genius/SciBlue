@@ -17,36 +17,7 @@ import Footer from "./components/LandingPage/Footer/Footer";
 import EditRequest from "./pages/EditRequest";
 import Feedback from "./pages/Feedback";
 import Community from "./pages/Community";
-
-// const Navbar: React.LazyExoticComponent<React.FC<object>> = lazy(
-//   () => import("./components/Navbar/Navbar")
-// );
-// const Footer: React.LazyExoticComponent<React.FC<object>> = lazy(
-//   () => import("./components/LandingPage/Footer/Footer")
-// );
-// const Home: React.LazyExoticComponent<React.FC<object>> = lazy(
-//   () => import("./pages/Home")
-// );
-
-// const Login: React.LazyExoticComponent<React.FC<object>> = lazy(
-//   () => import("./pages/Login")
-// );
-
-// const Signup: React.LazyExoticComponent<React.FC<object>> = lazy(
-//   () => import("./pages/Signup")
-// );
-
-// const CreateRequest: React.LazyExoticComponent<React.FC<object>> = lazy(
-//   () => import("./pages/CreateRequest")
-// );
-
-// const RequestsList: React.LazyExoticComponent<React.FC<object>> = lazy(
-//   () => import("./pages/RequestsList")
-// );
-
-// const RequestDetails: React.LazyExoticComponent<React.FC<object>> = lazy(
-//   () => import("./pages/RequestDetails")
-// );
+import ProfileInformation from "./pages/ProfileInformation";
 
 const MainLayout = (): JSX.Element => <Outlet />;
 
@@ -63,6 +34,10 @@ const App: React.FC = () => {
           <Route
             path="/request/create"
             element={<PrivateRoute element={<CreateRequest />} />}
+          />
+          <Route
+            path="/user/profile/:userId"
+            element={<ProfileInformation />}
           />
           <Route
             path="/request/edit/:id"

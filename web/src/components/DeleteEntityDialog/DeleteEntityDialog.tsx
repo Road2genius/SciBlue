@@ -13,7 +13,7 @@ interface DeleteEntityDialogProps {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  entityType: "request" | "question"; // Ou autres types d'entité si nécessaire
+  entityType: "request" | "question" | "user profile"
 }
 
 const DeleteEntityDialog: React.FC<DeleteEntityDialogProps> = ({

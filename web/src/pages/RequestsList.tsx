@@ -99,7 +99,12 @@ const RequestsList: React.FC = () => {
 
   if (loading)
     return (
-      <Box className={classes.root}>
+      <Box
+        className={classes.root}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
         <CircularProgress sx={{ color: "#197278" }} />
       </Box>
     );

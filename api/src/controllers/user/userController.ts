@@ -6,6 +6,8 @@ import { CustomError } from "../../types/error/customError";
 import mongoose from "mongoose";
 import { successHandler } from "../../middleware/responseHandler";
 import { convertToPlainObject } from "../../utils/convertPlainObject";
+import { CommentRequestModel } from "../../models/requests/Comment";
+import { RequestModel } from "../../models/requests/Request";
 
 // createUser requests the server to add a new user
 export const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -36,7 +38,7 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
       throw error;
     }
 
-    const user: IUser | null = await UserModel.findById(userId);
+    const user: IUser | null = await UserModel.findById(userId).select("-password");
 
     if (!user) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
@@ -64,12 +66,21 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
 
     const user: IUser | null = await UserModel.findByIdAndDelete(userId);
 
+    await CommentRequestModel.deleteMany({ userId });
+    await RequestModel.deleteMany({ userId });
+
     if (!user) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
       error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
       error.code = ERROR_CODES.USER_NOT_FOUND;
       throw error;
     }
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    });
 
     successHandler<{ message: string }>(
       req,
@@ -98,10 +109,14 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 
     const updatedData: IUser = req.body;
 
+    if (updatedData.password) {
+      updatedData.password = await bcrypt.hash(updatedData.password, 10);
+    }
+
     const user: IUser | null = await UserModel.findByIdAndUpdate(userId, updatedData, {
       new: true,
       runValidators: true,
-    });
+    }).select("-password");
 
     if (!user) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);

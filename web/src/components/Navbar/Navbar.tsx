@@ -18,6 +18,8 @@ import {
 import React, { useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserContext";
+import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { avatars, getAvatarKey } from "./avatar";
 import { useSnackbar } from "notistack";
 import { logoutUser } from "../../actions/auth/auth";
@@ -135,14 +137,27 @@ const Navbar: React.FC = () => {
               onClose={() => setAnchorEl(null)}
             >
               <MenuItem
+                divider
                 onClick={() => {
-                  navigate("/profile");
+                  navigate(`/user/profile/${userContext.userId}`);
                   setAnchorEl(null);
                 }}
               >
-                Profile Information
+                <Box mr={1}>
+                  <ManageAccountsOutlinedIcon sx={{ color: "#008080" }} />
+                </Box>
+                <Typography variant="subtitle1" sx={{ marginTop: "-3px" }}>
+                  Profile Information
+                </Typography>
               </MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem onClick={handleLogout}>
+                <Box mr={1}>
+                  <LogoutOutlinedIcon sx={{ color: "#008080" }} />
+                </Box>
+                <Typography variant="subtitle1" sx={{ marginTop: "-3px" }}>
+                  Logout
+                </Typography>
+              </MenuItem>
             </Menu>
           </>
         ) : (
