@@ -9,6 +9,7 @@ import {
   Grid,
   Paper,
   Button,
+  Tooltip,
 } from "@mui/material";
 import OpenInNew from "@mui/icons-material/OpenInNew";
 import {
@@ -22,6 +23,7 @@ import { UserRequest } from "../../pages/RequestsList";
 import { avatars, getAvatarKey } from "../Navbar/avatar";
 import { useNavigate } from "react-router-dom";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { formatDate, truncateText } from "../../utils/utils";
 
 const RequestCard: React.FC<{
@@ -336,10 +338,31 @@ const RequestCard: React.FC<{
                         })}{" "}
                         by
                       </Typography>
-                      <Typography variant="body2" sx={{ color: "#197278" }}>
-                        {usersRequest[requestId]?.firstName} -{" "}
-                        {usersRequest[requestId]?.lastName}
-                      </Typography>
+                      {!usersRequest[requestId].privacyLevel.mode ? (
+                        <Typography variant="body2" sx={{ color: "#197278" }}>
+                          {usersRequest[requestId]?.firstName} -
+                          {usersRequest[requestId]?.lastName}
+                        </Typography>
+                      ) : (
+                        <Box display="flex" alignItems="center">
+                          <Typography
+                            variant="subtitle2"
+                            sx={{ marginBottom: "5px" }}
+                          >
+                            {usersRequest[requestId]?.privacyLevel.username}
+                          </Typography>
+                          <Tooltip title="This user has activated private mode">
+                            <VisibilityOffIcon
+                              fontSize="inherit"
+                              sx={{
+                                fontSize: "24px",
+                                cursor: "pointer",
+                                marginLeft: "10px",
+                              }}
+                            />
+                          </Tooltip>
+                        </Box>
+                      )}
                       <Typography variant="caption" flexWrap="wrap" width="80%">
                         {usersRequest[requestId]?.organization}
                       </Typography>

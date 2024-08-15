@@ -47,6 +47,7 @@ const requestCreatorInitial = {
   id: "",
   firstName: "",
   lastName: "",
+  privacyLevel: { mode: false, username: "" },
   avatar: "",
   organization: undefined,
 };
@@ -215,6 +216,7 @@ const RequestsDetail: React.FC = () => {
             id: responseUser._id,
             firstName: responseUser.firstName,
             lastName: responseUser.lastName,
+            privacyLevel: responseUser.privacyLevel,
             avatar: responseUser.avatar,
             organization: responseUser.organizationAffiliated,
           });
@@ -383,6 +385,7 @@ const RequestsDetail: React.FC = () => {
               avatar={requestCreator.avatar}
               firstName={requestCreator.firstName}
               lastName={requestCreator.lastName}
+              privacyLevel={requestCreator.privacyLevel}
               organization={requestCreator.organization}
               createdAt={requestDetails.createdAt}
               updatedAt={requestDetails.updatedAt}
