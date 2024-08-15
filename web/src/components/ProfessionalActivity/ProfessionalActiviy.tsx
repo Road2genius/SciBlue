@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Typography, Divider, Switch } from "@mui/material";
 import CustomTextField from "../CustomTextField/CustomTextField";
 import { UserReq } from "../../../../shared-types/userData";
@@ -49,10 +49,6 @@ const ProfessionalActivity: React.FC<ProfessionalActivityProps> = ({
   handleDeleteChipDiscipline,
   handleChange,
 }) => {
-  // const [fundResearchProject, setFundResearchProject] =
-  //   useState<boolean>(false);
-  const [engageResearchActivities, setEngageResearchActivities] =
-    useState<boolean>(false);
   if (!user.organizationAffiliated) {
     return;
   }
@@ -138,10 +134,8 @@ const ProfessionalActivity: React.FC<ProfessionalActivityProps> = ({
           No
         </Typography>
         <Switch
-          checked={engageResearchActivities}
-          onChange={(event) =>
-            setEngageResearchActivities(event.target.checked)
-          }
+          checked={user.proDoesResearch}
+          onChange={(e) => handleChange("proDoesResearch", e.target.checked)}
           sx={{
             "& .MuiSwitch-switchBase.Mui-checked": {
               color: "#008080",
@@ -156,7 +150,7 @@ const ProfessionalActivity: React.FC<ProfessionalActivityProps> = ({
         </Typography>
       </Box>
 
-      {engageResearchActivities && (
+      {user.proDoesResearch && (
         <>
           <Box mt={8} mb={5} ml={8}>
             <Divider

@@ -14,6 +14,7 @@ export interface CommentWithUser extends RequestResComment {
     id: string;
     firstName: string;
     lastName: string;
+    privacyLevel: { mode: boolean; username: string };
     avatar: string;
     organizationAffiliated: string;
   };
@@ -247,6 +248,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
             avatar={comment.user.avatar}
             firstName={comment.user.firstName}
             lastName={comment.user.lastName}
+            privacyLevel={comment.user.privacyLevel}
             organization={comment.user.organizationAffiliated}
             createdAt={comment.createdAt}
           />

@@ -1,7 +1,7 @@
 import UserModel, { IUser } from "../../../src/models/user/User";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { TypeOfOrganization } from "../../../../shared-types/user";
+import { CountryNames, TypeOfOrganization } from "../../../../shared-types/user";
 
 export const validUserData: Partial<IUser> = {
   firstName: "John",
@@ -12,7 +12,7 @@ export const validUserData: Partial<IUser> = {
   organizationAffiliated: TypeOfOrganization.AcademicLaboratoryAndInstitute,
   institution: "Institution Name",
   profileVerificationInfo: "test",
-  country: "Country Name",
+  country: CountryNames.France,
 };
 
 export const anotherValidUserData: Partial<IUser> = {
@@ -24,7 +24,7 @@ export const anotherValidUserData: Partial<IUser> = {
   organizationAffiliated: TypeOfOrganization.AcademicLaboratoryAndInstitute,
   institution: "Another Institution Name",
   profileVerificationInfo: "test",
-  country: "Another Country Name",
+  country: CountryNames.France,
 };
 
 export const otherValidUserData: Partial<IUser> = {
@@ -36,7 +36,7 @@ export const otherValidUserData: Partial<IUser> = {
   organizationAffiliated: TypeOfOrganization.Government,
   typeOfOrganizationSpecific: "test",
   institution: "Another Institution Name",
-  country: "Another Country Name",
+  country: CountryNames.France,
 };
 
 // createUserFixture create a user for testing environment

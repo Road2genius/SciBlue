@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, CircularProgress, Container, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import TabsComponent from "../components/Tabs/Tabs";
@@ -16,6 +16,7 @@ export interface UserRequest {
   id: string;
   firstName: string;
   lastName: string;
+  privacyLevel: { mode: boolean; username: string };
   avatar?: string;
   organization?: TypeOfOrganization;
 }
@@ -51,12 +52,15 @@ const RequestsList: React.FC = () => {
 
         const usersMap: { [key: string]: UserRequest } = requests.reduce(
           (acc, request) => {
-            const user = usersData.find((user: UserRes) => user._id === request.userId);
+            const user = usersData.find(
+              (user: UserRes) => user._id === request.userId
+            );
             if (user) {
               acc[request._id] = {
                 id: user._id,
                 firstName: user.firstName,
                 lastName: user.lastName,
+                privacyLevel: user.privacyLevel,
                 avatar: user.avatar,
                 organization: user.organizationAffiliated,
               };
@@ -93,7 +97,17 @@ const RequestsList: React.FC = () => {
     fetchRequestsAndUsers();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <Box
+        className={classes.root}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <CircularProgress sx={{ color: "#197278" }} />
+      </Box>
+    );
 
   return (
     <Container maxWidth="xl">

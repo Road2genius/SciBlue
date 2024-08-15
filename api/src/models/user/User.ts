@@ -1,4 +1,10 @@
-import { Languages, ProjectFunding, ProjectProgressStatus, TypeOfOrganization } from "../../../../shared-types/user";
+import {
+  CountryNames,
+  Languages,
+  ProjectFunding,
+  ProjectProgressStatus,
+  TypeOfOrganization,
+} from "../../../../shared-types/user";
 import mongoose, { Document, Schema } from "mongoose";
 import { disciplineSchema, IFieldsEnvironmentalArea } from "../requests/Request";
 import { Discipline } from "../../../../shared-types/requestData";
@@ -15,7 +21,7 @@ export interface IUser extends Document {
   lastName: string;
   organizationName: string;
   typeOfOrganizationSpecific: string;
-  country: string;
+  country: CountryNames;
   languages: Languages[];
   institution: string;
   profileVerificationInfo: string;
@@ -37,6 +43,7 @@ export interface IUser extends Document {
     projectFunding?: ProjectFunding;
   };
   funder?: boolean;
+  proDoesResearch?: boolean;
   avatar: string;
   refreshToken: string;
   createdAt?: Date;
@@ -60,7 +67,7 @@ const userSchema: Schema = new Schema(
     lastName: { type: String, required: true },
     organizationName: { type: String },
     typeOfOrganizationSpecific: { type: String },
-    country: { type: String, required: true },
+    country: { type: String, enum: Object.values(CountryNames), required: true },
     languages: {
       type: [String],
       enum: Object.values(Languages),
@@ -94,6 +101,7 @@ const userSchema: Schema = new Schema(
       },
     },
     funder: { type: Boolean },
+    proDoesResearch: { type: Boolean },
     avatar: { type: String },
     refreshToken: { type: String },
   },

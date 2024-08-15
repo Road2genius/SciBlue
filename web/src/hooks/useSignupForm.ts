@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { UserReq } from "../../../shared-types/userData";
+import { UserReq, UserRes } from "../../../shared-types/userData";
 import AcademicAvatar from "../assets/avatars/academic.svg";
 import FreelanceAvatar from "../assets/avatars/freelancer.svg";
 import GovernmentAvatar from "../assets/avatars/government.svg";
 import OngAvatar from "../assets/avatars/ong.svg";
 import PrivateAvatar from "../assets/avatars/privateResearch.svg";
-import { createUserAction } from "../actions/user/user";
+import { createUserAction, deleteUserAction, updateUserAction } from "../actions/user/user";
 import { getErrorMessage } from "../utils/handleError";
 import { useSnackbar } from "notistack";
 import {
+  CountryNames,
   ProjectFunding,
   ProjectProgressStatus,
   TypeOfOrganization,
@@ -27,7 +28,7 @@ const initialUserState: UserReq = {
   lastName: "",
   organizationName: "",
   typeOfOrganizationSpecific: "",
-  country: "",
+  country: "" as CountryNames,
   languages: [],
   institution: "",
   profileVerificationInfo: "",
@@ -55,6 +56,7 @@ const initialUserState: UserReq = {
     projectFunding: "" as ProjectFunding,
   },
   funder: false,
+  proDoesResearch: false,
   avatar: "",
   refreshToken: "",
   createdAt: new Date(),
@@ -63,11 +65,31 @@ const initialUserState: UserReq = {
 
 interface UseUserFormProps {
   onSuccessSignIn?: () => void;
+  onSuccessUpdateUser?: () => void;
+  onErrorUpdateUser?: () => void;
+  onSuccessDeleteUser?: () => void;
+  onErrorDeleteUser?: () => void
+  profileInformation?: UserRes;
 }
 
-const useSignupForm = ({ onSuccessSignIn }: UseUserFormProps) => {
-  const [user, setUser] = useState<UserReq>(initialUserState);
+const useSignupForm = ({
+  onSuccessSignIn,
+  onSuccessUpdateUser,
+  onErrorUpdateUser,
+  onSuccessDeleteUser,
+  onErrorDeleteUser,
+  profileInformation,
+}: UseUserFormProps) => {
+  const [user, setUser] = useState<UserReq>(
+    profileInformation || initialUserState
+  );
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    if (profileInformation) {
+      setUser(profileInformation);
+    }
+  }, [profileInformation]);
 
   const avatarUrls: { [key in TypeOfOrganization]: string } = {
     [TypeOfOrganization.AcademicLaboratoryAndInstitute]: AcademicAvatar,
@@ -115,6 +137,13 @@ const useSignupForm = ({ onSuccessSignIn }: UseUserFormProps) => {
     setUser((prevUser) => ({
       ...prevUser,
       languages: prevUser.languages.filter((lang) => lang !== langToDelete),
+    }));
+  };
+
+  const handleDeleteChipCountry = () => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      country: "" as CountryNames,
     }));
   };
 
@@ -356,6 +385,27 @@ const useSignupForm = ({ onSuccessSignIn }: UseUserFormProps) => {
     }
   };
 
+  const handleUpdateUser = async (
+    userId: string,
+    userDetail: UserRes
+  ): Promise<void> => {
+    try {
+      await updateUserAction(userId, userDetail);
+      onSuccessUpdateUser && onSuccessUpdateUser();
+    } catch (err) {
+      onErrorUpdateUser && onErrorUpdateUser();
+    }
+  };
+
+  const handleDeleteUser = async (userId: string): Promise<void> => {
+    try {
+      await deleteUserAction(userId);
+      onSuccessDeleteUser && onSuccessDeleteUser();
+    } catch (err) {
+      onErrorDeleteUser && onErrorDeleteUser();
+    }
+  };
+
   return {
     user,
     getAvatarByOrganization,
@@ -368,10 +418,13 @@ const useSignupForm = ({ onSuccessSignIn }: UseUserFormProps) => {
     organizationIsResearcher,
     handleChangeLanguage,
     handleDeleteChipLanguage,
+    handleDeleteChipCountry,
     handleNestedArrayChange,
     handleDeleteChipDiscipline,
     handleDoubleNestedChip,
     handleDoubleNestedChange,
+    handleUpdateUser,
+    handleDeleteUser,
   };
 };
 

@@ -4,12 +4,21 @@ import CustomTextField from "../CustomTextField/CustomTextField";
 import { getTextFieldsConfig } from "../CustomTextField/getTextFieldsConfig";
 import { UserReq } from "../../../../shared-types/userData";
 import LanguageSelector from "../LanguageSelection/LanguageSelection";
+import CountrySelector from "../CountrySelection/CountrySelection";
 
 interface ConditionalTextFieldsProps {
   user: UserReq;
   handleChange: (field: keyof UserReq, value: string) => void;
-  handleChangeLanguage: (field: keyof UserReq, value: UserReq[keyof UserReq]) => void;
+  handleChangeChip: (
+    field: keyof UserReq,
+    value: UserReq[keyof UserReq]
+  ) => void;
+  handleChangeLanguage: (
+    field: keyof UserReq,
+    value: UserReq[keyof UserReq]
+  ) => void;
   handleDeleteChipLanguage: (lang: string) => void;
+  handleDeleteChipCountry: () => void;
   organizationIsResearcher: boolean;
 }
 
@@ -18,7 +27,9 @@ const ConditionalTextFields: React.FC<ConditionalTextFieldsProps> = ({
   handleChange,
   handleChangeLanguage,
   handleDeleteChipLanguage,
+  handleDeleteChipCountry,
   organizationIsResearcher,
+  handleChangeChip,
 }) => {
   const textFields = getTextFieldsConfig(user).filter((field) => {
     if (organizationIsResearcher) {
@@ -58,44 +69,147 @@ const ConditionalTextFields: React.FC<ConditionalTextFieldsProps> = ({
             multiline={field.multiline}
             short={true}
           />
-          {field.textfield === "country" && (
-            <Box sx={{ marginBottom: "20px" }}>
-              <Typography
-                variant="subtitle2"
-                fontWeight={600}
-                sx={{ marginBottom: "5px" }}
-              >
-                Spoken languages:
-              </Typography>
-              <Box display="flex">
-                <Box>
-                  {user.languages?.map((lang, index) => (
-                    <Chip
-                      key={index}
-                      label={lang}
-                      onDelete={() => handleDeleteChipLanguage(lang)}
-                      sx={{
-                        backgroundColor: "#C8E6C9",
-                        border: "1px solid black",
-                        borderRadius: "8px",
-                        marginRight: "10px",
-                        marginTop: "10px",
-                        "&:hover": {
+          {field.textfield === "lastName" && organizationIsResearcher && (
+            <>
+              <Box sx={{ marginBottom: "20px" }}>
+                <Typography variant="subtitle2" fontWeight={600}>
+                  Country *
+                </Typography>
+                <Box display="flex">
+                  <Box>
+                    {user.country && (
+                      <Chip
+                        key={index}
+                        label={user.country}
+                        onDelete={() => handleDeleteChipCountry()}
+                        sx={{
                           backgroundColor: "#C8E6C9",
-                        },
-                      }}
+                          border: "1px solid black",
+                          borderRadius: "8px",
+                          marginRight: "10px",
+                          marginTop: "10px",
+                          "&:hover": {
+                            backgroundColor: "#C8E6C9",
+                          },
+                        }}
+                      />
+                    )}
+                    <CountrySelector
+                      country={user.country}
+                      handleChangeCountry={(newCountry) =>
+                        handleChangeChip("country", newCountry)
+                      }
                     />
-                  ))}
-                  <LanguageSelector
-                    languages={user.languages}
-                    handleChangeLanguages={(newLanguages) =>
-                      handleChangeLanguage("languages", newLanguages)
-                    }
-                  />
+                  </Box>
                 </Box>
               </Box>
-            </Box>
+              <Box sx={{ marginBottom: "20px" }}>
+                <Typography variant="subtitle2" fontWeight={600}>
+                  Spoken languages:
+                </Typography>
+                <Box display="flex">
+                  <Box>
+                    {user.languages?.map((lang, index) => (
+                      <Chip
+                        key={index}
+                        label={lang}
+                        onDelete={() => handleDeleteChipLanguage(lang)}
+                        sx={{
+                          backgroundColor: "#C8E6C9",
+                          border: "1px solid black",
+                          borderRadius: "8px",
+                          marginRight: "10px",
+                          marginTop: "10px",
+                          "&:hover": {
+                            backgroundColor: "#C8E6C9",
+                          },
+                        }}
+                      />
+                    ))}
+                    <LanguageSelector
+                      languages={user.languages}
+                      handleChangeLanguages={(newLanguages) =>
+                        handleChangeLanguage("languages", newLanguages)
+                      }
+                    />
+                  </Box>
+                </Box>
+              </Box>
+            </>
           )}
+          {field.textfield === "typeOfOrganizationSpecific" &&
+            !organizationIsResearcher && (
+              <>
+                <Box sx={{ marginBottom: "20px" }}>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Country *
+                  </Typography>
+                  <Box display="flex">
+                    <Box>
+                      {user.country && (
+                        <Chip
+                          key={index}
+                          label={user.country}
+                          onDelete={() => handleDeleteChipCountry()}
+                          sx={{
+                            backgroundColor: "#C8E6C9",
+                            border: "1px solid black",
+                            borderRadius: "8px",
+                            marginRight: "10px",
+                            marginTop: "10px",
+                            "&:hover": {
+                              backgroundColor: "#C8E6C9",
+                            },
+                          }}
+                        />
+                      )}
+                      <CountrySelector
+                        country={user.country}
+                        handleChangeCountry={(newCountry) =>
+                          handleChangeChip("country", newCountry)
+                        }
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+                <Box sx={{ marginBottom: "20px" }}>
+                  <Typography
+                    variant="subtitle2"
+                    fontWeight={600}
+                    sx={{ marginBottom: "5px" }}
+                  >
+                    Spoken languages:
+                  </Typography>
+                  <Box display="flex">
+                    <Box>
+                      {user.languages?.map((lang, index) => (
+                        <Chip
+                          key={index}
+                          label={lang}
+                          onDelete={() => handleDeleteChipLanguage(lang)}
+                          sx={{
+                            backgroundColor: "#C8E6C9",
+                            border: "1px solid black",
+                            borderRadius: "8px",
+                            marginRight: "10px",
+                            marginTop: "10px",
+                            "&:hover": {
+                              backgroundColor: "#C8E6C9",
+                            },
+                          }}
+                        />
+                      ))}
+                      <LanguageSelector
+                        languages={user.languages}
+                        handleChangeLanguages={(newLanguages) =>
+                          handleChangeLanguage("languages", newLanguages)
+                        }
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+              </>
+            )}
         </React.Fragment>
       ))}
       <Box mt={8} mb={5} ml={8}>
