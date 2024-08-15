@@ -9,6 +9,7 @@ import { createUserAction } from "../actions/user/user";
 import { getErrorMessage } from "../utils/handleError";
 import { useSnackbar } from "notistack";
 import {
+  CountryNames,
   ProjectFunding,
   ProjectProgressStatus,
   TypeOfOrganization,
@@ -27,7 +28,7 @@ const initialUserState: UserReq = {
   lastName: "",
   organizationName: "",
   typeOfOrganizationSpecific: "",
-  country: "",
+  country: "" as CountryNames,
   languages: [],
   institution: "",
   profileVerificationInfo: "",
@@ -115,6 +116,13 @@ const useSignupForm = ({ onSuccessSignIn }: UseUserFormProps) => {
     setUser((prevUser) => ({
       ...prevUser,
       languages: prevUser.languages.filter((lang) => lang !== langToDelete),
+    }));
+  };
+
+  const handleDeleteChipCountry = () => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      country: "" as CountryNames,
     }));
   };
 
@@ -368,6 +376,7 @@ const useSignupForm = ({ onSuccessSignIn }: UseUserFormProps) => {
     organizationIsResearcher,
     handleChangeLanguage,
     handleDeleteChipLanguage,
+    handleDeleteChipCountry,
     handleNestedArrayChange,
     handleDeleteChipDiscipline,
     handleDoubleNestedChip,

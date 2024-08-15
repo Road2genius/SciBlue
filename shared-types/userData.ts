@@ -1,5 +1,6 @@
 import { Discipline } from "./requestData";
 import {
+  CountryNames,
   FieldsEnvironmentalArea,
   Languages,
   ProjectFunding,
@@ -19,7 +20,7 @@ export type UserReq = {
   lastName: string;
   organizationName: string;
   typeOfOrganizationSpecific: string;
-  country: string;
+  country: CountryNames;
   languages: Languages[];
   institution: string;
   profileVerificationInfo: string;
@@ -47,6 +48,7 @@ export type UserReq = {
     projectFunding: ProjectFunding;
   };
   funder: boolean;
+  proDoesResearch: boolean;
   avatar: string;
   refreshToken: string;
   createdAt: Date;
@@ -66,7 +68,7 @@ export type UserRes = {
   lastName: string;
   organizationName: string;
   typeOfOrganizationSpecific: string;
-  country: string;
+  country: CountryNames;
   languages: Languages[];
   institution: string;
   profileVerificationInfo: string;
@@ -94,6 +96,7 @@ export type UserRes = {
     projectFunding: ProjectFunding;
   };
   funder: boolean;
+  proDoesResearch: boolean;
   avatar: string;
   refreshToken: string;
   createdAt: Date;

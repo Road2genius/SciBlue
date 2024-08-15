@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../constants/error/errorCodes";
 import { CustomError } from "../types/error/customError";
 import { isStrongPassword, isValidEmail } from "../utils/validators";
-import { TypeOfOrganization } from "../../../shared-types/user";
+import { CountryNames, TypeOfOrganization } from "../../../shared-types/user";
 
 export const createUserValidationRules = (): ValidationChain[] => [
   body("email")
@@ -29,7 +29,7 @@ export const createUserValidationRules = (): ValidationChain[] => [
     ),
   body("firstName").notEmpty().withMessage("First Name is required"),
   body("lastName").notEmpty().withMessage("Last Name is required"),
-  body("country").notEmpty().withMessage("Country is required"),
+  body("country").notEmpty().withMessage("Country is required").isIn(Object.values(CountryNames)),
   body("organizationAffiliated")
     .notEmpty()
     .withMessage("Organization affiliated is required")
@@ -116,7 +116,11 @@ export const updateUserValidationRules = (): ValidationChain[] => [
       return true;
     }),
 
-  body("country").optional().notEmpty().withMessage("Country is required if provided"),
+  body("country")
+    .optional()
+    .notEmpty()
+    .withMessage("Country is required if provided")
+    .isIn(Object.values(CountryNames)),
 ];
 
 // Middleware to check for validation errors

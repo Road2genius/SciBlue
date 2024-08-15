@@ -39,6 +39,7 @@ const Signup: React.FC = () => {
     handleNestedChip,
     handleNestedChange,
     handleDeleteChipLanguage,
+    handleDeleteChipCountry,
     handleDeleteChipDiscipline,
     handleDoubleNestedChip,
     handleDoubleNestedChange,
@@ -120,8 +121,10 @@ const Signup: React.FC = () => {
             <ConditionalTextFields
               user={user}
               handleChange={handleChange}
+              handleChangeChip={handleChangeChip}
               handleChangeLanguage={handleChangeLanguage}
               handleDeleteChipLanguage={handleDeleteChipLanguage}
+              handleDeleteChipCountry={handleDeleteChipCountry}
               organizationIsResearcher={organizationIsResearcher(
                 user.organizationAffiliated
               )}
@@ -157,7 +160,7 @@ const Signup: React.FC = () => {
               variant="square"
               src={getAvatarByOrganization(user.organizationAffiliated)}
               sx={{ width: 146, height: 146, borderRadius: "5px" }}
-            ></Avatar>
+            />
           </Grid>
         </Grid>
         <ConfirmationUserDialog

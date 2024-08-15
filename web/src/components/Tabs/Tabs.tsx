@@ -170,7 +170,7 @@ const TabsComponent: React.FC<{
   const [filteredRequests, setFilteredRequests] =
     useState<RequestResInterface[]>(requestsList);
 
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
+  const handleChange = (_: SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
