@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -71,6 +71,10 @@ const DisciplineSelector: React.FC<DisciplineSelectorProps> = ({
     handleChangeDisciplines(selectedDisciplines);
     handleClose();
   };
+
+  useEffect(() => {
+    setSelectedDisciplines(disciplines);
+  }, [disciplines]);
 
   return (
     <>
