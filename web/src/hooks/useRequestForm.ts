@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   CommentVote,
+  Discipline,
   RequestReqComment,
   RequestReqInterface,
   RequestResInterface,
@@ -240,7 +241,23 @@ const useRequestForm = ({
       return prevRequest;
     });
   };
-  
+
+  const handleDeleteChipDiscipline = (disciplineToDelete: Discipline) => {
+    setRequest((prevRequest) => ({
+      ...prevRequest,
+      specificsSkills: {
+        ...prevRequest.specificsSkills,
+        disciplines: prevRequest.specificsSkills.disciplines.filter(
+          (discipline) =>
+            !(
+              discipline.primary === disciplineToDelete.primary &&
+              discipline.secondary === disciplineToDelete.secondary
+            )
+        ),
+      },
+    }));
+  };
+
   // requests action
   const handleCreateRequest = async (): Promise<void> => {
     try {
@@ -367,6 +384,7 @@ const useRequestForm = ({
     submitVoteComment,
     handleUpdateRequest,
     handleDeleteRequest,
+    handleDeleteChipDiscipline,
   };
 };
 

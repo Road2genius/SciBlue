@@ -22,6 +22,7 @@ const CreateRequest: React.FC = () => {
     handleNestedChip,
     handleDoubleNestedChip,
     handleDoubleNestedChange,
+    handleDeleteChipDiscipline,
   } = useRequestForm({
     onSuccessCreateRequest: () => setOpenDialog(true),
     onErrorCreateRequest: () =>
@@ -79,6 +80,7 @@ const CreateRequest: React.FC = () => {
             setInputAutoComplete={setInputAutoComplete}
             handleNestedChange={handleNestedChange}
             handleNestedChip={handleNestedChip}
+            handleDeleteChipDiscipline={handleDeleteChipDiscipline}
           />
           <Button
             variant="contained"
