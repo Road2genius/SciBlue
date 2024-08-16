@@ -41,11 +41,15 @@ export enum CollaborationStatus {
   closed = "Closed",
 }
 
+export enum DiscussionStatus {
+  open = "Open",
+  closed = "Closed",
+}
+
 export enum CollaborationVote {
   positive = "positive",
   negative = "negative",
 }
-
 export enum FieldsEnvironmentalArea {
   ClimateChange = "Climate change",
   Pollution = "Pollution",
@@ -174,7 +178,6 @@ export enum LanguageCodes {
   Malagasy = "mg",
   FilipinoTagalog = "ph",
 }
-
 
 export enum CountryCodes {
   Afghanistan = "af",

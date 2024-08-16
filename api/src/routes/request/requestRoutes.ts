@@ -41,6 +41,6 @@ requestRouter.get(ENDPOINT.REQUEST_COMMENT.GET_REQUEST_COMMENT_LIST_PATH, getReq
 
 // vote
 requestRouter.post(ENDPOINT.REQUEST_VOTE.SUBMIT_REQUEST_VOTE_PATH, authenticateJWT, submitVoteRequest);
-requestRouter.post(ENDPOINT.COMMENT_VOTE.SUBMIT_COMMENT_VOTE_PATH, authenticateJWT, submitVoteComment);
+requestRouter.post(ENDPOINT.REQUEST_COMMENT_VOTE.SUBMIT_REQUEST_COMMENT_VOTE_PATH, authenticateJWT, submitVoteComment);
 
 export default requestRouter;

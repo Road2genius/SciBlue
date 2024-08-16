@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
     onClick: () => void;
   }[] = [
     { name: "Home", onClick: () => navigate("/") },
-    { name: "Discussions", onClick: () => console.log("Discussions") },
+    { name: "Discussions", onClick: () => navigate("/discussions/list") },
     { name: "Request", onClick: () => navigate("/request/list") },
     { name: "Community", onClick: () => navigate("/community") },
     { name: "Send feedback", onClick: () => navigate("/feedback") },
@@ -130,7 +130,7 @@ const Navbar: React.FC = () => {
               alt="User Avatar"
               sx={{ cursor: "pointer" }}
               onClick={(e) => setAnchorEl(e.currentTarget)}
-            ></Avatar>
+            />
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}

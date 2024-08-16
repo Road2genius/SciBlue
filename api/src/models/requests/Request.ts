@@ -134,10 +134,7 @@ export const disciplineSchema = new Schema({
 const projectSchema: Schema<IProject> = new Schema({
   projectTitle: { type: String, required: true },
   summary: { type: String, required: true },
-  fieldsEnvironmentalArea: {
-    type: fieldsEnvironmentalAreaSchema,
-    required: true,
-  },
+  fieldsEnvironmentalArea: { type: Schema.Types.Mixed },
   projectProgressStatus: {
     type: String,
     enum: Object.values(ProjectProgressStatus),
@@ -186,16 +183,6 @@ const requestSchema: Schema<IRequest> = new Schema(
   },
   { timestamps: true }
 );
-
-// Add validation to ensure at least one of 'generic' or 'custom' is non-empty
-fieldsEnvironmentalAreaSchema.pre("validate", function (next) {
-  const value = this as IFieldsEnvironmentalArea;
-  if (!value.generic?.length && !value.custom?.length) {
-    next(new Error("fields environmental area must have at least one non-empty field: generic or custom."));
-  } else {
-    next();
-  }
-});
 
 requestSchema.pre("save", function (next) {
   const request = this as IRequest;

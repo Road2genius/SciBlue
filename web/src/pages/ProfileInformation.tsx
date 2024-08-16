@@ -98,8 +98,11 @@ const ProfileInformation: React.FC = () => {
       profileInformationToUpdate._id,
       profileInformationToUpdate
     );
+    setUserContext({
+      userId: profileInformationToUpdate._id,
+      avatar: profileInformationToUpdate.avatar,
+    });
     navigate(`/community`);
-    console.log();
   };
 
   const handleDeleteUserDialog = () => {

@@ -38,7 +38,7 @@ import ProjectDetails from "../components/ProjectDetails/ProjectDetails";
 import CollaborationDetails from "../components/CollaborationDetails/CollaborationDetails";
 import EntityActions from "../components/EntityActions/EntityActions";
 import CommentItem, {
-  CommentWithUser,
+  CommentRequestWithUser,
 } from "../components/CommentItem/CommentItem";
 import DeleteCommentDialog from "../components/DeleteCommentDialog/DeleteCommentDialog";
 import DeleteEntityDialog from "../components/DeleteEntityDialog/DeleteEntityDialog";
@@ -62,7 +62,9 @@ const RequestsDetail: React.FC = () => {
     requestCreatorInitial
   );
   const [handleComment, setHandleComment] = useState<string>("");
-  const [commentsList, setCommentsList] = useState<CommentWithUser[]>([]);
+  const [commentsList, setCommentsList] = useState<CommentRequestWithUser[]>(
+    []
+  );
   const [openDialogDeleteComment, setOpenDialogDeleteComment] = useState<{
     open: boolean;
     commentId: string;
@@ -264,14 +266,16 @@ const RequestsDetail: React.FC = () => {
 
     const handleCommentCreated = (data: {
       requestId: string;
-      comment: CommentWithUser;
+      comment: CommentRequestWithUser;
     }) => {
       if (data.requestId === requestDetails._id) {
         setCommentsList((prevComments) => [...prevComments, data.comment]);
       }
     };
 
-    const handleCommentUpdated = (data: { comment: CommentWithUser }) => {
+    const handleCommentUpdated = (data: {
+      comment: CommentRequestWithUser;
+    }) => {
       setCommentsList((prevComments) =>
         prevComments.map((comment) =>
           comment._id === data.comment._id ? data.comment : comment
@@ -285,7 +289,9 @@ const RequestsDetail: React.FC = () => {
       );
     };
 
-    const handleVoteCommentUpdate = (data: { comment: CommentWithUser }) => {
+    const handleVoteCommentUpdate = (data: {
+      comment: CommentRequestWithUser;
+    }) => {
       setCommentsList((prevComments) =>
         prevComments.map((comment) =>
           comment._id === data.comment._id ? data.comment : comment
@@ -430,7 +436,7 @@ const RequestsDetail: React.FC = () => {
             userId={requestDetails.userId}
             currentUserId={userContext?.userId}
             entityType="request"
-            collaborationStatus={requestDetails.collaborationStatus}
+            status={requestDetails.collaborationStatus}
             handleUpdateStatus={handleUpdateRequestStatus}
             setOpenDialogDelete={setOpenDialogDeleteRequest}
           />
@@ -448,7 +454,7 @@ const RequestsDetail: React.FC = () => {
             {requestDetails.comments.length <= 1 ? " comment" : " comments"}
           </Typography>
         </Box>
-        {commentsList.map((comment: CommentWithUser, index: number) => (
+        {commentsList.map((comment: CommentRequestWithUser, index: number) => (
           <CommentItem
             key={index}
             comment={comment}

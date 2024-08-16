@@ -1,5 +1,15 @@
-import { RequestReqInterface, RequestResInterface } from "../../../shared-types/requestData";
-import { CollaborationStatus, ProjectFunding, ProjectProgressStatus, TypeOfOrganization } from "../../../shared-types/user";
+import {
+  RequestReqInterface,
+  RequestResInterface,
+} from "../../../shared-types/requestData";
+import { QuestionReqInterface, QuestionResInterface } from "../../../shared-types/questionData";
+import {
+  CollaborationStatus,
+  DiscussionStatus,
+  ProjectFunding,
+  ProjectProgressStatus,
+  TypeOfOrganization,
+} from "../../../shared-types/user";
 
 export type formData = {
   firstName: string;
@@ -12,6 +22,41 @@ export type formData = {
   city: string;
   country: string;
   professionalActivity: string;
+};
+
+export const initialQuestionState: QuestionReqInterface = {
+  userId: "",
+  title: "",
+  body: "",
+  fieldsEnvironmentalArea: {
+    generic: [],
+    custom: [],
+  },
+  discussionStatus: "" as DiscussionStatus,
+  positiveVotes: 0,
+  negativeVotes: 0,
+  comments: [],
+  votes: [],
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+export const initialQuestionResponseState: QuestionResInterface = {
+  _id: "",
+  userId: "",
+  title: "",
+  body: "",
+  fieldsEnvironmentalArea: {
+    generic: [],
+    custom: [],
+  },
+  discussionStatus: "" as DiscussionStatus,
+  positiveVotes: 0,
+  negativeVotes: 0,
+  comments: [],
+  votes: [],
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
 
 export const initialRequestState: RequestReqInterface = {

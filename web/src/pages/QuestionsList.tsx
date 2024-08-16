@@ -1,18 +1,18 @@
 import { Box, CircularProgress, Container, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
-import TabsRequestComponent from "../components/Tabs/TabsRequest";
-import {
-  getRequestCommentListAction,
-  getRequestListAction,
-} from "../actions/request/request";
-import { RequestResInterface } from "../../../shared-types/requestData";
 import { getUserByIdAction } from "../actions/user/user";
 import { TypeOfOrganization } from "../../../shared-types/user";
 import { useUserContext } from "../context/UserContext";
 import { UserRes } from "../../../shared-types/userData";
+import { QuestionResInterface } from "../../../shared-types/questionData";
+import {
+  getQuestionCommentListAction,
+  getQuestionListAction,
+} from "../actions/question/question";
+import TabsQuestionComponent from "../components/Tabs/TabsQuestion";
 
-export interface UserRequest {
+export interface UserQuestion {
   id: string;
   firstName: string;
   lastName: string;
@@ -21,42 +21,44 @@ export interface UserRequest {
   organization?: TypeOfOrganization;
 }
 
-const RequestsList: React.FC = () => {
+const QuestionsList: React.FC = () => {
   const classes = useStyles();
-  const [requestsList, setRequestsList] = useState<RequestResInterface[]>([]);
-  const [usersList, setUsersList] = useState<{ [key: string]: UserRequest }>(
+  const [questionsList, setQuestionsList] = useState<QuestionResInterface[]>(
+    []
+  );
+  const [usersList, setUsersList] = useState<{ [key: string]: UserQuestion }>(
     {}
   );
-  const [userCommentedRequests, setUserCommentedRequests] = useState<
-    RequestResInterface[]
+  const [userCommentedQuestions, setUserCommentedQuestions] = useState<
+    QuestionResInterface[]
   >([]);
-  const [userSubmittedRequests, setUserSubmittedRequests] = useState<
-    RequestResInterface[]
+  const [userSubmittedQuestions, setUserSubmittedQuestions] = useState<
+    QuestionResInterface[]
   >([]);
   const { userContext } = useUserContext();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchRequestsAndUsers = async () => {
+    const fetchQuestionsAndUsers = async () => {
       try {
-        const requests = await getRequestListAction();
-        setRequestsList(requests);
+        const questions = await getQuestionListAction();
+        setQuestionsList(questions);
 
         const uniqueUserIds = [
-          ...new Set(requests.map((request) => request.userId)),
+          ...new Set(questions.map((question) => question.userId)),
         ];
 
         const usersData = await Promise.all(
           uniqueUserIds.map((id) => getUserByIdAction(id))
         );
 
-        const usersMap: { [key: string]: UserRequest } = requests.reduce(
-          (acc, request) => {
+        const usersMap: { [key: string]: UserQuestion } = questions.reduce(
+          (acc, question) => {
             const user = usersData.find(
-              (user: UserRes) => user._id === request.userId
+              (user: UserRes) => user._id === question.userId
             );
             if (user) {
-              acc[request._id] = {
+              acc[question._id] = {
                 id: user._id,
                 firstName: user.firstName,
                 lastName: user.lastName,
@@ -67,34 +69,34 @@ const RequestsList: React.FC = () => {
             }
             return acc;
           },
-          {} as { [key: string]: UserRequest }
+          {} as { [key: string]: UserQuestion }
         );
         setUsersList(usersMap);
 
-        const commentedRequests = [];
-        const submittedRequests = [];
-        for (const request of requests) {
-          const comments = await getRequestCommentListAction(request._id);
+        const commentedQuestions = [];
+        const submittedQuestions = [];
+        for (const question of questions) {
+          const comments = await getQuestionCommentListAction(question._id);
           if (
             comments.some((comment) => comment.userId === userContext?.userId)
           ) {
-            commentedRequests.push(request);
+            commentedQuestions.push(question);
           }
-          if (request.userId === userContext?.userId) {
-            submittedRequests.push(request);
+          if (question.userId === userContext?.userId) {
+            submittedQuestions.push(question);
           }
         }
 
-        setUserCommentedRequests(commentedRequests);
-        setUserSubmittedRequests(submittedRequests);
+        setUserCommentedQuestions(commentedQuestions);
+        setUserSubmittedQuestions(submittedQuestions);
       } catch (err) {
-        console.log("Failed to load requests");
+        console.log("Failed to load questions");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchRequestsAndUsers();
+    fetchQuestionsAndUsers();
   }, []);
 
   if (loading)
@@ -123,26 +125,30 @@ const RequestsList: React.FC = () => {
           },
         }}
       >
-        <Typography variant="h4" fontWeight={700} color="#197278" mb={4}>
-          Collaboration requests
+        <Typography variant="h4" fontWeight={700} color="#197278">
+          Questions and dicussions
         </Typography>
-        <TabsRequestComponent
+        <Typography variant="subtitle2" color="gray" mb={4}>
+          Put your expertise to good use by taking part to discussions or
+          answering a technical question posted by the community
+        </Typography>
+        <TabsQuestionComponent
           titles={[
-            "All requests",
-            "Requests you have answered",
-            "Requests you have submitted",
+            "All questions",
+            "Questions you answered",
+            "Questions you asked",
           ]}
-          requestsList={requestsList}
-          usersRequest={usersList}
-          userCommentedRequests={userCommentedRequests}
-          userSubmittedRequests={userSubmittedRequests}
+          questionsList={questionsList}
+          usersQuestion={usersList}
+          userCommentedQuestions={userCommentedQuestions}
+          userSubmittedQuestions={userSubmittedQuestions}
         />
       </Box>
     </Container>
   );
 };
 
-export default RequestsList;
+export default QuestionsList;
 
 const useStyles = makeStyles({
   root: {

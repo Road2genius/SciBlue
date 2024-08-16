@@ -7,7 +7,6 @@ import { CustomError } from "../../types/error/customError";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../constants/error/errorCodes";
 import { CommentRequestModel } from "../../models/requests/Comment";
 import { io } from "../../server";
-const dot = require("dot-object");
 
 // createRequest requests the server to create a new collaboration request
 export const createRequest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -97,7 +96,7 @@ export const updateRequest = async (req: Request, res: Response, next: NextFunct
       throw error;
     }
 
-    const updatedRequestData: IRequest = dot.dot(req.body);
+    const updatedRequestData: IRequest = req.body;
 
     const request: IRequest | null = await RequestModel.findByIdAndUpdate(
       requestId,

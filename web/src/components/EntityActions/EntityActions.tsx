@@ -5,14 +5,14 @@ import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import UnarchiveOutlinedIcon from "@mui/icons-material/UnarchiveOutlined";
 import { useNavigate } from "react-router-dom";
-import { CollaborationStatus } from "../../../../shared-types/user";
+import { CollaborationStatus, DiscussionStatus } from "../../../../shared-types/user";
 
 interface EntityActionsProps {
   entityId: string;
   userId: string;
   currentUserId?: string;
   entityType: "request" | "question";
-  collaborationStatus: CollaborationStatus;
+  status: CollaborationStatus | DiscussionStatus;
   handleUpdateStatus: () => void;
   setOpenDialogDelete: (open: boolean) => void;
 }
@@ -22,7 +22,7 @@ const EntityActions: React.FC<EntityActionsProps> = ({
   userId,
   currentUserId,
   entityType,
-  collaborationStatus,
+  status,
   handleUpdateStatus,
   setOpenDialogDelete,
 }) => {
@@ -82,7 +82,7 @@ const EntityActions: React.FC<EntityActionsProps> = ({
       >
         <DeleteForeverOutlinedIcon />
       </Button>
-      {collaborationStatus === CollaborationStatus.open ? (
+      {(status === CollaborationStatus.open || status === DiscussionStatus.open) ? (
         <Button
           title={`Close ${entityType}`}
           size="small"

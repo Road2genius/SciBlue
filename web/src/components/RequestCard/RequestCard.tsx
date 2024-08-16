@@ -102,20 +102,20 @@ const RequestCard: React.FC<{
             <Box display="flex" alignItems="center">
               <Box display="flex" alignItems="center">
                 {positiveVotes}
-                <IconButton sx={{ padding: "4px" }}>
-                  <ThumbUpOffAltIcon />
-                </IconButton>
+                <ThumbUpOffAltIcon />
               </Box>
-              <Box display="flex" alignItems="center">
+              <Box
+                display="flex"
+                alignItems="center"
+                sx={{ marginLeft: "5px" }}
+              >
                 {negativeVotes}
-                <IconButton sx={{ padding: "4px" }}>
-                  <ThumbDownOffAltIcon
-                    sx={{
-                      marginTop: "7px",
-                      transform: "scaleX(-1)",
-                    }}
-                  />
-                </IconButton>
+                <ThumbDownOffAltIcon
+                  sx={{
+                    marginTop: "5px",
+                    transform: "scaleX(-1)",
+                  }}
+                />
               </Box>
             </Box>
             <Typography

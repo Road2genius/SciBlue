@@ -84,7 +84,7 @@ export const submitVoteComment = async (
 ): Promise<void> => {
   const token = sessionStorage.getItem("your_jwt_secret_key");
   return api.post<void, CommentVote>(
-    `/comments/${commentVote.commentId}/votes`,
+    `/requests/comments/${commentVote.commentId}/votes`,
     commentVote,
     {
       Authorization: `Bearer ${token}`,

@@ -5,16 +5,18 @@ import { formatDate, getModifiedTimeAgo } from "../../utils/utils";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 interface UserInfoProps {
+  listCard?: boolean;
   avatar?: string;
   firstName: string;
   lastName: string;
   organization?: string;
-  privacyLevel: { mode: boolean; username: string };
+  privacyLevel?: { mode: boolean; username: string };
   createdAt: string | Date;
   updatedAt?: string | Date;
 }
 
 const UserInfo: React.FC<UserInfoProps> = ({
+  listCard,
   avatar,
   firstName,
   lastName,
@@ -40,14 +42,14 @@ const UserInfo: React.FC<UserInfoProps> = ({
           <Typography variant="subtitle2" color="grey">
             Posted {formatDate(createdAt)} by
           </Typography>
-          {!privacyLevel.mode ? (
+          {!privacyLevel?.mode ? (
             <Typography variant="body2" sx={{ color: "#197278" }}>
               {firstName} - {lastName}
             </Typography>
           ) : (
             <Box display="flex" alignItems="center">
               <Typography variant="body2" sx={{ color: "#197278" }}>
-                {privacyLevel.username}
+                {privacyLevel?.username}
               </Typography>
               <Tooltip title="This user has activated private mode">
                 <VisibilityOffIcon
@@ -66,7 +68,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
           </Typography>
         </Box>
       </Box>
-      {updatedAt && (
+      {updatedAt && !listCard && (
         <Typography
           variant="subtitle2"
           color="grey"
