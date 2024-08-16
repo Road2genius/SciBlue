@@ -421,19 +421,22 @@ const UserDialog: React.FC<{
             >
               Project&apos;s progress status
             </Typography>
-            <Box className={classes.chipContainer} mb={2}>
-              <Chip
-                key={user.kindOfCollaborationWanted.projectProgressStatus}
-                label={user.kindOfCollaborationWanted.projectProgressStatus}
-                sx={{
-                  marginRight: "10px",
-                  backgroundColor: "transparent",
-                  border: "1px solid black",
-                  borderRadius: "8px",
-                  marginTop: " 8px",
-                }}
-              />
-            </Box>
+            {user.kindOfCollaborationWanted.projectProgressStatus !== "" && (
+              <Box className={classes.chipContainer} mb={2}>
+                <Chip
+                  key={user.kindOfCollaborationWanted.projectProgressStatus}
+                  label={user.kindOfCollaborationWanted.projectProgressStatus}
+                  sx={{
+                    marginRight: "10px",
+                    backgroundColor: "transparent",
+                    border: "1px solid black",
+                    borderRadius: "8px",
+                    marginTop: " 8px",
+                  }}
+                />
+              </Box>
+            )}
+
             <Typography
               variant="body1"
               fontWeight={600}
@@ -441,20 +444,22 @@ const UserDialog: React.FC<{
             >
               Project&apos;s funding
             </Typography>
-            <Box className={classes.chipContainer} mb={2}>
-              <Chip
-                key={user.kindOfCollaborationWanted.projectFunding}
-                label={user.kindOfCollaborationWanted.projectFunding}
-                sx={{
-                  marginRight: "10px",
-                  backgroundColor: "transparent",
+            {user.kindOfCollaborationWanted.projectFunding !== "" && (
+              <Box className={classes.chipContainer} mb={2}>
+                <Chip
+                  key={user.kindOfCollaborationWanted.projectFunding}
+                  label={user.kindOfCollaborationWanted.projectFunding}
+                  sx={{
+                    marginRight: "10px",
+                    backgroundColor: "transparent",
 
-                  border: "1px solid black",
-                  borderRadius: "8px",
-                  marginTop: " 8px",
-                }}
-              />
-            </Box>
+                    border: "1px solid black",
+                    borderRadius: "8px",
+                    marginTop: " 8px",
+                  }}
+                />
+              </Box>
+            )}
           </Box>
         </Container>
       </Box>

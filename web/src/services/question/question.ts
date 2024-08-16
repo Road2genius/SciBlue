@@ -26,7 +26,7 @@ export const updateQuestion = async (
   dataQuestion: Partial<QuestionResInterface>
 ): Promise<QuestionResInterface> => {
   const token = sessionStorage.getItem("your_jwt_secret_key");
-  return api.patch<QuestionResInterface, Partial<QuestionReqInterface>>(
+  return api.patch<QuestionResInterface, Partial<QuestionResInterface>>(
     `/questions/${questionId}`,
     dataQuestion,
     {
@@ -84,7 +84,7 @@ export const submitVoteComment = async (
 ): Promise<void> => {
   const token = sessionStorage.getItem("your_jwt_secret_key");
   return api.post<void, QuestionCommentVote>(
-    `/comments/${commentVote.commentId}/votes`,
+    `/questions/comments/${commentVote.commentId}/votes`,
     commentVote,
     {
       Authorization: `Bearer ${token}`,

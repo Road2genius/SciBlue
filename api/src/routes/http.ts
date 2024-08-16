@@ -32,7 +32,7 @@ export const ENDPOINT = {
     SUBMIT_REQUEST_VOTE_PATH: `/requests/:requestId/votes`,
   },
   REQUEST_COMMENT_VOTE: {
-    SUBMIT_REQUEST_COMMENT_VOTE_PATH: `/comments/:commentId/votes`,
+    SUBMIT_REQUEST_COMMENT_VOTE_PATH: `/requests/comments/:commentId/votes`,
   },
   QUESTION: {
     CREATE_QUESTION_PATH: `/questions`,
@@ -51,6 +51,6 @@ export const ENDPOINT = {
     SUBMIT_QUESTION_VOTE_PATH: `/questions/:questionId/votes`,
   },
   QUESTION_COMMENT_VOTE: {
-    SUBMIT_QUESTION_COMMENT_VOTE_PATH: `/comments/:commentId/votes`,
+    SUBMIT_QUESTION_COMMENT_VOTE_PATH: `/questions/comments/:commentId/votes`,
   },
 };

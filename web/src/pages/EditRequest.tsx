@@ -26,6 +26,7 @@ const EditRequest: React.FC = () => {
     handleNestedChip,
     handleDoubleNestedChip,
     handleDoubleNestedChange,
+    handleDeleteChipDiscipline
   } = useRequestForm({
     onSuccessUpdateRequest: () =>
       enqueueSnackbar("Request edited successful", { variant: "success" }),
@@ -103,6 +104,7 @@ const EditRequest: React.FC = () => {
             setInputAutoComplete={setInputAutoComplete}
             handleNestedChange={handleNestedChange}
             handleNestedChip={handleNestedChip}
+            handleDeleteChipDiscipline={handleDeleteChipDiscipline}
           />
           <Box display="flex" justifyContent="flex-end">
             <Button

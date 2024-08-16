@@ -20,6 +20,8 @@ import Community from "./pages/Community";
 import ProfileInformation from "./pages/ProfileInformation";
 import CreateQuestion from "./pages/CreateQuestion";
 import QuestionsList from "./pages/QuestionsList";
+import QuestionDetail from "./pages/QuestionDetail";
+import EditQuestion from "./pages/EditQuestion";
 
 const MainLayout = (): JSX.Element => <Outlet />;
 
@@ -57,6 +59,14 @@ const App: React.FC = () => {
             element={<PrivateRoute element={<CreateQuestion />} />}
           />
           <Route path="/discussions/list" element={<QuestionsList />} />
+          <Route
+            path="/question/details/:questionId"
+            element={<PrivateRoute element={<QuestionDetail />} />}
+          />
+          <Route
+            path="/question/edit/:questionId"
+            element={<PrivateRoute element={<EditQuestion />} />}
+          />
         </Routes>
       </Suspense>
       <Footer />

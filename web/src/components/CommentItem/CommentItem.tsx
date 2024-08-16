@@ -8,8 +8,20 @@ import CustomTextField from "../../components/CustomTextField/CustomTextField";
 import { CollaborationVote } from "../../../../shared-types/user";
 import { RequestResComment } from "../../../../shared-types/requestData"; // Ou autre type pour les commentaires
 import UserInfo from "../UserInfo/UserInfo";
+import { QuestionResComment } from "../../../../shared-types/questionData";
 
-export interface CommentWithUser extends RequestResComment {
+export interface CommentRequestWithUser extends RequestResComment {
+  user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    privacyLevel: { mode: boolean; username: string };
+    avatar: string;
+    organizationAffiliated: string;
+  };
+}
+
+export interface CommentQuestionWithUser extends QuestionResComment {
   user: {
     id: string;
     firstName: string;
@@ -21,7 +33,7 @@ export interface CommentWithUser extends RequestResComment {
 }
 
 interface CommentItemProps {
-  comment: CommentWithUser;
+  comment: CommentRequestWithUser | CommentQuestionWithUser;
   userHasVotedPositive: boolean;
   userHasVotedNegative: boolean;
   editingComment: { isEditing: boolean; editedText: string };

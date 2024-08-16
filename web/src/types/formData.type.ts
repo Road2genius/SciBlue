@@ -2,9 +2,10 @@ import {
   RequestReqInterface,
   RequestResInterface,
 } from "../../../shared-types/requestData";
-import { QuestionReqInterface } from "../../../shared-types/questionData";
+import { QuestionReqInterface, QuestionResInterface } from "../../../shared-types/questionData";
 import {
   CollaborationStatus,
+  DiscussionStatus,
   ProjectFunding,
   ProjectProgressStatus,
   TypeOfOrganization,
@@ -31,6 +32,25 @@ export const initialQuestionState: QuestionReqInterface = {
     generic: [],
     custom: [],
   },
+  discussionStatus: "" as DiscussionStatus,
+  positiveVotes: 0,
+  negativeVotes: 0,
+  comments: [],
+  votes: [],
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+export const initialQuestionResponseState: QuestionResInterface = {
+  _id: "",
+  userId: "",
+  title: "",
+  body: "",
+  fieldsEnvironmentalArea: {
+    generic: [],
+    custom: [],
+  },
+  discussionStatus: "" as DiscussionStatus,
   positiveVotes: 0,
   negativeVotes: 0,
   comments: [],

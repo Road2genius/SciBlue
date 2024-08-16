@@ -182,7 +182,7 @@ export const submitVoteQuestionComment = async (req: Request, res: Response, nex
 
     const user = await UserModel.findById(comment.userId);
 
-    io.emit("voteCommentUpdate", {
+    io.emit("voteQuestionCommentUpdate", {
       comment: {
         _id: comment._id,
         userId: comment.userId,

@@ -7,7 +7,6 @@ import mongoose from "mongoose";
 import { CustomError } from "../../types/error/customError";
 import { CommentQuestionModel } from "../../models/questions/Comment";
 import { io } from "../../server";
-const dot = require("dot-object");
 
 // createQuestion requests the server to create a new question/discussion
 export const createQuestion = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -97,7 +96,7 @@ export const updateQuestion = async (req: Request, res: Response, next: NextFunc
       throw error;
     }
 
-    const updatedQuestionData: IQuestion = dot.dot(req.body);
+    const updatedQuestionData: IQuestion = req.body;
 
     const question: IQuestion | null = await QuestionModel.findByIdAndUpdate(
       questionId,

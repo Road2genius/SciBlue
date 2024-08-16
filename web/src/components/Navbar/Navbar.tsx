@@ -130,7 +130,7 @@ const Navbar: React.FC = () => {
               alt="User Avatar"
               sx={{ cursor: "pointer" }}
               onClick={(e) => setAnchorEl(e.currentTarget)}
-            ></Avatar>
+            />
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}

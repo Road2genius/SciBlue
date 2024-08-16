@@ -48,6 +48,15 @@ const questionSchema: Schema<IQuestion> = new Schema(
   { timestamps: true }
 );
 
+questionSchema.pre("save", function (next) {
+  const request = this as IQuestion;
+
+  request.positiveVotes = request.votes.filter((vote) => vote.vote === "positive").length;
+  request.negativeVotes = request.votes.filter((vote) => vote.vote === "negative").length;
+
+  next();
+});
+
 export const QuestionModel = mongoose.model<IQuestion>("Question", questionSchema);
 
 export default QuestionModel;

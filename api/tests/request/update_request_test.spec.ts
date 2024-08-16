@@ -12,7 +12,7 @@ describe("Update a request", () => {
   let requestId: string;
   let token: string;
   const newProjectName: string = "test request updated";
-  const updatedData = { project: { projectTitle: newProjectName } };
+  const updatedData = { ...valideRequestData, project: { ...valideRequestData.project, projectTitle: newProjectName } };
 
   beforeEach(async () => {
     await UserModel.deleteMany({});

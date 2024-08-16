@@ -22,6 +22,7 @@ import {
   DiscussionStatus,
   FieldsEnvironmentalArea,
 } from "../../../../shared-types/user";
+import QuestionCard from "../QuestionCard/QuestionCard";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -95,7 +96,7 @@ const TabsQuestionComponent: React.FC<{
   questionsList,
   userCommentedQuestions,
   userSubmittedQuestions,
-  //   usersQuestion,
+  usersQuestion,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -255,10 +256,13 @@ const TabsQuestionComponent: React.FC<{
             </Box>
           </Box>
         </Box>
-
-        <CustomTabPanel value={value} index={0}></CustomTabPanel>
-        <CustomTabPanel value={value} index={1}></CustomTabPanel>
-        <CustomTabPanel value={value} index={2}></CustomTabPanel>
+        {memoizedFilteredRequests.map((question, index) => (
+          <CustomTabPanel value={index} index={index} key={index}>
+            <Box my={1}>
+              <QuestionCard question={question} usersQuestion={usersQuestion} />
+            </Box>
+          </CustomTabPanel>
+        ))}
       </Box>
       <Dialog
         fullWidth

@@ -303,9 +303,9 @@ const TabsRequestComponent: React.FC<{
           </Box>
         </Box>
 
-        <CustomTabPanel value={value} index={0}>
-          {memoizedFilteredRequests.map((request, index) => (
-            <Box my={1} key={index}>
+        {memoizedFilteredRequests.map((request, index) => (
+          <CustomTabPanel value={index} index={index} key={index}>
+            <Box my={1}>
               <RequestCard
                 requestId={request._id}
                 requestTitle={request.kindOfCollaborationWanted.requestTitle}
@@ -330,66 +330,8 @@ const TabsRequestComponent: React.FC<{
                 collaborationStatus={request.collaborationStatus}
               />
             </Box>
-          ))}
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-          {memoizedFilteredRequests.map((request, index) => (
-            <Box my={1} key={index}>
-              <RequestCard
-                requestId={request._id}
-                requestTitle={request.kindOfCollaborationWanted.requestTitle}
-                description={request.kindOfCollaborationWanted.description}
-                typeOfCollaboration={
-                  request.kindOfCollaborationWanted.typeOfCollaboration
-                }
-                projectStartEndEstimation={
-                  request.project.projectStartEndEstimation
-                }
-                fieldsEnvironmentalAreaCustom={
-                  request.project.fieldsEnvironmentalArea.custom
-                }
-                fieldsEnvironmentalAreaGeneric={
-                  request.project.fieldsEnvironmentalArea.generic
-                }
-                comments={request.comments}
-                positiveVotes={request.positiveVotes}
-                negativeVotes={request.negativeVotes}
-                createdAt={request.createdAt}
-                usersRequest={usersRequest}
-                collaborationStatus={request.collaborationStatus}
-              />
-            </Box>
-          ))}
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={2}>
-          {memoizedFilteredRequests.map((request, index) => (
-            <Box my={1} key={index}>
-              <RequestCard
-                requestId={request._id}
-                requestTitle={request.kindOfCollaborationWanted.requestTitle}
-                description={request.kindOfCollaborationWanted.description}
-                typeOfCollaboration={
-                  request.kindOfCollaborationWanted.typeOfCollaboration
-                }
-                projectStartEndEstimation={
-                  request.project.projectStartEndEstimation
-                }
-                fieldsEnvironmentalAreaCustom={
-                  request.project.fieldsEnvironmentalArea.custom
-                }
-                fieldsEnvironmentalAreaGeneric={
-                  request.project.fieldsEnvironmentalArea.generic
-                }
-                comments={request.comments}
-                positiveVotes={request.positiveVotes}
-                negativeVotes={request.negativeVotes}
-                createdAt={request.createdAt}
-                usersRequest={usersRequest}
-                collaborationStatus={request.collaborationStatus}
-              />
-            </Box>
-          ))}
-        </CustomTabPanel>
+          </CustomTabPanel>
+        ))}
       </Box>
       <Dialog
         fullWidth

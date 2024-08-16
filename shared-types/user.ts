@@ -50,7 +50,6 @@ export enum CollaborationVote {
   positive = "positive",
   negative = "negative",
 }
-
 export enum FieldsEnvironmentalArea {
   ClimateChange = "Climate change",
   Pollution = "Pollution",

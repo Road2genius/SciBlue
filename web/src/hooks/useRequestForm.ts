@@ -280,7 +280,7 @@ const useRequestForm = ({
     try {
       await updateRequestAction(requestId, requestDetail);
       onSuccessUpdateRequest && onSuccessUpdateRequest();
-    } catch (err) {
+    } catch (error) {
       onErrorUpdateRequest && onErrorUpdateRequest();
     }
   };
@@ -289,7 +289,7 @@ const useRequestForm = ({
     try {
       await deleteRequestAction(requestId);
       onSuccessDeleteRequest && onSuccessDeleteRequest();
-    } catch (err) {
+    } catch (error) {
       onErrorDeleteRequest && onErrorDeleteRequest();
     }
   };

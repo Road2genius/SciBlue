@@ -47,7 +47,7 @@ export const createQuestionComment = async (req: Request, res: Response, next: N
 
     const user = await UserModel.findById(userId);
 
-    io.emit("commentCreated", {
+    io.emit("questionCommentCreated", {
       questionId,
       comment: {
         _id: comment._id,
@@ -97,7 +97,7 @@ export const deleteQuestionComment = async (req: Request, res: Response, next: N
       $pull: { comments: comment._id },
     });
 
-    io.emit("commentDeleted", { commentId: comment._id });
+    io.emit("questionCommentDeleted", { commentId: comment._id });
 
     successHandler<{ message: string }>(
       req,
@@ -145,7 +145,7 @@ export const updateQuestionComment = async (req: Request, res: Response, next: N
 
     const user = await UserModel.findById(comment.userId);
 
-    io.emit("commentUpdated", {
+    io.emit("questionCommentUpdated", {
       comment: {
         _id: comment._id,
         userId: comment.userId,
