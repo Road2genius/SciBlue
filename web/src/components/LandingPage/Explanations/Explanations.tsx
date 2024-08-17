@@ -7,26 +7,43 @@ const Explications: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <Box className={classes.root}>
-      <Container maxWidth="xl" sx={{ marginY: "40px" }}>
-        <Grid container gap={10}>
+    <Container maxWidth="xl">
+      <Box
+        className={classes.root}
+        sx={{
+          minWidth: {
+            xs: "100%",
+            sm: "100%",
+            md: "100%",
+            lg: "100%",
+            xl: "1200px",
+          },
+        }}
+      >
+        <Grid container gap={5}>
           <Grid
             item
             xs={12}
-            md={4}
+            md={6}
             display="flex"
             flexDirection="column"
             justifyContent="center"
           >
-            <img src={CommunityImage} alt="Community Image" />
+            <img
+              src={CommunityImage}
+              alt="Community Image"
+              style={{
+                width: "97.4%",
+                height: "auto",
+                marginBottom: "1rem",
+              }}
+            />
           </Grid>
-
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={5}>
             <Box display="flex" flexDirection="column" mt={2}>
-              <Typography variant="body1" fontWeight={800} paragraph>
+              <Typography variant="h6" fontWeight={700} paragraph>
                 A community
               </Typography>
-
               <Typography variant="body1" paragraph>
                 We aspire to a platform where{" "}
                 <strong>all active players</strong> who contribute to or aspire
@@ -35,11 +52,11 @@ const Explications: React.FC = () => {
                   easily connect, share ideas, and innovate together.
                 </strong>
               </Typography>
-
-              <Box display="flex" justifyContent="flex-end">
+              <Box display="flex" justifyContent="flex-end" mt={2} mb={4}>
                 <Button
                   variant="contained"
                   color="primary"
+                  href="/community"
                   sx={{
                     borderRadius: "8px",
                     textTransform: "none",
@@ -58,6 +75,7 @@ const Explications: React.FC = () => {
                 <Button
                   variant="contained"
                   color="primary"
+                  href="/signup"
                   sx={{
                     borderRadius: "8px",
                     textTransform: "none",
@@ -74,7 +92,7 @@ const Explications: React.FC = () => {
               </Box>
 
               <Box display="flex" flexDirection="column" mt={2}>
-                <Typography variant="body1" fontWeight={800} paragraph>
+                <Typography variant="h6" fontWeight={700} paragraph>
                   Contribute to the interface!
                 </Typography>
 
@@ -86,14 +104,15 @@ const Explications: React.FC = () => {
                 </Typography>
               </Box>
             </Box>
-
-            <Box display="flex" justifyContent="flex-end">
+            <Box display="flex" justifyContent="flex-end" my={1}>
               <Button
                 variant="contained"
                 color="primary"
+                href="/feedback"
                 sx={{
                   borderRadius: "8px",
                   textTransform: "none",
+                  minWidth: "171px",
                   height: "50px",
                   fontWeight: 700,
                   backgroundColor: "#008080",
@@ -107,13 +126,18 @@ const Explications: React.FC = () => {
             </Box>
           </Grid>
         </Grid>
-      </Container>
-    </Box>
+      </Box>
+    </Container>
   );
 };
 
 export default Explications;
 
 const useStyles = makeStyles({
-  root: {},
+  root: {
+    marginTop: "40px",
+    display: "flex",
+    flexDirection: "column",
+    margin: "auto",
+  },
 });
