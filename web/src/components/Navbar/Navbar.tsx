@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserContext";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
@@ -31,15 +31,17 @@ const Navbar: React.FC = () => {
   const navigate: NavigateFunction = useNavigate();
   const { userContext, setUserContext } = useUserContext();
 
+  const location = useLocation();
+  const [activePage, setActivePage] = useState(location.pathname);
+
   const buttons: {
     name: string;
-    onClick: () => void;
+    path: string;
   }[] = [
-    { name: "Home", onClick: () => navigate("/") },
-    { name: "Discussions", onClick: () => navigate("/discussions/list") },
-    { name: "Request", onClick: () => navigate("/request/list") },
-    { name: "Community", onClick: () => navigate("/community") },
-    { name: "Send feedback", onClick: () => navigate("/feedback") },
+    { name: "Home", path: "/" },
+    { name: "Discussions & Questions", path: "/discussions/list" },
+    { name: "Requests", path: "/request/list" },
+    { name: "Community", path: "/community" },
   ];
 
   const toggleDrawer =
@@ -82,19 +84,38 @@ const Navbar: React.FC = () => {
           marginLeft: "30px",
         }}
       >
-        SciForEarth
+        SciBlue
       </Typography>
+
       <List>
         {buttons.map((button, index) => (
-          <ListItem key={index} onClick={button.onClick}>
+          <ListItem
+            divider
+            key={index}
+            onClick={() => {
+              setActivePage(button.path);
+              navigate(button.path);
+            }}
+          >
             <ListItemButton>
-              <ListItemText primary={button.name} />
+              <ListItemText
+                primary={button.name}
+                sx={{
+                  fontWeight: "bold",
+                  color: activePage === button.path ? "#008080" : "primary",
+                }}
+              />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
     </Box>
   );
+
+  const handleNavigateNavBar = (buttonPath: string) => {
+    setActivePage(buttonPath);
+    navigate(buttonPath);
+  };
 
   return (
     <AppBar
@@ -103,26 +124,54 @@ const Navbar: React.FC = () => {
       sx={{ borderBottom: "1px solid #e0e0e0" }}
     >
       <Toolbar>
-        <Typography
-          variant="h6"
-          fontWeight={800}
-          sx={{ flexGrow: 1, color: "#00796b", cursor: "pointer" }}
-          onClick={() => navigate("/")}
+        <Box display="flex" flexDirection="column">
+          <Typography
+            variant="h6"
+            fontWeight={800}
+            sx={{ flexGrow: 1, color: "#00796b", cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          >
+            SciBlue
+          </Typography>
+          <Typography variant="subtitle1" mt={-1} color="gray">
+            Accelerate change through collaboration
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: { xs: "none", md: "flex" },
+            flexGrow: 1,
+            justifyContent: "center",
+          }}
         >
-          SciForEarth
-        </Typography>
-        <Box sx={{ display: { xs: "none", md: "flex" }, flexGrow: 1 }}>
           {buttons.map((button) => (
             <Button
               key={button.name}
               color="inherit"
-              onClick={button.onClick}
-              sx={{ textTransform: "none", mx: 1 }}
+              onClick={() => handleNavigateNavBar(button.path)}
+              sx={{
+                textTransform: "none",
+                mx: 1,
+                fontWeight: "bold",
+                color: activePage === button.path ? "#008080" : "primary",
+              }}
             >
               {button.name}
             </Button>
           ))}
         </Box>
+        <Button
+          color="inherit"
+          onClick={() => handleNavigateNavBar("/feedback")}
+          sx={{
+            textTransform: "none",
+            mx: 2,
+            fontWeight: "bold",
+            color: activePage === "/feedback" ? "#008080" : "primary",
+          }}
+        >
+          Help us improve
+        </Button>
         {userContext ? (
           <>
             <Avatar
@@ -163,13 +212,14 @@ const Navbar: React.FC = () => {
         ) : (
           <>
             <Button
-              variant="outlined"
+              variant="contained"
               sx={{
                 display: { xs: "none", md: "block" },
                 textTransform: "none",
                 color: "#000",
                 borderRadius: "10px",
                 borderColor: "#000",
+                backgroundColor: "inherit",
                 "&:hover": {
                   borderColor: "#00796b",
                   backgroundColor: "#00796b",
@@ -190,15 +240,11 @@ const Navbar: React.FC = () => {
                 <MenuIcon />
               </IconButton>
             </Box>
-            <Drawer
-              anchor="right"
-              open={drawerOpen}
-              onClose={toggleDrawer(false)}
-            >
-              {list}
-            </Drawer>
           </>
         )}
+        <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+          {list}
+        </Drawer>
       </Toolbar>
     </AppBar>
   );
