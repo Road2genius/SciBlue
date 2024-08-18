@@ -54,7 +54,7 @@ setupSocketConnection();
 
 if (process.env.NODE_ENV !== "test") {
   connectDB().then(() => {
-    console.log(`⚡️[api]: express...`);
+    console.log(`⚡️[api]: express is running in ${process.env.NODE_ENV} mode...`);
     server.listen(PORT, () => {
       console.log(`⚡️[api]: express http://localhost:${PORT}`);
     });

@@ -1,10 +1,11 @@
 import { connect } from "mongoose";
 
 const connectDB = async () => {
-  console.log(`⚡️[api]: mongo...`);
-  return connect(process.env.MONGO_URI || "mongodb://localhost:27017/SciBlue")
+  const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/SciBlue";
+  console.log(`⚡️[api]: Attempting to connect to MongoDB at ${mongoUri}`);
+  return connect(mongoUri)
     .then(() => {
-      console.log(`⚡️[api]: mongo mongodb://localhost:27017/SciBlue`);
+      console.log(`⚡️[api]: Connected to MongoDB at ${mongoUri}`);
     })
     .catch((err) => {
       console.error("⚠️[api]: mongo", err?.message);
