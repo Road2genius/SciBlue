@@ -32,6 +32,6 @@ describe("Get Users List", () => {
     const response = await request(app).get(url).expect(HTTP_STATUS_CODES.OK);
 
     expect(response.body.data.length).toEqual(0);
-    expect(response.body.data.length).toBe([]);
+    expect(response.body.data).toEqual([]);
   });
 });
