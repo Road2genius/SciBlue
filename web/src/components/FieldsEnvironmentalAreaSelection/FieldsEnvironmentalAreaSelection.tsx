@@ -1,12 +1,12 @@
 import React from "react";
 import { Box, Chip } from "@mui/material";
 import { FieldsEnvironmentalArea } from "../../../../shared-types/user";
-import { UserRes } from "../../../../shared-types/userData";
+import { UserReq } from "../../../../shared-types/userData";
 import { makeStyles } from "@mui/styles";
 import CustomTagInput from "../CustomTag/CustomTag";
 
 interface FieldsEnvironmentalAreaSelectorProps {
-  user: UserRes;
+  user: UserReq;
   activity: "researchActivityAndExpertise" | "professionalActivityAndExpertise";
   handleDoubleNestedChip: (
     section:
