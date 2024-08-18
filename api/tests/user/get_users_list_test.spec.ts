@@ -27,4 +27,11 @@ describe("Get Users List", () => {
     expect(response.body.data[0]).toHaveProperty("email", validUserData.email);
     expect(response.body.data[1]).toHaveProperty("email", anotherValidUserData.email);
   });
+
+  it("should return an empty list if no users are found", async () => {
+    const response = await request(app).get(url).expect(HTTP_STATUS_CODES.OK);
+
+    expect(response.body.data.length).toEqual(0);
+    expect(response.body.data.length).toBe([]);
+  });
 });
