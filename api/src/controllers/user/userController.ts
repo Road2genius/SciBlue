@@ -134,7 +134,7 @@ export const getUsersList = async (req: Request, res: Response, next: NextFuncti
   try {
     const users: IUser[] = await UserModel.find();
 
-    successHandler<IUser[]>(req, res, users, HTTP_STATUS_CODES.OK);
+    successHandler<IUser[]>(req, res, users || [], HTTP_STATUS_CODES.OK);
   } catch (error) {
     next(error);
   }
