@@ -16,21 +16,23 @@ import { Server as SocketIOServer } from "socket.io";
 import { setupSocketConnection } from "./config/ws";
 
 dotenv.config();
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
+
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  credentials: true,
+};
 
 const app = express();
 const server = createServer(app);
 const io = new SocketIOServer(server, {
-  cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
+  cors: corsOptions,
 });
 app.use(compression({ level: 9 }));
 app.use(cookieParser());
 
 // Middleware
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(bodyParser.json());
 
@@ -46,7 +48,7 @@ app.get("/", (req, res) => {
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 4321; //todo: move env file
+const PORT = process.env.PORT || 5000;
 
 setupSocketConnection();
 
