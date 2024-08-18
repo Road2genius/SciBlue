@@ -2,7 +2,7 @@
   "name": "sciblue-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
     "build-and-start": "npm run build && npm start",
     "dev": "set NODE_ENV=development && nodemon --watch src --exec ts-node src/server.ts",
@@ -45,7 +45,6 @@
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
-    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
