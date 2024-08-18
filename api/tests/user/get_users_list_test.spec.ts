@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../../src/server";
 import UserModel from "../../src/models/user/User";
-import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
+import { HTTP_STATUS_CODES } from "../../src/constants/error/errorCodes";
 import { anotherValidUserData, createUserFixture, validUserData } from "../user/fixtures/user";
 import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
 
@@ -29,9 +29,9 @@ describe("Get Users List", () => {
   });
 
   it("should return an empty list if no users are found", async () => {
-    const response = await request(app).get(url).expect(HTTP_STATUS_CODES.NOT_FOUND);
+    const response = await request(app).get(url).expect(HTTP_STATUS_CODES.OK);
 
-    expect(response.body.code).toBe(ERROR_CODES.USERS_NOT_FOUND);
-    expect(response.body.message).toBe(ERROR_MESSAGES[ERROR_CODES.USERS_NOT_FOUND]);
+    expect(response.body.data.length).toEqual(0);
+    expect(response.body.data).toEqual([]);
   });
 });

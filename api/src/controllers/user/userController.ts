@@ -133,14 +133,6 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 export const getUsersList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const users: IUser[] = await UserModel.find();
-
-    if (!users.length) {
-      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USERS_NOT_FOUND]);
-      error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
-      error.code = ERROR_CODES.USERS_NOT_FOUND;
-      throw error;
-    }
-
     successHandler<IUser[]>(req, res, users, HTTP_STATUS_CODES.OK);
   } catch (error) {
     next(error);
