@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 import { successHandler } from "../../middleware/responseHandler";
 import { sendEmail } from "../../config/email";
 import cache from "../../middleware/auth";
+import { JWT_SECRET_KEY, REFRESH_TOKEN } from "../../../src/config/config";
 
 export const loginUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -38,10 +39,18 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
       throw error;
     }
 
-    const token = jwt.sign({ userId: user._id }, "your_jwt_secret_key", {
+    if (!JWT_SECRET_KEY) {
+      throw new Error("TOKEN is not defined.");
+    }
+
+    if (!REFRESH_TOKEN) {
+      throw new Error("TOKEN is not defined.");
+    }
+
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
       expiresIn: "1h",
     });
-    const refreshToken = jwt.sign({ userId: user._id }, "refresh_token_key", { expiresIn: "7d" });
+    const refreshToken = jwt.sign({ userId: user._id }, REFRESH_TOKEN, { expiresIn: "7d" });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -112,8 +121,12 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
     throw error;
   }
 
+  if (!REFRESH_TOKEN) {
+    throw new Error("TOKEN is not defined.");
+  }
+
   try {
-    const payload = jwt.verify(refreshToken, "refresh_token_key") as { userId: string };
+    const payload = jwt.verify(refreshToken, REFRESH_TOKEN) as { userId: string };
 
     const user = await UserModel.findById(payload.userId);
     if (!user || user.refreshToken !== refreshToken) {
@@ -122,7 +135,11 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
       throw error;
     }
 
-    const token = jwt.sign({ userId: user._id }, "your_jwt_secret_key", {
+    if (!JWT_SECRET_KEY) {
+      throw new Error("TOKEN is not defined.");
+    }
+
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
       expiresIn: "1h",
     });
 

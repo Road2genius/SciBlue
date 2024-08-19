@@ -6,7 +6,7 @@ import { BASE_ROUTE, ENDPOINT } from "../../src/routes/http";
 import { createUserFixture, generateTestToken, validUserData } from "../user/fixtures/user";
 import UserModel, { IUser } from "../../src/models/user/User";
 import { valideRequestData } from "./fixtures/request";
-import { IRequest } from "src/models/requests/Request";
+import { IRequest } from "../../src/models/requests/Request";
 
 // POST /api/requests
 describe("Create a request", () => {

@@ -11,7 +11,7 @@ import { api } from "../api";
 export const createRequest = async (
   dataRequest: RequestReqInterface
 ): Promise<RequestResInterface> => {
-  const token = sessionStorage.getItem("your_jwt_secret_key");
+  const token = sessionStorage.getItem("auth_token");
   return api.post<RequestResInterface, RequestReqInterface>(
     "/requests",
     dataRequest,
@@ -25,7 +25,7 @@ export const updateRequest = async (
   requestId: string,
   dataRequest: Partial<RequestResInterface>
 ): Promise<RequestResInterface> => {
-  const token = sessionStorage.getItem("your_jwt_secret_key");
+  const token = sessionStorage.getItem("auth_token");
   return api.patch<RequestResInterface, Partial<RequestReqInterface>>(
     `/requests/${requestId}`,
     dataRequest,
@@ -36,7 +36,7 @@ export const updateRequest = async (
 };
 
 export const deleteRequest = async (requestId: string): Promise<void> => {
-  const token = sessionStorage.getItem("your_jwt_secret_key");
+  const token = sessionStorage.getItem("auth_token");
   await api.delete<string>(`/requests/${requestId}`, {
     Authorization: `Bearer ${token}`,
   });
@@ -53,7 +53,7 @@ export const getRequestList = async (): Promise<RequestResInterface[]> => {
 export const getRequestById = async (
   requestId: string
 ): Promise<RequestResInterface> => {
-  const token = sessionStorage.getItem("your_jwt_secret_key");
+  const token = sessionStorage.getItem("auth_token");
   const response: { success: boolean; data: RequestResInterface } =
     await api.get<{
       success: boolean;
@@ -69,7 +69,7 @@ export const getRequestById = async (
 export const submitVoteRequest = async (
   requestVote: RequestVote
 ): Promise<RequestResInterface> => {
-  const token = sessionStorage.getItem("your_jwt_secret_key");
+  const token = sessionStorage.getItem("auth_token");
   return api.post<RequestResInterface, RequestVote>(
     `/requests/${requestVote.requestId}/votes`,
     requestVote,
@@ -82,7 +82,7 @@ export const submitVoteRequest = async (
 export const submitVoteComment = async (
   commentVote: CommentVote
 ): Promise<void> => {
-  const token = sessionStorage.getItem("your_jwt_secret_key");
+  const token = sessionStorage.getItem("auth_token");
   return api.post<void, CommentVote>(
     `/requests/comments/${commentVote.commentId}/votes`,
     commentVote,
@@ -95,7 +95,7 @@ export const submitVoteComment = async (
 export const createCommentRequest = async (
   requestComment: RequestReqComment
 ): Promise<RequestResComment> => {
-  const token = sessionStorage.getItem("your_jwt_secret_key");
+  const token = sessionStorage.getItem("auth_token");
   return api.post<RequestResComment, RequestReqComment>(
     `/requests/${requestComment.requestId}/comments`,
     requestComment,
@@ -118,7 +118,7 @@ export const getRequestCommentList = async (
 export const deleteRequestComment = async (
   commentId: string
 ): Promise<void> => {
-  const token = sessionStorage.getItem("your_jwt_secret_key");
+  const token = sessionStorage.getItem("auth_token");
   await api.delete(`/requests/comments/${commentId}`, {
     Authorization: `Bearer ${token}`,
   });
@@ -128,7 +128,7 @@ export const updateRequestComment = async (
   commentId: string,
   text: string
 ): Promise<RequestResComment> => {
-  const token = sessionStorage.getItem("your_jwt_secret_key");
+  const token = sessionStorage.getItem("auth_token");
   const response: { success: boolean; comment: RequestResComment } =
     await api.patch<
       { success: boolean; comment: RequestResComment },

@@ -2,6 +2,7 @@ import UserModel, { IUser } from "../../../src/models/user/User";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { CountryNames, TypeOfOrganization } from "../../../../shared-types/user";
+import { JWT_SECRET_KEY } from "../../../src/config/config";
 
 export const validUserData: Partial<IUser> = {
   firstName: "John",
@@ -53,7 +54,10 @@ export const createUserFixture = async (userData: Partial<IUser>): Promise<IUser
 
 // generateTestToken generate a token for testing environment
 export const generateTestToken = (user: IUser): string => {
-  const token = jwt.sign({ userId: user._id }, "your_jwt_secret_key", {
+  if (!JWT_SECRET_KEY) {
+    throw new Error("TOKEN is not defined.");
+  }
+  const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
     expiresIn: "1h",
   });
   return token;

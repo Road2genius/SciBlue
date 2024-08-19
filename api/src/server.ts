@@ -15,8 +15,9 @@ import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import { setupSocketConnection } from "./config/ws";
 
-dotenv.config();
-dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
+// dotenv.config();
+const nodeEnv = process.env.NODE_ENV?.trim();
+dotenv.config({ path: `.env.${nodeEnv}` });
 
 const corsOptions = {
   origin: process.env.FRONTEND_URL || "http://localhost:5173",
@@ -54,7 +55,7 @@ const PORT = process.env.PORT || 5000;
 
 setupSocketConnection();
 
-if (process.env.NODE_ENV !== "test") {
+if (nodeEnv !== "test") {
   connectDB().then(() => {
     console.log(`⚡️[api]: express is running in ${process.env.NODE_ENV} mode...`);
     server.listen(PORT, () => {
