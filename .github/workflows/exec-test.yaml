@@ -21,12 +21,6 @@ jobs:
       - name: Change directory to /api
         run: cd api
 
-      - name: Set environment variables from secrets
-        run: echo "Setting secrets as environment variables"
-        env:
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-
       - name: Install pnpm
         run: npm install -g pnpm
 
