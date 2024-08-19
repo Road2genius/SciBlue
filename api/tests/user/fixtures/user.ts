@@ -4,8 +4,6 @@ import bcrypt from "bcrypt";
 import { CountryNames, TypeOfOrganization } from "../../../../shared-types/user";
 import { JWT_SECRET_KEY } from "../../../src/config/config";
 
-const JWT_SECRET = JWT_SECRET_KEY || process.env.JWT_SECRET_KEY
-
 export const validUserData: Partial<IUser> = {
   firstName: "John",
   lastName: "Doe",
@@ -56,10 +54,10 @@ export const createUserFixture = async (userData: Partial<IUser>): Promise<IUser
 
 // generateTestToken generate a token for testing environment
 export const generateTestToken = (user: IUser): string => {
-  if (!JWT_SECRET) {
+  if (!JWT_SECRET_KEY) {
     throw new Error("TOKEN is not defined.");
   }
-  const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
+  const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
     expiresIn: "1h",
   });
   return token;

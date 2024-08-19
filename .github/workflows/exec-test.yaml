@@ -22,10 +22,12 @@ jobs:
         run: cd api
 
       - name: Set environment variables from secrets
+        run: |
+          if [ -z "$JWT_SECRET_KEY" ]; then echo "JWT_SECRET_KEY is not set"; exit 1; else echo "JWT_SECRET_KEY is set"; fi
+          if [ -z "$REFRESH_TOKEN" ]; then echo "REFRESH_TOKEN is not set"; exit 1; else echo "REFRESH_TOKEN is set"; fi
         env:
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-        run: echo "Secrets set"
 
       - name: Install pnpm
         run: npm install -g pnpm

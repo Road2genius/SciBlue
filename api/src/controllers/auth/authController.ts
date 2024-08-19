@@ -10,9 +10,6 @@ import { sendEmail } from "../../config/email";
 import cache from "../../middleware/auth";
 import { JWT_SECRET_KEY, REFRESH_TOKEN } from "../../../src/config/config";
 
-const JWT_SECRET = JWT_SECRET_KEY || process.env.JWT_SECRET_KEY
-const REFRESHTOKEN = REFRESH_TOKEN || process.env.JWT_SECRET_KEY
-
 export const loginUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { email, password } = req.body;
@@ -42,18 +39,18 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
       throw error;
     }
 
-    if (!JWT_SECRET) {
+    if (!JWT_SECRET_KEY) {
       throw new Error("TOKEN is not defined.");
     }
 
-    if (!REFRESHTOKEN) {
+    if (!REFRESH_TOKEN) {
       throw new Error("TOKEN is not defined.");
     }
 
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
       expiresIn: "1h",
     });
-    const refreshToken = jwt.sign({ userId: user._id }, REFRESHTOKEN, { expiresIn: "7d" });
+    const refreshToken = jwt.sign({ userId: user._id }, REFRESH_TOKEN, { expiresIn: "7d" });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -124,12 +121,12 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
     throw error;
   }
 
-  if (!REFRESHTOKEN) {
+  if (!REFRESH_TOKEN) {
     throw new Error("TOKEN is not defined.");
   }
 
   try {
-    const payload = jwt.verify(refreshToken, REFRESHTOKEN) as { userId: string };
+    const payload = jwt.verify(refreshToken, REFRESH_TOKEN) as { userId: string };
 
     const user = await UserModel.findById(payload.userId);
     if (!user || user.refreshToken !== refreshToken) {
@@ -138,11 +135,11 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
       throw error;
     }
 
-    if (!JWT_SECRET) {
+    if (!JWT_SECRET_KEY) {
       throw new Error("TOKEN is not defined.");
     }
 
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
       expiresIn: "1h",
     });
 
