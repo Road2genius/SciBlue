@@ -24,8 +24,7 @@ jobs:
       - name: Set environment variables from secrets
         env:
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          API_KEY: ${{ secrets.API_KEY }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
         run: echo "Secrets set"
 
       - name: Install pnpm
