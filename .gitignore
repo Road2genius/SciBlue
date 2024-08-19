@@ -24,3 +24,13 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# Ignorer tous les fichiers .env
+*.env
+*.env.*
+
+# Ignorer les fichiers .env dans les sous-dossiers spécifiques
+/api/*.env
+/api/*.env.*
+/web/*.env
+/web/*.env.*

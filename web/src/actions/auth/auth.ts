@@ -4,7 +4,7 @@ import { AuthResponse, LoginData } from "../../types/auth/auth";
 export const loginUser = async (data: LoginData): Promise<AuthResponse> => {
   try {
     const { token, userId, avatar } = await login(data);
-    sessionStorage.setItem("your_jwt_secret_key", token);
+    sessionStorage.setItem("auth_token", token);
 
     return { token, userId, avatar };
   } catch (error) {
@@ -15,7 +15,7 @@ export const loginUser = async (data: LoginData): Promise<AuthResponse> => {
 export const logoutUser = async (userId: string): Promise<void> => {
   try {
     await logout(userId);
-    sessionStorage.removeItem("your_jwt_secret_key");
+    sessionStorage.removeItem("auth_token");
     localStorage.removeItem("userContext");
   } catch (error) {
     throw new Error("Failed to log in");

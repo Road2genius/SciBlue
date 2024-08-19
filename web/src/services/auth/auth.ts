@@ -19,7 +19,7 @@ export const refreshTokenService = async (): Promise<string> => {
     }
   );
 
-  sessionStorage.setItem("your_jwt_secret_key", response.token);
+  sessionStorage.setItem("auth_token", response.token);
 
   return response.token;
 };

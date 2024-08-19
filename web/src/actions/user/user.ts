@@ -59,7 +59,7 @@ export const updateUserAction = async (
 export const deleteUserAction = async (userId: string): Promise<void> => {
   try {
     await deleteUser(userId);
-    sessionStorage.removeItem("your_jwt_secret_key");
+    sessionStorage.removeItem("auth_token");
     localStorage.removeItem("userContext");
   } catch (error) {
     throw new Error(getErrorMessage(error));

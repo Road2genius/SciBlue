@@ -31,3 +31,6 @@ jobs:
       - name: Run tests
         run: pnpm test
         working-directory: ./api
+        env:
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
