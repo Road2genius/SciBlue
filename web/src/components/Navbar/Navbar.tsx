@@ -20,9 +20,10 @@ import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserContext";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import { avatars, getAvatarKey } from "./avatar";
 import { useSnackbar } from "notistack";
 import { logoutUser } from "../../actions/auth/auth";
+import { getAvatar } from "./avatar";
+
 
 const Navbar: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -175,7 +176,7 @@ const Navbar: React.FC = () => {
         {userContext ? (
           <>
             <Avatar
-              src={avatars[getAvatarKey(userContext.avatar)]}
+              src={getAvatar(userContext.avatar)}
               alt="User Avatar"
               sx={{ cursor: "pointer" }}
               onClick={(e) => setAnchorEl(e.currentTarget)}

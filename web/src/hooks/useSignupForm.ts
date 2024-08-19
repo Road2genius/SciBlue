@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { UserReq, UserRes } from "../../../shared-types/userData";
-import AcademicAvatar from "../assets/avatars/academic.svg";
-import FreelanceAvatar from "../assets/avatars/freelancer.svg";
-import GovernmentAvatar from "../assets/avatars/government.svg";
-import OngAvatar from "../assets/avatars/ong.svg";
-import PrivateAvatar from "../assets/avatars/privateResearch.svg";
-import { createUserAction, deleteUserAction, updateUserAction } from "../actions/user/user";
+import {
+  createUserAction,
+  deleteUserAction,
+  updateUserAction,
+} from "../actions/user/user";
 import { getErrorMessage } from "../utils/handleError";
 import { useSnackbar } from "notistack";
 import {
@@ -15,6 +14,7 @@ import {
   TypeOfOrganization,
 } from "../../../shared-types/user";
 import { Discipline, NestedKeyOf } from "../../../shared-types/requestData";
+import { getAvatarByOrganization } from "../components/Navbar/avatar";
 
 const initialUserState: UserReq = {
   organizationAffiliated: "" as TypeOfOrganization,
@@ -68,7 +68,7 @@ interface UseUserFormProps {
   onSuccessUpdateUser?: () => void;
   onErrorUpdateUser?: () => void;
   onSuccessDeleteUser?: () => void;
-  onErrorDeleteUser?: () => void
+  onErrorDeleteUser?: () => void;
   profileInformation?: UserRes;
 }
 
@@ -90,23 +90,6 @@ const useSignupForm = ({
       setUser(profileInformation);
     }
   }, [profileInformation]);
-
-  const avatarUrls: { [key in TypeOfOrganization]: string } = {
-    [TypeOfOrganization.AcademicLaboratoryAndInstitute]: AcademicAvatar,
-    [TypeOfOrganization.AcademicTechnologyPlatform]: AcademicAvatar,
-    [TypeOfOrganization.FreelanceScientist]: FreelanceAvatar,
-    [TypeOfOrganization.Government]: GovernmentAvatar,
-    [TypeOfOrganization.NgoNonProfitOrganizationFoundation]: OngAvatar,
-    [TypeOfOrganization.PrivateResearchOrganizations]: PrivateAvatar,
-  };
-
-  const getAvatarByOrganization = (
-    organization?: TypeOfOrganization
-  ): string | undefined => {
-    if (organization) {
-      return avatarUrls[organization];
-    }
-  };
 
   const organizationIsResearcher = (organization: string): boolean =>
     organization === TypeOfOrganization.AcademicLaboratoryAndInstitute ||
@@ -375,7 +358,11 @@ const useSignupForm = ({
 
   const handleValidate = async (): Promise<void> => {
     try {
-      await createUserAction(user);
+      const userToCreate: UserReq = {
+        ...user,
+        avatar: user.avatar.split("/").pop()!,
+      };
+      await createUserAction(userToCreate);
       onSuccessSignIn && onSuccessSignIn();
     } catch (err) {
       const errorMessages = getErrorMessage(err).split(",");

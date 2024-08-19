@@ -14,8 +14,8 @@ import cookieParser from "cookie-parser";
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import { setupSocketConnection } from "./config/ws";
+import path from "path";
 
-// dotenv.config();
 const nodeEnv = process.env.NODE_ENV?.trim();
 dotenv.config({ path: `.env.${nodeEnv}` });
 
@@ -33,6 +33,9 @@ const io = new SocketIOServer(server, {
 });
 app.use(compression({ level: 9 }));
 app.use(cookieParser());
+
+// Avatars
+app.use("/avatars", express.static(path.join(__dirname, "../public/avatars")));
 
 // Middleware
 app.use(cors(corsOptions));

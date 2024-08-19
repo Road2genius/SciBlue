@@ -22,6 +22,7 @@ import {
 import FlagComponent from "../components/FlagComponent/FlagComponent";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import UserDetailModal from "../components/UserDetailModal/UserDetailModal";
+import { getAvatar } from "../components/Navbar/avatar";
 
 const Community: React.FC = () => {
   const { organizationIsResearcher } = useSignupForm({});
@@ -31,7 +32,6 @@ const Community: React.FC = () => {
   }>({ open: false });
   const classes = useStyles();
   const { getCommunityList } = useCommunity();
-  const { getAvatarByOrganization } = useSignupForm({});
   const [usersList, setUsersList] = useState<UserRes[]>([]);
 
   const getCountryKeyFromValue = (
@@ -114,9 +114,7 @@ const Community: React.FC = () => {
                     <Box display="flex" my={2} ml={2}>
                       <Avatar
                         variant="square"
-                        src={getAvatarByOrganization(
-                          user.organizationAffiliated
-                        )}
+                        src={getAvatar(user.avatar ?? "")}
                         sx={{ width: 120, height: 120, borderRadius: "5px" }}
                       />
                       {!user.privacyLevel.mode ? (

@@ -1,8 +1,8 @@
 import React from "react";
 import { Avatar, Box, Tooltip, Typography } from "@mui/material";
-import { avatars, getAvatarKey } from "../../components/Navbar/avatar";
 import { formatDate, getModifiedTimeAgo } from "../../utils/utils";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { getAvatar } from "../Navbar/avatar";
 
 interface UserInfoProps {
   listCard?: boolean;
@@ -29,7 +29,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
     <Box display="flex" flexDirection="column">
       <Box display="flex" alignItems="center">
         <Avatar
-          src={avatars[getAvatarKey(avatar)]}
+          src={getAvatar(avatar ?? "")}
           alt="User Avatar"
           sx={{
             width: 64,

@@ -20,11 +20,13 @@ import {
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import { UserRequest } from "../../pages/RequestsList";
-import { avatars, getAvatarKey } from "../Navbar/avatar";
+// import { avatars, getAvatarKey } from "../Navbar/avatar";
 import { useNavigate } from "react-router-dom";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { formatDate, truncateText } from "../../utils/utils";
+import { getAvatar } from "../Navbar/avatar";
+// import { getAvatar } from "../Navbar/avatar";
 
 const RequestCard: React.FC<{
   requestId: string;
@@ -320,11 +322,7 @@ const RequestCard: React.FC<{
                   </Box>
                   <Box display="flex" alignItems="center">
                     <Avatar
-                      src={
-                        avatars[
-                          getAvatarKey(usersRequest[requestId]?.avatar ?? "")
-                        ]
-                      }
+                      src={getAvatar(usersRequest[requestId]?.avatar ?? "")}
                       alt="User Avatar"
                       sx={{ marginRight: "10px", border: "solid 1px gray" }}
                     />
