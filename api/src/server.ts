@@ -35,6 +35,7 @@ app.use(compression({ level: 9 }));
 app.use(cookieParser());
 
 // Avatars
+console.log("Serving avatars from:", path.join(__dirname, "../public/avatars"));
 app.use("/avatars", express.static(path.join(__dirname, "../public/avatars")));
 
 // Middleware
