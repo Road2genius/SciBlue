@@ -26,6 +26,7 @@ import useSignupForm from "../../hooks/useSignupForm";
 import { UserRes } from "../../../../shared-types/userData";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import FlagComponent from "../FlagComponent/FlagComponent";
+import { getAvatar } from "../Navbar/avatar";
 
 const UserDialog: React.FC<{
   user?: UserRes;
@@ -34,9 +35,7 @@ const UserDialog: React.FC<{
   getCountryCode: (countryName: string) => string | undefined;
   getLanguageCode: (languageName: string) => string | undefined;
 }> = ({ user, open, handleClose, getCountryCode, getLanguageCode }) => {
-  const { getAvatarByOrganization, organizationIsResearcher } = useSignupForm(
-    {}
-  );
+  const { organizationIsResearcher } = useSignupForm({});
   const theme = useTheme();
   const classes = useStyles();
   const isXs = useMediaQuery(theme.breakpoints.down("sm"));
@@ -73,7 +72,7 @@ const UserDialog: React.FC<{
         >
           <Avatar
             variant="square"
-            src={getAvatarByOrganization(user.organizationAffiliated)}
+            src={getAvatar(user.avatar)}
             sx={{
               width: isXs ? 100 : 146,
               height: isXs ? 100 : 146,

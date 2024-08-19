@@ -1,22 +1,26 @@
-import AcademicAvatar from "../../assets/avatars/academic.svg";
-import FreelanceAvatar from "../../assets/avatars/freelancer.svg";
-import GovernmentAvatar from "../../assets/avatars/government.svg";
-import OngAvatar from "../../assets/avatars/ong.svg";
-import PrivateAvatar from "../../assets/avatars/privateResearch.svg";
+import { TypeOfOrganization } from "../../../../shared-types/user";
 
-export const getAvatarKey = (url?: string): string => {
-  if (url) {
-    const parts = url.split("/");
-    const filename = parts[parts.length - 1];
-    return filename.replace(".svg", "");
-  }
-  return "";
+export const getAvatar = (avatarFilename: string): string => {
+  const avatarUrl = `${import.meta.env.VITE_AVATAR_BASE_URL}/${avatarFilename}`;
+  return avatarUrl;
 };
 
-export const avatars: { [key: string]: string } = {
-  academic: AcademicAvatar,
-  freelancer: FreelanceAvatar,
-  government: GovernmentAvatar,
-  ong: OngAvatar,
-  privateResearch: PrivateAvatar,
+export const avatarUrls: { [key in TypeOfOrganization]: string } = {
+  [TypeOfOrganization.AcademicLaboratoryAndInstitute]:
+    getAvatar("academic.svg"),
+  [TypeOfOrganization.AcademicTechnologyPlatform]: getAvatar("academic.svg"),
+  [TypeOfOrganization.FreelanceScientist]: getAvatar("freelancer.svg"),
+  [TypeOfOrganization.Government]: getAvatar("government.svg"),
+  [TypeOfOrganization.NgoNonProfitOrganizationFoundation]: getAvatar("ong.svg"),
+  [TypeOfOrganization.PrivateResearchOrganizations]: getAvatar(
+    "privateResearch.svg"
+  ),
+};
+
+export const getAvatarByOrganization = (
+  organization?: TypeOfOrganization
+): string | undefined => {
+  if (organization) {
+    return avatarUrls[organization];
+  }
 };

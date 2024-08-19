@@ -25,6 +25,7 @@ import { getTextFieldsConfig } from "../components/CustomTextField/getTextFields
 import { useSnackbar } from "notistack";
 import DeleteEntityDialog from "../components/DeleteEntityDialog/DeleteEntityDialog";
 import { useUserContext } from "../context/UserContext";
+import { getAvatarByOrganization } from "../components/Navbar/avatar";
 
 const ProfileInformation: React.FC = () => {
   const { userId } = useParams();
@@ -49,7 +50,6 @@ const ProfileInformation: React.FC = () => {
     handleDoubleNestedChip,
     handleDoubleNestedChange,
     handleNestedChip,
-    getAvatarByOrganization,
     handleUpdateUser,
     handleDeleteUser,
   } = useSignupForm({
