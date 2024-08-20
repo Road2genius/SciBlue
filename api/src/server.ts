@@ -36,7 +36,7 @@ app.use(cookieParser());
 
 // Avatars
 console.log("Serving avatars from:", path.join(__dirname, "../public/avatars"));
-app.use("/avatars", express.static(path.join(__dirname, "../public/avatars")));
+app.use("/avatars", express.static(__dirname + "/public/avatars"));
 
 // Middleware
 app.use(cors(corsOptions));
