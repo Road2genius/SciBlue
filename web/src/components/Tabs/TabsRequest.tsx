@@ -384,7 +384,12 @@ const TabsRequestComponent: React.FC<{
                     : "",
                   borderRadius: "8px",
                   "&:hover": {
-                    backgroundColor: "#C8E6C9",
+                    backgroundColor:
+                      filterRequest.collaborationStatus?.includes(
+                        label as CollaborationStatus
+                      )
+                        ? "#C8E6C9"
+                        : "transparent",
                   },
                 }}
                 onClick={() =>
@@ -418,7 +423,11 @@ const TabsRequestComponent: React.FC<{
                     : "",
                   borderRadius: "8px",
                   "&:hover": {
-                    backgroundColor: "#C8E6C9",
+                    backgroundColor: filterRequest.collaborationType?.includes(
+                      label as TypeOfCollaboration
+                    )
+                      ? "#C8E6C9"
+                      : "transparent",
                   },
                 }}
                 onClick={() =>
@@ -453,7 +462,12 @@ const TabsRequestComponent: React.FC<{
                     : "",
                   borderRadius: "8px",
                   "&:hover": {
-                    backgroundColor: "#C8E6C9",
+                    backgroundColor:
+                      filterRequest.fieldsEnvironmentalArea?.includes(
+                        label as FieldsEnvironmentalArea
+                      )
+                        ? "#C8E6C9"
+                        : "transparent",
                   },
                 }}
                 onClick={() =>
@@ -490,7 +504,12 @@ const TabsRequestComponent: React.FC<{
                       : "",
                     borderRadius: "8px",
                     "&:hover": {
-                      backgroundColor: "#C8E6C9",
+                      backgroundColor:
+                        filterRequest.projectProgressStatus?.includes(
+                          label as ProjectProgressStatus
+                        )
+                          ? "#C8E6C9"
+                          : "transparent",
                     },
                   }}
                   onClick={() =>
@@ -526,7 +545,11 @@ const TabsRequestComponent: React.FC<{
                       : "",
                     borderRadius: "8px",
                     "&:hover": {
-                      backgroundColor: "#C8E6C9",
+                      backgroundColor: filterRequest.projectFunding?.includes(
+                        label as ProjectFunding
+                      )
+                        ? "#C8E6C9"
+                        : "transparent",
                     },
                   }}
                   onClick={() => handleFilterRequest("projectFunding", label)}
@@ -559,7 +582,12 @@ const TabsRequestComponent: React.FC<{
                     : "",
                   borderRadius: "8px",
                   "&:hover": {
-                    backgroundColor: "#C8E6C9",
+                    backgroundColor:
+                      filterRequest.organizationRequested?.includes(
+                        label as TypeOfOrganization
+                      )
+                        ? "#C8E6C9"
+                        : "transparent",
                   },
                 }}
                 onClick={() =>

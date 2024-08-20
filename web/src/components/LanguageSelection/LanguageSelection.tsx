@@ -62,6 +62,9 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             backgroundColor: "#C8E6C9",
           },
           textDecoration: "underline",
+          ".MuiChip-label": {
+            fontWeight: "bold",
+          },
         }}
       />
 

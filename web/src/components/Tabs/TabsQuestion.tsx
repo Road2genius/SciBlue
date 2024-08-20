@@ -11,7 +11,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-// import { makeStyles } from "@mui/styles";
 import React, { SyntheticEvent, useMemo, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import TuneRoundedIcon from "@mui/icons-material/TuneRounded";
@@ -349,7 +348,12 @@ const TabsQuestionComponent: React.FC<{
                     : "",
                   borderRadius: "8px",
                   "&:hover": {
-                    backgroundColor: "#C8E6C9",
+                    backgroundColor:
+                      filterQuestion.fieldsEnvironmentalArea?.includes(
+                        label as FieldsEnvironmentalArea
+                      )
+                        ? "#C8E6C9"
+                        : "transparent",
                   },
                 }}
                 onClick={() =>
