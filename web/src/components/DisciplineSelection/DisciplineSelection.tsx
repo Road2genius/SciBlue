@@ -91,6 +91,9 @@ const DisciplineSelector: React.FC<DisciplineSelectorProps> = ({
             backgroundColor: "#C8E6C9",
           },
           textDecoration: "underline",
+          ".MuiChip-label": {
+            fontWeight: "bold",
+          },
         }}
       />
       <Dialog

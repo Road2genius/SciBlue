@@ -102,7 +102,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         Fields of application *
       </Typography>
       <Box className={classes.chipContainer} mb={2}>
-        <>
+        <Box display="flex" flexWrap="wrap" alignItems="center">
           {Object.values(FieldsEnvironmentalArea).map((label) => (
             <Chip
               key={label}
@@ -132,25 +132,63 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 border: "1px solid black",
                 borderRadius: "8px",
                 "&:hover": {
-                  backgroundColor: "#C8E6C9",
+                  backgroundColor:
+                    request.project.fieldsEnvironmentalArea.generic.includes(
+                      label as FieldsEnvironmentalArea
+                    )
+                      ? "#C8E6C9"
+                      : "transparent",
                 },
+                flexWrap: "wrap",
               }}
               clickable
             />
           ))}
-          <CustomTagInput
-            label="add your tag"
-            customTags={request.project.fieldsEnvironmentalArea.custom ?? []}
-            setCustomTags={(newCustomTags) =>
-              handleDoubleNestedChange(
-                "project",
-                "fieldsEnvironmentalArea",
-                "custom",
-                newCustomTags
-              )
-            }
-          />
-        </>
+          {request.project.fieldsEnvironmentalArea.custom.map(
+            (label, index) => (
+              <Chip
+                key={index}
+                label={label}
+                onDelete={() =>
+                  handleDoubleNestedChip(
+                    "project",
+                    "fieldsEnvironmentalArea",
+                    "custom",
+                    label
+                  )
+                }
+                sx={{
+                  backgroundColor: "#C8E6C9",
+                  border: "1px solid black",
+                  borderRadius: "8px",
+                  marginRight: "10px",
+                  marginTop: "10px",
+                  "&:hover": {
+                    backgroundColor: "#C8E6C9",
+                  },
+                  flexWrap: "wrap",
+                  maxWidth: "100%",
+                  ".MuiChip-label": {
+                    maxWidth: "90%",
+                  },
+                }}
+              />
+            )
+          )}
+        </Box>
+        <CustomTagInput
+          label="add an environmental area"
+          environmental
+          customTags={request.project.fieldsEnvironmentalArea.custom ?? []}
+          setCustomTags={(newCustomTags) =>
+            handleDoubleNestedChange(
+              "project",
+              "fieldsEnvironmentalArea",
+              "custom",
+              newCustomTags
+            )
+          }
+        />
       </Box>
       <Typography variant="body2" fontWeight={600} mt={3}>
         Project&apos;s progress status *
@@ -273,10 +311,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
 const useStyles = makeStyles({
   chipContainer: {
     maxWidth: "800px",
-    display: "flex",
-    flexWrap: "wrap",
-    marginBottom: "5px",
-    alignItems: "center",
   },
 });
 

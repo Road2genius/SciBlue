@@ -120,7 +120,7 @@ const Navbar: React.FC = () => {
 
   return (
     <AppBar
-      position="static"
+      position="sticky"
       color="default"
       sx={{ borderBottom: "1px solid #e0e0e0" }}
     >

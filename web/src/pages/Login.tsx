@@ -2,11 +2,15 @@ import {
   Box,
   Button,
   Container,
+  IconButton,
+  InputAdornment,
   Link,
   TextField,
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import React, { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +25,7 @@ const LoginPage: React.FC = () => {
   const { setUserContext } = useUserContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,11 +62,24 @@ const LoginPage: React.FC = () => {
         <TextField
           fullWidth
           placeholder="Enter password"
-          type="password"
+          type={!showPassword ? "password" : "text"}
           variant="outlined"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           sx={{ marginBottom: "20px" }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                  onMouseDown={(event) => event.preventDefault()}
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <Link href="#" color="#BCBDC7" alignSelf="flex-end" fontWeight={700}>
           Forgot password?

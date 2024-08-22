@@ -33,8 +33,7 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [inputAutoComplete, setInputAutoComplete] = useState<string>("");
-  const [selectedCountry, setSelectedCountry] =
-    useState<CountryNames>(country);
+  const [selectedCountry, setSelectedCountry] = useState<CountryNames>(country);
 
   const handleOpen = () => {
     setSelectedCountry(country);
@@ -62,6 +61,9 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
             backgroundColor: "#C8E6C9",
           },
           textDecoration: "underline",
+          ".MuiChip-label": {
+            fontWeight: "bold",
+          },
         }}
       />
 

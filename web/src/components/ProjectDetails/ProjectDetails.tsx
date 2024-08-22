@@ -14,36 +14,32 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
         Concerning the project we will be working on
       </Typography>
       <Box display="flex" gap={1} my={1} flexWrap="wrap">
-        {project.fieldsEnvironmentalArea.custom?.map(
-          (customField, index) => (
-            <Chip
-              size="small"
-              key={index}
-              label={customField}
-              variant="outlined"
-              sx={{
-                backgroundColor: "#C8E6C9",
-                border: "1px solid black",
-                borderRadius: "8px",
-              }}
-            />
-          )
-        )}
-        {project.fieldsEnvironmentalArea.generic?.map(
-          (genericField, index) => (
-            <Chip
-              size="small"
-              key={index}
-              label={genericField}
-              variant="outlined"
-              sx={{
-                backgroundColor: "#C8E6C9",
-                border: "1px solid black",
-                borderRadius: "8px",
-              }}
-            />
-          )
-        )}
+        {project.fieldsEnvironmentalArea.custom?.map((customField, index) => (
+          <Chip
+            size="small"
+            key={index}
+            label={customField}
+            variant="outlined"
+            sx={{
+              backgroundColor: "#C8E6C9",
+              border: "1px solid black",
+              borderRadius: "8px",
+            }}
+          />
+        ))}
+        {project.fieldsEnvironmentalArea.generic?.map((genericField, index) => (
+          <Chip
+            size="small"
+            key={index}
+            label={genericField}
+            variant="outlined"
+            sx={{
+              backgroundColor: "#C8E6C9",
+              border: "1px solid black",
+              borderRadius: "8px",
+            }}
+          />
+        ))}
       </Box>
       <Box display="flex" alignItems="center" mt={2}>
         {project.projectStartEndEstimation &&
@@ -89,20 +85,22 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
             }}
           />
         </Box>
-        <Box display="flex" alignItems="center" ml={5}>
-          <Typography variant="body2" sx={{ marginX: "8px" }}>
-            Funding:
-          </Typography>
-          <Chip
-            size="small"
-            label={project.projectFunding}
-            sx={{
-              backgroundColor: "#fff",
-              border: "1px solid black",
-              borderRadius: "8px",
-            }}
-          />
-        </Box>
+        {project.projectFunding && (
+          <Box display="flex" alignItems="center" ml={5}>
+            <Typography variant="body2" sx={{ marginX: "8px" }}>
+              Funding:
+            </Typography>
+            <Chip
+              size="small"
+              label={project.projectFunding}
+              sx={{
+                backgroundColor: "#fff",
+                border: "1px solid black",
+                borderRadius: "8px",
+              }}
+            />
+          </Box>
+        )}
       </Box>
       <Box mt={8}>
         <Typography

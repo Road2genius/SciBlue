@@ -64,7 +64,12 @@ const InterestSelector: React.FC<InterestSelectorProps> = ({
               border: "1px solid black",
               borderRadius: "8px",
               "&:hover": {
-                backgroundColor: "#C8E6C9",
+                backgroundColor:
+                user.kindOfCollaborationWanted.typeOfOrganization.includes(
+                  label as TypeOfOrganization
+                )
+                  ? "#C8E6C9"
+                  : "transparent",
               },
             }}
             clickable

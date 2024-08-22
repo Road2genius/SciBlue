@@ -10,6 +10,7 @@ interface TextFieldProps {
   required?: boolean;
   multiline?: boolean;
   short?: boolean;
+  InputProps?: object;
 }
 
 const CustomTextField: React.FC<TextFieldProps> = ({
@@ -21,6 +22,7 @@ const CustomTextField: React.FC<TextFieldProps> = ({
   required = false,
   multiline = false,
   short = false,
+  InputProps,
 }) => (
   <>
     <Typography
@@ -39,6 +41,7 @@ const CustomTextField: React.FC<TextFieldProps> = ({
       onChange={onChange}
       multiline={multiline}
       rows={multiline ? 4 : undefined}
+      InputProps={InputProps}
       sx={{
         marginBottom: "20px",
         maxWidth: "100%",

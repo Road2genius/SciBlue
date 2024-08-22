@@ -7,6 +7,7 @@ interface CustomTagInputProps {
   label?: string;
   customTags: string[];
   setCustomTags: (customTags: string[]) => void;
+  environmental?: boolean;
 }
 
 const CustomTagInput: React.FC<CustomTagInputProps> = ({
@@ -15,6 +16,7 @@ const CustomTagInput: React.FC<CustomTagInputProps> = ({
   label,
   customTags,
   setCustomTags,
+  environmental,
 }) => {
   const [customTag, setCustomTag] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
@@ -48,14 +50,39 @@ const CustomTagInput: React.FC<CustomTagInputProps> = ({
         {subtitle}
       </Typography>
       <Box display="flex" alignItems="center">
-        <Box>
-          {customTags?.map((customTag, index) => (
+        <Box maxWidth="800px">
+          {!environmental && (
+            <>
+              {customTags?.map((customTag, index) => (
+                <Chip
+                  key={index}
+                  label={customTag}
+                  onDelete={handleDeleteKeyword(customTag)}
+                  sx={{
+                    backgroundColor: "#C8E6C9",
+                    border: "1px solid black",
+                    borderRadius: "8px",
+                    marginRight: "10px",
+                    marginTop: "10px",
+                    "&:hover": {
+                      backgroundColor: "#C8E6C9",
+                    },
+                    flexWrap: "wrap",
+                    maxWidth: "100%",
+                    ".MuiChip-label": {
+                      maxWidth: "90%",
+                    },
+                  }}
+                />
+              ))}
+            </>
+          )}
+          <Box display="flex" alignItems="center">
             <Chip
-              key={index}
-              label={customTag}
-              onDelete={handleDeleteKeyword(customTag)}
+              label={`+ ${label}`}
+              onClick={handleOpen}
               sx={{
-                backgroundColor: "#C8E6C9",
+                backgroundColor: "#fff",
                 border: "1px solid black",
                 borderRadius: "8px",
                 marginRight: "10px",
@@ -63,26 +90,13 @@ const CustomTagInput: React.FC<CustomTagInputProps> = ({
                 "&:hover": {
                   backgroundColor: "#C8E6C9",
                 },
+                textDecoration: "underline",
+                ".MuiChip-label": {
+                  fontWeight: "bold",
+                },
               }}
             />
-          ))}
-        </Box>
-        <Box display="flex" alignItems="center">
-          <Chip
-            label={`+ ${label}`}
-            onClick={handleOpen}
-            sx={{
-              backgroundColor: "#fff",
-              border: "1px solid black",
-              borderRadius: "8px",
-              marginRight: "10px",
-              marginTop: "10px",
-              "&:hover": {
-                backgroundColor: "#C8E6C9",
-              },
-              textDecoration: "underline",
-            }}
-          />
+          </Box>
         </Box>
       </Box>
       <Modal

@@ -1,6 +1,14 @@
-import React from "react";
-import { Box, Typography, Divider } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  Divider,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
 import CustomTextField from "../CustomTextField/CustomTextField";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { UserReq } from "../../../../shared-types/userData";
 
 interface LoginField {
@@ -26,6 +34,8 @@ const LoginInformation: React.FC<LoginInformationProps> = ({
   user,
   fromProfileInformation,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   if (!user.organizationAffiliated) {
     return;
   }
@@ -50,7 +60,9 @@ const LoginInformation: React.FC<LoginInformationProps> = ({
           key={index + 4}
           label={getGoodLabel(field)}
           placeholder={field.placeholder}
-          type={field.type}
+          type={
+            field.type === "password" && !showPassword ? "password" : "text"
+          }
           value={field.value ?? ""}
           onChange={(e) =>
             handleChange(field.textfield as keyof typeof user, e.target.value)
@@ -58,6 +70,20 @@ const LoginInformation: React.FC<LoginInformationProps> = ({
           required={field.required}
           multiline={field.multiline}
           short={true}
+          InputProps={{
+            endAdornment:
+              field.type === "password" ? (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword(!showPassword)}
+                    onMouseDown={(event) => event.preventDefault()}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ) : null,
+          }}
         />
       ))}
       <Box mt={8} mb={5} ml={8}>

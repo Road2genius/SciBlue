@@ -76,7 +76,12 @@ const CollaborationDetails: React.FC<CollaborationDetailsProps> = ({
               border: "1px solid black",
               borderRadius: "8px",
               "&:hover": {
-                backgroundColor: "#C8E6C9",
+                backgroundColor:
+                  request.kindOfCollaborationWanted.typeOfCollaboration.includes(
+                    label as TypeOfCollaboration
+                  )
+                    ? "#C8E6C9"
+                    : "transparent",
               },
             }}
             clickable

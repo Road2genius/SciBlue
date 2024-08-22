@@ -36,7 +36,11 @@ app.use(cookieParser());
 
 // Avatars
 console.log("Serving avatars from:", path.resolve(__dirname, "../../public/avatars"));
-app.use("/avatars", express.static(path.resolve(__dirname, "../../public/avatars")));
+if (nodeEnv === "development") {
+  app.use("/avatars", express.static(path.resolve(__dirname, "../public/avatars")));
+} else {
+  app.use("/avatars", express.static(path.resolve(__dirname, "../../public/avatars")));
+}
 
 // Middleware
 app.use(cors(corsOptions));
