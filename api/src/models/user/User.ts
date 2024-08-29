@@ -46,6 +46,7 @@ export interface IUser extends Document {
   proDoesResearch?: boolean;
   avatar: string;
   refreshToken: string;
+  activatedAccountStatus: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -104,6 +105,7 @@ const userSchema: Schema = new Schema(
     proDoesResearch: { type: Boolean },
     avatar: { type: String },
     refreshToken: { type: String },
+    activatedAccountStatus: { type: Boolean },
   },
   { timestamps: true }
 );

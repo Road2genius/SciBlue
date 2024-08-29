@@ -7,6 +7,7 @@ export const ENDPOINT = {
     DELETE_USER_PATH: `/users/:id`,
     UPDATE_USER_PATH: `/users/:id`,
     GET_USERS_LIST_PATH: `/users`,
+    ACTIVATE_ACCOUNT_EMAIL: '/users/activation/:token'
   },
   AUTH: {
     LOGIN_PATH: `/login`,

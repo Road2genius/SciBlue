@@ -22,6 +22,7 @@ import CreateQuestion from "./pages/CreateQuestion";
 import QuestionsList from "./pages/QuestionsList";
 import QuestionDetail from "./pages/QuestionDetail";
 import EditQuestion from "./pages/EditQuestion";
+import AccountActivated from "./pages/AccountActivated";
 
 const MainLayout = (): JSX.Element => <Outlet />;
 
@@ -67,6 +68,7 @@ const App: React.FC = () => {
             path="/question/edit/:questionId"
             element={<PrivateRoute element={<EditQuestion />} />}
           />
+          <Route path="/account-activated" element={<AccountActivated />} />
         </Routes>
       </Suspense>
       <Footer />

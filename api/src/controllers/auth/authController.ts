@@ -6,7 +6,7 @@ import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../constants/
 import { CustomError } from "../../types/error/customError";
 import jwt from "jsonwebtoken";
 import { successHandler } from "../../middleware/responseHandler";
-import { sendEmail } from "../../config/email";
+// import { sendEmail } from "../../config/email";
 import cache from "../../middleware/auth";
 import { JWT_SECRET_KEY, REFRESH_TOKEN } from "../../../src/config/config";
 
@@ -156,94 +156,94 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
-export const requestPasswordReset = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  try {
-    const { email } = req.body;
-    const user = await UserModel.findOne({ email });
+// export const requestPasswordReset = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+//   try {
+//     const { email } = req.body;
+//     const user = await UserModel.findOne({ email });
 
-    if (!user) {
-      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
-      error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
-      error.code = ERROR_CODES.USER_NOT_FOUND;
-      throw error;
-    }
+//     if (!user) {
+//       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
+//       error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
+//       error.code = ERROR_CODES.USER_NOT_FOUND;
+//       throw error;
+//     }
 
-    const token = crypto.randomBytes(32).toString("hex");
+//     const token = crypto.randomBytes(32).toString("hex");
 
-    cache.set(email, token);
+//     cache.set(email, token);
 
-    const resetUrl = `${process.env.BASE_URL}/reset-password?token=${token}`;
-    const message = `You requested a password reset. Click this link to reset your password: ${resetUrl}`;
-    await sendEmail(user.email, "Password Reset Request", message);
+//     const resetUrl = `${process.env.BASE_URL}/reset-password?token=${token}`;
+//     const message = `You requested a password reset. Click this link to reset your password: ${resetUrl}`;
+//     await sendEmail(user.email, "Password Reset Request", message);
 
-    successHandler<{ message: string }>(
-      req,
-      res,
-      {
-        message: "Email sent",
-      },
-      HTTP_STATUS_CODES.OK
-    );
-  } catch (error) {
-    next(error);
-  }
-};
+//     successHandler<{ message: string }>(
+//       req,
+//       res,
+//       {
+//         message: "Email sent",
+//       },
+//       HTTP_STATUS_CODES.OK
+//     );
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
-export const resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  try {
-    const { token, newPassword } = req.body;
-    const email = req.query.email as string | undefined;
+// export const resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+//   try {
+//     const { token, newPassword } = req.body;
+//     const email = req.query.email as string | undefined;
 
-    if (!email) {
-      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
-      error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
-      error.code = ERROR_CODES.VALIDATION_ERROR;
-      error.message = "Email is required";
-      throw error;
-    }
+//     if (!email) {
+//       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
+//       error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
+//       error.code = ERROR_CODES.VALIDATION_ERROR;
+//       error.message = "Email is required";
+//       throw error;
+//     }
 
-    if (!newPassword) {
-      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
-      error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
-      error.code = ERROR_CODES.VALIDATION_ERROR;
-      error.message = "Password is required";
-      throw error;
-    }
+//     if (!newPassword) {
+//       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
+//       error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
+//       error.code = ERROR_CODES.VALIDATION_ERROR;
+//       error.message = "Password is required";
+//       throw error;
+//     }
 
-    const cachedToken = cache.get(email) as string | undefined;
+//     const cachedToken = cache.get(email) as string | undefined;
 
-    if (!cachedToken || cachedToken !== token) {
-      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
-      error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
-      error.code = ERROR_CODES.VALIDATION_ERROR;
-      error.message = "Invalid or expired token";
-      throw error;
-    }
+//     if (!cachedToken || cachedToken !== token) {
+//       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
+//       error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
+//       error.code = ERROR_CODES.VALIDATION_ERROR;
+//       error.message = "Invalid or expired token";
+//       throw error;
+//     }
 
-    const user = await UserModel.findOne({ email });
+//     const user = await UserModel.findOne({ email });
 
-    if (!user) {
-      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
-      error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
-      error.code = ERROR_CODES.USER_NOT_FOUND;
-      throw error;
-    }
+//     if (!user) {
+//       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
+//       error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
+//       error.code = ERROR_CODES.USER_NOT_FOUND;
+//       throw error;
+//     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
-    await user.save();
+//     const hashedPassword = await bcrypt.hash(newPassword, 10);
+//     user.password = hashedPassword;
+//     await user.save();
 
-    cache.del(email);
+//     cache.del(email);
 
-    successHandler<{ message: string }>(
-      req,
-      res,
-      {
-        message: "Password reset successfully",
-      },
-      HTTP_STATUS_CODES.OK
-    );
-  } catch (error) {
-    next(error);
-  }
-};
+//     successHandler<{ message: string }>(
+//       req,
+//       res,
+//       {
+//         message: "Password reset successfully",
+//       },
+//       HTTP_STATUS_CODES.OK
+//     );
+//   } catch (error) {
+//     next(error);
+//   }
+// };
