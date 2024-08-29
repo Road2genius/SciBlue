@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
+import { Trans, useTranslation } from "react-i18next";
 
 interface ConfirmationDialogProps {
   openDialog: boolean;
@@ -20,6 +21,8 @@ const ConfirmationUserDialog: React.FC<ConfirmationDialogProps> = ({
   openDialog,
   handleCloseDialog,
 }) => {
+  useTranslation();
+
   return (
     <Dialog
       open={openDialog}
@@ -33,32 +36,28 @@ const ConfirmationUserDialog: React.FC<ConfirmationDialogProps> = ({
       )}
     >
       <DialogTitle sx={{ fontWeight: "700", color: "#197278" }}>
-        Thank you for registering !
+        <Trans i18nKey="confirmation_dialog_sign_up_title"/>
       </DialogTitle>
       <DialogContent sx={{ marginLeft: "30px", marginY: "20px" }}>
         <Typography variant="body2" fontWeight={700}>
-          Protecting our members is our priority
+          <Trans i18nKey="confirmation_dialog_sign_up_subtitle"/>
         </Typography>
         <Box display="flex" my={2}>
           <DoneRoundedIcon sx={{ color: "#197278", marginRight: "2px" }} />
           <Typography variant="body2">
-            Your profile will be reviewed within a few working hours
+            <Trans i18nKey="confirmation_dialog_sign_up_content_one"/>
           </Typography>
         </Box>
         <Box display="flex" my={2}>
           <DoneRoundedIcon sx={{ color: "#197278", marginRight: "2px" }} />
           <Typography variant="body2">
-            Should we need any further information to confirm your identity, we
-            will contact you via email
+            <Trans i18nKey="confirmation_dialog_sign_up_content_two"/>
           </Typography>
         </Box>
         <Box display="flex" my={2}>
           <DoneRoundedIcon sx={{ color: "#197278", marginRight: "2px" }} />
           <Typography variant="body2">
-            SciBlue wants to ensure the reliability of its members and protect
-            the action of those who choose to fight against environmental
-            crisis. We will remove access to any fake profil or any member who
-            do not meet with the purpose of these plateform
+            <Trans i18nKey="confirmation_dialog_sign_up_content_tree"/>
           </Typography>
         </Box>
       </DialogContent>
@@ -81,7 +80,7 @@ const ConfirmationUserDialog: React.FC<ConfirmationDialogProps> = ({
           }}
           onClick={handleCloseDialog}
         >
-          Close
+          <Trans i18nKey="confirmation_dialog_sign_up_close_button"/>
         </Button>
       </DialogActions>
     </Dialog>

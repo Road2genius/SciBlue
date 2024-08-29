@@ -1,19 +1,21 @@
+import React from "react";
 import { Box, Container, Grid, Link, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 const links: {
   text: string;
   href: string;
 }[] = [
-  { text: "Legal Notice", href: "#" },
-  { text: "Terms of Use", href: "#" },
-  { text: "Privacy Policy", href: "#" },
-  { text: "Contact Us", href: "#" },
+  { text: "landing_footer_legal_notive", href: "#" },
+  { text: "landing_footer_terms_of_use", href: "#" },
+  { text: "landing_footer_private_policy", href: "#" },
+  { text: "landing_footer_contact_us", href: "#" },
 ];
 
 const Footer: React.FC = () => {
   const classes = useStyles();
+  useTranslation();
 
   return (
     <>
@@ -33,8 +35,7 @@ const Footer: React.FC = () => {
           }}
         >
           <Typography variant="body1" fontWeight={600}>
-            This is the first version of the platform, we will keep making it
-            better. Which feature would you like us to add ?
+            <Trans i18nKey="landing_footer_beta_text"/>
           </Typography>
         </Link>
       </Box>
@@ -51,7 +52,9 @@ const Footer: React.FC = () => {
                     "&:hover": { color: "#305B8D" },
                   }}
                 >
-                  <Typography variant="body1">{link.text}</Typography>
+                  <Typography variant="body1">
+                    <Trans i18nKey={link.text}/>
+                  </Typography>
                 </Link>
               </Grid>
             ))}

@@ -23,6 +23,8 @@ import FlagComponent from "../components/FlagComponent/FlagComponent";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import UserDetailModal from "../components/UserDetailModal/UserDetailModal";
 import { getAvatar } from "../components/Navbar/avatar";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../hooks/useTranslatedEnum";
 
 const Community: React.FC = () => {
   const { organizationIsResearcher } = useSignupForm({});
@@ -33,6 +35,8 @@ const Community: React.FC = () => {
   const classes = useStyles();
   const { getCommunityList } = useCommunity();
   const [usersList, setUsersList] = useState<UserRes[]>([]);
+  const { t } = useTranslation();
+  const { translatedOrganizations,translatedFieldsEnvironmentalArea } = useTranslatedEnum();
 
   const getCountryKeyFromValue = (
     countryName: string
@@ -91,7 +95,7 @@ const Community: React.FC = () => {
           color="#197278"
           sx={{ marginBottom: "30px" }}
         >
-          Browse the SciBlue Community
+          <Trans i18nKey="community_page_main_title" />
         </Typography>
         <Box mt={5}>
           <Grid container spacing={5}>
@@ -175,7 +179,7 @@ const Community: React.FC = () => {
                         <Chip
                           size="small"
                           key={index}
-                          label={user.organizationAffiliated}
+                          label={translatedOrganizations[user.organizationAffiliated]}
                           variant="outlined"
                           sx={{
                             backgroundColor: "#DAD7CD",
@@ -194,7 +198,7 @@ const Community: React.FC = () => {
                               <Chip
                                 size="small"
                                 key={index}
-                                label={genericEnvironmental}
+                                label={translatedFieldsEnvironmentalArea[genericEnvironmental]}
                                 variant="outlined"
                                 sx={{
                                   backgroundColor: "#C8E6C9",
@@ -215,7 +219,7 @@ const Community: React.FC = () => {
                               <Chip
                                 size="small"
                                 key={index}
-                                label={genericEnvironmental}
+                                label={translatedFieldsEnvironmentalArea[genericEnvironmental]}
                                 variant="outlined"
                                 sx={{
                                   backgroundColor: "#C8E6C9",
@@ -235,7 +239,7 @@ const Community: React.FC = () => {
                           <Chip
                             size="small"
                             key={index}
-                            label="Funder"
+                            label={t("community_page_funder")}
                             variant="outlined"
                             sx={{
                               backgroundColor: "#DEE126",

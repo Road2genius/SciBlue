@@ -8,6 +8,7 @@ import {
   Button,
   Paper,
 } from "@mui/material";
+import { Trans, useTranslation } from "react-i18next";
 
 interface DeleteCommentDialogProps {
   open: boolean;
@@ -20,6 +21,8 @@ const DeleteCommentDialog: React.FC<DeleteCommentDialogProps> = ({
   onClose,
   onConfirm,
 }) => {
+  useTranslation();
+
   return (
     <Dialog
       open={open}
@@ -33,14 +36,20 @@ const DeleteCommentDialog: React.FC<DeleteCommentDialogProps> = ({
       )}
     >
       <DialogTitle sx={{ fontWeight: "700", color: "#197278" }}>
-        Delete your comment ?
+        <Trans i18nKey="request_detail_dialog_delete_comment_title" />
       </DialogTitle>
       <DialogContent sx={{ marginY: "20px" }}>
         <DialogContentText>
-          Are you sure you want to <b>delete</b> your comment?
+          <Trans
+            i18nKey="request_detail_dialog_delete_comment_subtitle"
+            components={{ 1: <b /> }}
+          />
         </DialogContentText>
         <DialogContentText>
-          This action is <b>permanent.</b>
+          <Trans
+            i18nKey="request_detail_dialog_delete_comment_content"
+            components={{ 1: <b /> }}
+          />
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -60,7 +69,7 @@ const DeleteCommentDialog: React.FC<DeleteCommentDialogProps> = ({
           }}
           onClick={onConfirm}
         >
-          Delete comment
+          <Trans i18nKey="request_detail_dialog_button_delete" />
         </Button>
         <Button
           size="small"
@@ -78,7 +87,7 @@ const DeleteCommentDialog: React.FC<DeleteCommentDialogProps> = ({
           }}
           onClick={onClose}
         >
-          Cancel
+          <Trans i18nKey="request_detail_dialog_button_cancel" />
         </Button>
       </DialogActions>
     </Dialog>

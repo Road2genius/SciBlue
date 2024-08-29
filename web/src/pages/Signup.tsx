@@ -22,9 +22,11 @@ import InterestSelector from "../components/InterestSelection/InterestSelection"
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import ConfirmationUserDialog from "../components/ConfirmationUserDialog/ConfirmationUserDialog";
+import { Trans, useTranslation } from "react-i18next";
 
 const Signup: React.FC = () => {
   const classes = useStyles();
+  useTranslation();
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [termsOfService, setTermsOfService] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -70,15 +72,15 @@ const Signup: React.FC = () => {
         }}
       >
         <Typography variant="h4" fontWeight={700} color="#197278">
-          Sign up
+          <Trans i18nKey="signup_title"/>
         </Typography>
         <Typography variant="body2" mb={4} color="grey">
-          *Required information
+          <Trans i18nKey="signup_information"/>
         </Typography>
         <Grid container>
           <Grid item xs={12} md={11}>
             <Typography variant="h5" fontWeight={600} my={2}>
-              Type of organization you are affiliated with*
+              <Trans i18nKey="signup_organization_affiliated_subtitle"/>
             </Typography>
             <OrganizationChips
               selectedOrganizations={user.organizationAffiliated}
@@ -176,15 +178,7 @@ const Signup: React.FC = () => {
               mr={-1}
             >
               <Typography variant="body2">
-                By checking this box, you are agreeing to our{" "}
-                <span
-                  style={{
-                    fontWeight: "bold",
-                    textDecoration: "underline",
-                  }}
-                >
-                  terms of service
-                </span>
+                <Trans i18nKey="terms_of_service_message" components={{ 1:  <u style={{fontWeight: "bold"}}/> }}/>
               </Typography>
               <Checkbox
                 onChange={(e) => setTermsOfService(e.target.checked)}
@@ -216,7 +210,7 @@ const Signup: React.FC = () => {
                 }}
                 onClick={() => handleValidate()}
               >
-                Validate
+                <Trans i18nKey="signup_information"/>
               </Button>
             </Box>
           </>

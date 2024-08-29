@@ -5,6 +5,7 @@ import { getTextFieldsConfig } from "../CustomTextField/getTextFieldsConfig";
 import { UserReq } from "../../../../shared-types/userData";
 import LanguageSelector from "../LanguageSelection/LanguageSelection";
 import CountrySelector from "../CountrySelection/CountrySelection";
+import { Trans, useTranslation } from "react-i18next";
 
 interface ConditionalTextFieldsProps {
   user: UserReq;
@@ -31,6 +32,8 @@ const ConditionalTextFields: React.FC<ConditionalTextFieldsProps> = ({
   organizationIsResearcher,
   handleChangeChip,
 }) => {
+  const { t } = useTranslation();
+
   const textFields = getTextFieldsConfig(user).filter((field) => {
     if (organizationIsResearcher) {
       return (
@@ -52,14 +55,14 @@ const ConditionalTextFields: React.FC<ConditionalTextFieldsProps> = ({
   return (
     <Box>
       <Typography variant="h5" fontWeight={600} mb={2}>
-        General Information
+      <Trans i18nKey="general_information_title"/>
       </Typography>
       {textFields.slice(2).map((field, index) => (
         <React.Fragment key={index}>
           <CustomTextField
             key={index}
-            label={field.label}
-            placeholder={field.placeholder}
+            label={t(field.label)}
+            placeholder={t(field.placeholder)}
             type={field.type}
             value={field.value}
             onChange={(e) =>
@@ -73,7 +76,7 @@ const ConditionalTextFields: React.FC<ConditionalTextFieldsProps> = ({
             <>
               <Box sx={{ marginBottom: "20px" }}>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Country *
+                  <Trans i18nKey="general_information_country"/>
                 </Typography>
                 <Box display="flex">
                   <Box>
@@ -105,7 +108,7 @@ const ConditionalTextFields: React.FC<ConditionalTextFieldsProps> = ({
               </Box>
               <Box sx={{ marginBottom: "20px" }}>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Spoken languages:
+                  <Trans i18nKey="general_information_language"/>
                 </Typography>
                 <Box display="flex">
                   <Box>
@@ -142,7 +145,7 @@ const ConditionalTextFields: React.FC<ConditionalTextFieldsProps> = ({
               <>
                 <Box sx={{ marginBottom: "20px" }}>
                   <Typography variant="subtitle2" fontWeight={600}>
-                    Country *
+                    <Trans i18nKey="general_information_country"/>
                   </Typography>
                   <Box display="flex">
                     <Box>
@@ -178,7 +181,7 @@ const ConditionalTextFields: React.FC<ConditionalTextFieldsProps> = ({
                     fontWeight={600}
                     sx={{ marginBottom: "5px" }}
                   >
-                    Spoken languages:
+                    <Trans i18nKey="general_information_language"/>
                   </Typography>
                   <Box display="flex">
                     <Box>

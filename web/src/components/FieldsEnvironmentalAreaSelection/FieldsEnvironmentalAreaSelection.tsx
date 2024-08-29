@@ -4,6 +4,8 @@ import { FieldsEnvironmentalArea } from "../../../../shared-types/user";
 import { UserReq } from "../../../../shared-types/userData";
 import { makeStyles } from "@mui/styles";
 import CustomTagInput from "../CustomTag/CustomTag";
+import { useTranslatedEnum } from "../../hooks/useTranslatedEnum";
+import { useTranslation } from "react-i18next";
 
 interface FieldsEnvironmentalAreaSelectorProps {
   user: UserReq;
@@ -30,13 +32,16 @@ const FieldsEnvironmentalAreaSelector: React.FC<
   FieldsEnvironmentalAreaSelectorProps
 > = ({ user, handleDoubleNestedChip, handleDoubleNestedChange, activity }) => {
   const classes = useStyles();
+  const { translatedFieldsEnvironmentalArea } = useTranslatedEnum()
+  const { t } = useTranslation();
+
   return (
     <Box className={classes.chipContainer} mb={2}>
       <Box display="flex" flexWrap="wrap" alignItems="center">
         {Object.values(FieldsEnvironmentalArea).map((label) => (
           <Chip
             key={label}
-            label={label}
+            label={translatedFieldsEnvironmentalArea[label]}
             onClick={() =>
               handleDoubleNestedChip(
                 activity,
@@ -107,7 +112,7 @@ const FieldsEnvironmentalAreaSelector: React.FC<
         ))}
       </Box>
       <CustomTagInput
-        label="add an environmental area"
+        label={t('research_activity_and_expertise_environmental_area_button')}
         environmental
         customTags={user[activity].fieldsEnvironmentalArea.custom}
         setCustomTags={(newCustomTags) =>

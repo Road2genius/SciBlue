@@ -14,7 +14,7 @@ import {
   Box,
 } from "@mui/material";
 import { CountryNames } from "../../../../shared-types/user";
-
+import { Trans, useTranslation } from "react-i18next";
 interface CountrySelectorProps {
   country: CountryNames;
   handleChangeCountry: (country: CountryNames) => void;
@@ -34,6 +34,7 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
   const [open, setOpen] = useState(false);
   const [inputAutoComplete, setInputAutoComplete] = useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState<CountryNames>(country);
+  const { t } = useTranslation();
 
   const handleOpen = () => {
     setSelectedCountry(country);
@@ -49,7 +50,7 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
   return (
     <>
       <Chip
-        label="+ choose a country"
+        label={`+ ` + t('general_information_country_placeholder')}
         onClick={handleOpen}
         sx={{
           backgroundColor: "#fff",
@@ -74,7 +75,7 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Country selection</DialogTitle>
+        <DialogTitle><Trans i18nKey="general_information_dialog_title"/></DialogTitle>
         <DialogContent>
           <Autocomplete
             value={selectedCountry}
@@ -92,7 +93,7 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
             renderInput={(params) => (
               <TextField
                 {...params}
-                placeholder="Type a country to select"
+                placeholder={t('general_information_dialog_placeholder')}
                 variant="outlined"
                 sx={{
                   ".MuiOutlinedInput-root": {
@@ -118,7 +119,7 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
                 },
               }}
             >
-              Close
+              <Trans i18nKey="general_information_dialog_close"/>
             </Button>
             <Button
               disabled={!selectedCountry}
@@ -139,7 +140,7 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
                 marginY: "20px",
               }}
             >
-              Select Country
+              <Trans i18nKey="general_information_dialog_submit"/>
             </Button>
           </Box>
         </DialogActions>

@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { TypeOfOrganization } from "../../../../shared-types/user";
+import { useTranslatedEnum } from "../../hooks/useTranslatedEnum";
 
 interface OrganizationChipsProps {
   selectedOrganizations: TypeOfOrganization;
@@ -13,12 +14,14 @@ const OrganizationChips: React.FC<OrganizationChipsProps> = ({
   handleChange,
 }) => {
   const classes = useStyles();
+  const { translatedOrganizations } = useTranslatedEnum()
+  
   return (
     <Box className={classes.chipContainer}>
       {Object.values(TypeOfOrganization).map((label) => (
         <Chip
           key={label}
-          label={label}
+          label={translatedOrganizations[label]}
           onClick={() => handleChange(label)}
           sx={{
             marginRight: "10px",

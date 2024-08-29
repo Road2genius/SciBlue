@@ -39,8 +39,8 @@ export interface IUser extends Document {
   };
   kindOfCollaborationWanted: {
     typeOfOrganization: TypeOfOrganization[];
-    projectProgressStatus: ProjectProgressStatus;
-    projectFunding?: ProjectFunding;
+    projectProgressStatus: ProjectProgressStatus[];
+    projectFunding?: ProjectFunding[];
   };
   funder?: boolean;
   proDoesResearch?: boolean;
@@ -92,11 +92,11 @@ const userSchema: Schema = new Schema(
         enum: Object.values(TypeOfOrganization),
       },
       projectProgressStatus: {
-        type: String,
+        type: [String],
         enum: Object.values(ProjectProgressStatus),
       },
       projectFunding: {
-        type: String,
+        type: [String],
         enum: Object.values(ProjectFunding),
       },
     },

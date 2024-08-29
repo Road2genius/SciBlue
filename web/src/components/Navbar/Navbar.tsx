@@ -23,7 +23,9 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useSnackbar } from "notistack";
 import { logoutUser } from "../../actions/auth/auth";
 import { getAvatar } from "./avatar";
-
+import { useI18n } from "../../context/I18nContext";
+import { Trans, useTranslation } from "react-i18next";
+import CustomizedLangSwitch from "../LangSwitch/LangSwitch";
 
 const Navbar: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -31,31 +33,30 @@ const Navbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate: NavigateFunction = useNavigate();
   const { userContext, setUserContext } = useUserContext();
-
   const location = useLocation();
   const [activePage, setActivePage] = useState(location.pathname);
+  useTranslation();
+  const i18n = useI18n();
 
   const buttons: {
     name: string;
     path: string;
   }[] = [
-    { name: "Home", path: "/" },
-    { name: "Discussions & Questions", path: "/discussions/list" },
-    { name: "Requests", path: "/request/list" },
-    { name: "Community", path: "/community" },
+    { name: "navbar_home", path: "/" },
+    { name: "navbar_questions", path: "/discussions/list" },
+    { name: "navbar_requests", path: "/request/list" },
+    { name: "navbar_community", path: "/community" },
   ];
 
-  const toggleDrawer =
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return;
-      }
-      setDrawerOpen(open);
-    };
+  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    if (
+      event.type === "keydown" &&
+      ((event as React.KeyboardEvent).key === "Tab" || (event as React.KeyboardEvent).key === "Shift")
+    ) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
 
   const handleLogout = async () => {
     if (userContext?.userId) {
@@ -100,7 +101,7 @@ const Navbar: React.FC = () => {
           >
             <ListItemButton>
               <ListItemText
-                primary={button.name}
+                primary={<Trans i18nKey={button.name} />}
                 sx={{
                   fontWeight: "bold",
                   color: activePage === button.path ? "#008080" : "primary",
@@ -118,12 +119,13 @@ const Navbar: React.FC = () => {
     navigate(buttonPath);
   };
 
+  const handleLanguageChange = (checked: boolean) => {
+    const newLanguage = checked ? "en" : "fr";
+    i18n.changeLanguage(newLanguage);
+  };
+
   return (
-    <AppBar
-      position="sticky"
-      color="default"
-      sx={{ borderBottom: "1px solid #e0e0e0" }}
-    >
+    <AppBar position="sticky" color="default" sx={{ borderBottom: "1px solid #e0e0e0" }}>
       <Toolbar>
         <Box display="flex" flexDirection="column">
           <Typography
@@ -135,7 +137,7 @@ const Navbar: React.FC = () => {
             SciBlue
           </Typography>
           <Typography variant="subtitle1" mt={-1} color="gray">
-            Accelerate change through collaboration
+            <Trans i18nKey="sciblue_slogan" />
           </Typography>
         </Box>
         <Box
@@ -157,10 +159,13 @@ const Navbar: React.FC = () => {
                 color: activePage === button.path ? "#008080" : "primary",
               }}
             >
-              {button.name}
+              <Trans i18nKey={button.name} />
             </Button>
           ))}
         </Box>
+        {/* <Button onClick={() => i18n.changeLanguage("en")}>En</Button> */}
+        {/* <Button onClick={() => i18n.changeLanguage("fr")}>Fr</Button> */}
+        <CustomizedLangSwitch onChange={handleLanguageChange} checked={i18n.language === "en"} />
         <Button
           color="inherit"
           onClick={() => handleNavigateNavBar("/feedback")}
@@ -171,7 +176,7 @@ const Navbar: React.FC = () => {
             color: activePage === "/feedback" ? "#008080" : "primary",
           }}
         >
-          Help us improve
+          <Trans i18nKey="navbar_feedback" />
         </Button>
         {userContext ? (
           <>
@@ -181,11 +186,7 @@ const Navbar: React.FC = () => {
               sx={{ cursor: "pointer" }}
               onClick={(e) => setAnchorEl(e.currentTarget)}
             />
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={() => setAnchorEl(null)}
-            >
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
               <MenuItem
                 divider
                 onClick={() => {
@@ -197,7 +198,7 @@ const Navbar: React.FC = () => {
                   <ManageAccountsOutlinedIcon sx={{ color: "#008080" }} />
                 </Box>
                 <Typography variant="subtitle1" sx={{ marginTop: "-3px" }}>
-                  Profile Information
+                  <Trans i18nKey="navbar_profile" />
                 </Typography>
               </MenuItem>
               <MenuItem onClick={handleLogout}>
@@ -205,7 +206,7 @@ const Navbar: React.FC = () => {
                   <LogoutOutlinedIcon sx={{ color: "#008080" }} />
                 </Box>
                 <Typography variant="subtitle1" sx={{ marginTop: "-3px" }}>
-                  Logout
+                  <Trans i18nKey="navbar_logout" />
                 </Typography>
               </MenuItem>
             </Menu>
@@ -229,15 +230,10 @@ const Navbar: React.FC = () => {
               }}
               onClick={() => navigate("/login")}
             >
-              Login & Signup
+              <Trans i18nKey="navbar_login" />
             </Button>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="end"
-                onClick={toggleDrawer(true)}
-              >
+              <IconButton color="inherit" aria-label="open drawer" edge="end" onClick={toggleDrawer(true)}>
                 <MenuIcon />
               </IconButton>
             </Box>

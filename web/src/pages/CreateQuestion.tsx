@@ -8,22 +8,19 @@ import CustomTagInput from "../components/CustomTag/CustomTag";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../components/Request/ConfirmationDialog";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../hooks/useTranslatedEnum";
 
 const CreateQuestion: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const classes = useStyles();
-  const {
-    question,
-    handleChange,
-    handleNestedChange,
-    handleNestedChip,
-    handleCreateQuestion,
-  } = useQuestionForm({
+  const { t } = useTranslation();
+  const { translatedFieldsEnvironmentalArea } = useTranslatedEnum();
+  const { question, handleChange, handleNestedChange, handleNestedChip, handleCreateQuestion } = useQuestionForm({
     onSuccessCreateQuestion: () => setOpenDialog(true),
-    onErrorCreateQuestion: () =>
-      enqueueSnackbar("Failed to create a question", { variant: "error" }),
+    onErrorCreateQuestion: () => enqueueSnackbar("Failed to create a question", { variant: "error" }),
   });
 
   const handleCloseDialog = () => {
@@ -48,12 +45,12 @@ const CreateQuestion: React.FC = () => {
           }}
         >
           <Typography variant="h4" fontWeight={700} color="#197278" mb={4}>
-            Ask a question or start a discussion
+            <Trans i18nKey="create_question_main_title" />
           </Typography>
           <Box my={2}>
             <CustomTextField
-              label="Title"
-              placeholder="Be specific and imagine you’re asking a question to another person"
+              label={t("create_question_title")}
+              placeholder={t("create_question_title_placeholder")}
               type="text"
               value={question.title}
               onChange={(e) => handleChange("title", e.target.value)}
@@ -62,8 +59,8 @@ const CreateQuestion: React.FC = () => {
           </Box>
           <Box my={2}>
             <CustomTextField
-              label="Body"
-              placeholder="Include all the information someone would need to answer your question"
+              label={t("create_question_body")}
+              placeholder={t("create_question_body_placeholder")}
               type="text"
               value={question.body}
               onChange={(e) => handleChange("body", e.target.value)}
@@ -72,34 +69,22 @@ const CreateQuestion: React.FC = () => {
             />
           </Box>
           <Typography variant="subtitle2" fontWeight={600} mt={2}>
-            Do you already apply your expertise to area(s) related to the
-            environmental crisis?
+            <Trans i18nKey="create_question_application_area" />
           </Typography>
           <Box className={classes.chipContainer} mb={2}>
             <>
               {Object.values(FieldsEnvironmentalArea).map((label) => (
                 <Chip
                   key={label}
-                  label={label}
-                  onClick={() =>
-                    handleNestedChip(
-                      "fieldsEnvironmentalArea",
-                      "generic",
-                      label
-                    )
-                  }
+                  label={translatedFieldsEnvironmentalArea[label]}
+                  onClick={() => handleNestedChip("fieldsEnvironmentalArea", "generic", label)}
                   sx={{
                     marginRight: "10px",
                     marginTop: "10px",
-                    backgroundColor:
-                      question.fieldsEnvironmentalArea.generic.includes(
-                        label as FieldsEnvironmentalArea
-                      )
-                        ? "#C8E6C9"
-                        : "transparent",
-                    color: question.fieldsEnvironmentalArea.generic.includes(
-                      label as FieldsEnvironmentalArea
-                    )
+                    backgroundColor: question.fieldsEnvironmentalArea.generic.includes(label as FieldsEnvironmentalArea)
+                      ? "#C8E6C9"
+                      : "transparent",
+                    color: question.fieldsEnvironmentalArea.generic.includes(label as FieldsEnvironmentalArea)
                       ? "#000"
                       : "",
                     border: "1px solid black",
@@ -112,14 +97,10 @@ const CreateQuestion: React.FC = () => {
                 />
               ))}
               <CustomTagInput
-                label="add an environmental area"
+                label={t("research_activity_and_expertise_environmental_area_button")}
                 customTags={question.fieldsEnvironmentalArea.custom}
                 setCustomTags={(newCustomTags) =>
-                  handleNestedChange(
-                    "fieldsEnvironmentalArea",
-                    "custom",
-                    newCustomTags
-                  )
+                  handleNestedChange("fieldsEnvironmentalArea", "custom", newCustomTags)
                 }
               />
             </>
@@ -142,15 +123,11 @@ const CreateQuestion: React.FC = () => {
             }}
             onClick={() => handleCreateQuestion()}
           >
-            Ask & discuss
+            <Trans i18nKey="create_question_submit" />
           </Button>
         </Box>
       </Container>
-      <ConfirmationDialog
-        entity="question"
-        openDialog={openDialog}
-        handleCloseDialog={handleCloseDialog}
-      />
+      <ConfirmationDialog entity="question" openDialog={openDialog} handleCloseDialog={handleCloseDialog} />
     </>
   );
 };

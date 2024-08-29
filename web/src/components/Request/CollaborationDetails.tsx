@@ -8,6 +8,8 @@ import {
   RequestReqInterface,
   RequestResInterface,
 } from "../../../../shared-types/requestData";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../../hooks/useTranslatedEnum";
 
 interface CollaborationDetailsProps {
   request: RequestReqInterface | RequestResInterface;
@@ -37,20 +39,23 @@ const CollaborationDetails: React.FC<CollaborationDetailsProps> = ({
   handleNestedChip,
 }) => {
   const classes = useStyles();
+  const { t } = useTranslation();
+
+  const { translatedCollaborationsType } = useTranslatedEnum();
 
   return (
     <>
       <Typography variant="h5" fontWeight={600} my={2}>
-        Describe the collaboration you are looking for
+        <Trans i18nKey="create_request_collab_detail_title" />
       </Typography>
       <Typography variant="body2" fontWeight={600} mt={2}>
-        Collaboration type *
+        <Trans i18nKey="create_request_collab_detail_type" />
       </Typography>
       <Box className={classes.chipContainer} mb={2}>
         {Object.values(TypeOfCollaboration).map((label) => (
           <Chip
             key={label}
-            label={label}
+            label={translatedCollaborationsType[label]}
             onClick={() =>
               handleNestedChip(
                 "kindOfCollaborationWanted",
@@ -89,8 +94,10 @@ const CollaborationDetails: React.FC<CollaborationDetailsProps> = ({
         ))}
       </Box>
       <CustomTextField
-        label="Title of your collaboration request"
-        placeholder="The title of your request will be the most visible information. Try to be concise and precise."
+        label={t("create_request_collab_detail_title_request_label")}
+        placeholder={t(
+          "create_request_collab_detail_title_request_placeholder"
+        )}
         type="text"
         value={request.kindOfCollaborationWanted.requestTitle}
         onChange={(e) =>
@@ -103,7 +110,7 @@ const CollaborationDetails: React.FC<CollaborationDetailsProps> = ({
         required
       />
       <CustomTextField
-        label="Describe in details what you are looking for"
+        label={t("create_request_collab_detail_description_request_label")}
         placeholder=""
         type="text"
         value={request.kindOfCollaborationWanted.description}

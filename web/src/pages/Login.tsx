@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  IconButton,
-  InputAdornment,
-  Link,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, IconButton, InputAdornment, Link, TextField, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -16,9 +7,11 @@ import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { useSnackbar } from "notistack";
+import { Trans, useTranslation } from "react-i18next";
 
 const LoginPage: React.FC = () => {
   const classes = useStyles();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { login, loading, error } = useLogin();
@@ -43,25 +36,25 @@ const LoginPage: React.FC = () => {
     <Container maxWidth="xl">
       <Box className={classes.root}>
         <Typography variant="h4" fontWeight={700} color="#197278" mb={4}>
-          Login
+          <Trans i18nKey="login_title" />
         </Typography>
         <Typography variant="body1" fontWeight={600}>
-          Mail
+          <Trans i18nKey="login_mail" />
         </Typography>
         <TextField
           fullWidth
-          placeholder="Enter mail address"
+          placeholder={t("loing_mail_placeholder")}
           variant="outlined"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           sx={{ marginBottom: "20px" }}
         />
         <Typography variant="body1" fontWeight={600}>
-          Password
+          <Trans i18nKey="login_password" />
         </Typography>
         <TextField
           fullWidth
-          placeholder="Enter password"
+          placeholder={t("login_password_placeholder")}
           type={!showPassword ? "password" : "text"}
           variant="outlined"
           value={password}
@@ -82,21 +75,16 @@ const LoginPage: React.FC = () => {
           }}
         />
         <Link href="#" color="#BCBDC7" alignSelf="flex-end" fontWeight={700}>
-          Forgot password?
+          <Trans i18nKey="login_forgot_password" />
         </Link>
         {error && (
           <Typography color="error" mt={2}>
             {error}
           </Typography>
         )}
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="center"
-          mt={4}
-        >
+        <Box display="flex" justifyContent="flex-end" alignItems="center" mt={4}>
           <Link href="/signup" color="#197278" fontWeight={700}>
-            Sign up
+            <Trans i18nKey="login_button_sign_up" />
           </Link>
           <Button
             variant="contained"
@@ -116,7 +104,7 @@ const LoginPage: React.FC = () => {
             }}
             disabled={loading}
           >
-            Next
+            <Trans i18nKey="login_button_next" />
           </Button>
         </Box>
       </Box>

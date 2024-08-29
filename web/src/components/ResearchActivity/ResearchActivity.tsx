@@ -6,6 +6,7 @@ import { Discipline, NestedKeyOf } from "../../../../shared-types/requestData";
 import DisciplineSelector from "../DisciplineSelection/DisciplineSelection";
 import CustomTagInput from "../CustomTag/CustomTag";
 import FieldsEnvironmentalAreaSelector from "../FieldsEnvironmentalAreaSelection/FieldsEnvironmentalAreaSelection";
+import { Trans, useTranslation } from "react-i18next";
 
 interface ResearchActivityProps {
   user: UserReq;
@@ -46,6 +47,9 @@ const ResearchActivity: React.FC<ResearchActivityProps> = ({
   handleDoubleNestedChange,
   professionalDoesResearch,
 }) => {
+
+  const { t } = useTranslation();
+
   if (!user.organizationAffiliated) {
     return;
   }
@@ -53,20 +57,19 @@ const ResearchActivity: React.FC<ResearchActivityProps> = ({
   return (
     <Box>
       <Typography variant="h5" fontWeight={600}>
-        Research activty and expertise
+        <Trans i18nKey="research_activity_and_expertise_title"/>
       </Typography>
       {!professionalDoesResearch && (
         <Typography variant="body2" color="GrayText" mb={2}>
-          Help others understand your work and why your skills can be relevant
-          to the environmental crisis
+          <Trans i18nKey="research_activity_and_expertise_title_placeholder"/>
         </Typography>
       )}
       <Box mt={professionalDoesResearch ? 3 : 0}>
         <CustomTextField
           label={
             professionalDoesResearch
-              ? "Introduce your research activity"
-              : "Introduce yourself and your research"
+              ? t("research_activity_and_expertise_introduction_pro_research")
+              : t("research_activity_and_expertise_introduction")
           }
           placeholder=""
           type="text"
@@ -83,7 +86,7 @@ const ResearchActivity: React.FC<ResearchActivityProps> = ({
         />
       </Box>
       <Typography variant="subtitle2" fontWeight={600}>
-        Disciplines
+        <Trans i18nKey="research_activity_and_expertise_disciplines"/>
       </Typography>
       <Box display="flex" mt={-1}>
         <Box>
@@ -119,10 +122,10 @@ const ResearchActivity: React.FC<ResearchActivityProps> = ({
         </Box>
       </Box>
       <Typography variant="subtitle2" fontWeight={600} mt={2} mb={-1}>
-        Skills & Expertise
+        <Trans i18nKey="research_activity_and_expertise_skills_and_expertise_title"/>
       </Typography>
       <CustomTagInput
-        label="add a skill or expertise"
+        label={t('research_activity_and_expertise_skills_and_expertise_placeholder')}
         customTags={user.researchActivityAndExpertise.expertisesAndSkills}
         setCustomTags={(newCustomTags) =>
           handleNestedChange(
@@ -135,8 +138,7 @@ const ResearchActivity: React.FC<ResearchActivityProps> = ({
       {!professionalDoesResearch && (
         <>
           <Typography variant="subtitle2" fontWeight={600} mt={3}>
-            Do you already apply your expertise to area(s) related to the
-            environmental crisis?
+            <Trans i18nKey="research_activity_and_expertise_environmental_area_title"/>
           </Typography>
           <FieldsEnvironmentalAreaSelector
             user={user}
@@ -146,11 +148,10 @@ const ResearchActivity: React.FC<ResearchActivityProps> = ({
           />
 
           <Typography variant="subtitle2" fontWeight={600} mt={3}>
-            Do you want to add other application area(s), non-related to
-            environmental crisis, where you are used to apply your expertise ?
+            <Trans i18nKey="research_activity_and_expertise_another_application_area_title"/>
           </Typography>
           <CustomTagInput
-            label="add another application area"
+            label={t('research_activity_and_expertise_another_application_area_button')}
             customTags={user.researchActivityAndExpertise.fieldsApplicationArea}
             setCustomTags={(newCustomTags) =>
               handleNestedChange(

@@ -8,6 +8,7 @@ import ProjectDetails from "../components/Request/ProjectDetails";
 import CollaborationDetails from "../components/Request/CollaborationDetails";
 import SpecificsDetails from "../components/Request/SpecificsDetail";
 import ConfirmationDialog from "../components/Request/ConfirmationDialog";
+import { Trans, useTranslation } from "react-i18next";
 
 const CreateRequest: React.FC = () => {
   const [inputAutoComplete, setInputAutoComplete] = useState<string>("");
@@ -15,6 +16,7 @@ const CreateRequest: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const classes = useStyles();
+  useTranslation();
   const {
     request,
     handleCreateRequest,
@@ -59,7 +61,7 @@ const CreateRequest: React.FC = () => {
           }}
         >
           <Typography variant="h4" fontWeight={700} color="#197278" mb={4}>
-            Submit a collaboration request
+            <Trans i18nKey="create_request_title" />
           </Typography>
           <ProjectDetails
             request={request}
@@ -100,7 +102,7 @@ const CreateRequest: React.FC = () => {
             }}
             onClick={() => handleCreateRequest()}
           >
-            Submit
+            <Trans i18nKey="create_request_submit_action_button" />
           </Button>
         </Box>
       </Container>

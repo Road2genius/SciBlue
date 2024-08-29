@@ -21,19 +21,12 @@ export enum ProjectProgressStatus {
   Starting = "Starting",
   Ongoing = "Ongoing",
   NearingCompletion = "Nearing completion",
-  None = "",
 }
 
 export enum ProjectFunding {
   NotFunded = "Not funded",
   LookingForFunding = "Looking for funding",
   Funded = "Funded",
-  None = "",
-}
-
-export enum CollaborationDuration {
-  LongTermCollaboration = "Long-term collaboration",
-  ShortTermOrOneTimeExperiment = "Short term or one time experiment",
 }
 
 export enum CollaborationStatus {
@@ -65,13 +58,6 @@ export enum FieldsEnvironmentalArea {
   RessourcesManagement = "Ressources management",
   Forestry = "Forestry",
 }
-
-export type SkillsOrTechnicalKeys =
-  | "specificTechnicsNames"
-  | "equipment"
-  | "models"
-  | "chemicalAndBiologicalProducts"
-  | "otherSkills";
 
 export enum Languages {
   Arabic = "Arabic",

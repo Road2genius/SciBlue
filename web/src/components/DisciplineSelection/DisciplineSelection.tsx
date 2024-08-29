@@ -42,6 +42,7 @@ import {
   SpaceScienceSubDisciplines,
 } from "../../../../shared-types/disciplines";
 import { Discipline } from "../../../../shared-types/requestData";
+import { Trans, useTranslation } from "react-i18next";
 
 interface DisciplineSelectorProps {
   disciplines: Discipline[];
@@ -60,6 +61,7 @@ const DisciplineSelector: React.FC<DisciplineSelectorProps> = ({
   handleChangeDisciplines,
 }) => {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
   const [inputAutoComplete, setInputAutoComplete] = useState<string>("");
   const [selectedDisciplines, setSelectedDisciplines] =
     useState<Discipline[]>(disciplines);
@@ -79,7 +81,7 @@ const DisciplineSelector: React.FC<DisciplineSelectorProps> = ({
   return (
     <>
       <Chip
-        label="+ choose disciplines"
+        label={`+ ` + t('research_activity_and_expertise_disciplines_placeholder')}
         onClick={handleOpen}
         sx={{
           backgroundColor: "#fff",
@@ -103,7 +105,7 @@ const DisciplineSelector: React.FC<DisciplineSelectorProps> = ({
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Discipline selection</DialogTitle>
+        <DialogTitle><Trans i18nKey="research_activity_and_expertise_disciplines_dialog_title"/></DialogTitle>
         <DialogContent>
           <Autocomplete
             value={selectedDisciplines}
@@ -186,7 +188,7 @@ const DisciplineSelector: React.FC<DisciplineSelectorProps> = ({
             renderInput={(params) => (
               <TextField
                 {...params}
-                placeholder="Type a discipline to add"
+                placeholder={t('research_activity_and_expertise_disciplines_dialog_placeholder')}
                 variant="outlined"
                 sx={{
                   ".MuiOutlinedInput-root": {
@@ -212,7 +214,7 @@ const DisciplineSelector: React.FC<DisciplineSelectorProps> = ({
                 },
               }}
             >
-              Close
+              <Trans i18nKey="general_information_dialog_close"/>
             </Button>
             <Button
               disabled={selectedDisciplines.length === 0}
@@ -233,7 +235,7 @@ const DisciplineSelector: React.FC<DisciplineSelectorProps> = ({
                 marginY: "20px",
               }}
             >
-              Add disciplines
+              <Trans i18nKey="research_activity_and_expertise_disciplines_dialog_submit"/>
             </Button>
           </Box>
         </DialogActions>

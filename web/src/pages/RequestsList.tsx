@@ -2,15 +2,13 @@ import { Box, CircularProgress, Container, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import TabsRequestComponent from "../components/Tabs/TabsRequest";
-import {
-  getRequestCommentListAction,
-  getRequestListAction,
-} from "../actions/request/request";
+import { getRequestCommentListAction, getRequestListAction } from "../actions/request/request";
 import { RequestResInterface } from "../../../shared-types/requestData";
 import { getUserByIdAction } from "../actions/user/user";
 import { TypeOfOrganization } from "../../../shared-types/user";
 import { useUserContext } from "../context/UserContext";
 import { UserRes } from "../../../shared-types/userData";
+import { Trans, useTranslation } from "react-i18next";
 
 export interface UserRequest {
   id: string;
@@ -23,16 +21,11 @@ export interface UserRequest {
 
 const RequestsList: React.FC = () => {
   const classes = useStyles();
+  const { t } = useTranslation();
   const [requestsList, setRequestsList] = useState<RequestResInterface[]>([]);
-  const [usersList, setUsersList] = useState<{ [key: string]: UserRequest }>(
-    {}
-  );
-  const [userCommentedRequests, setUserCommentedRequests] = useState<
-    RequestResInterface[]
-  >([]);
-  const [userSubmittedRequests, setUserSubmittedRequests] = useState<
-    RequestResInterface[]
-  >([]);
+  const [usersList, setUsersList] = useState<{ [key: string]: UserRequest }>({});
+  const [userCommentedRequests, setUserCommentedRequests] = useState<RequestResInterface[]>([]);
+  const [userSubmittedRequests, setUserSubmittedRequests] = useState<RequestResInterface[]>([]);
   const { userContext } = useUserContext();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -42,19 +35,13 @@ const RequestsList: React.FC = () => {
         const requests = await getRequestListAction();
         setRequestsList(requests);
 
-        const uniqueUserIds = [
-          ...new Set(requests.map((request) => request.userId)),
-        ];
+        const uniqueUserIds = [...new Set(requests.map((request) => request.userId))];
 
-        const usersData = await Promise.all(
-          uniqueUserIds.map((id) => getUserByIdAction(id))
-        );
+        const usersData = await Promise.all(uniqueUserIds.map((id) => getUserByIdAction(id)));
 
         const usersMap: { [key: string]: UserRequest } = requests.reduce(
           (acc, request) => {
-            const user = usersData.find(
-              (user: UserRes) => user._id === request.userId
-            );
+            const user = usersData.find((user: UserRes) => user._id === request.userId);
             if (user) {
               acc[request._id] = {
                 id: user._id,
@@ -75,9 +62,7 @@ const RequestsList: React.FC = () => {
         const submittedRequests = [];
         for (const request of requests) {
           const comments = await getRequestCommentListAction(request._id);
-          if (
-            comments.some((comment) => comment.userId === userContext?.userId)
-          ) {
+          if (comments.some((comment) => comment.userId === userContext?.userId)) {
             commentedRequests.push(request);
           }
           if (request.userId === userContext?.userId) {
@@ -99,12 +84,7 @@ const RequestsList: React.FC = () => {
 
   if (loading)
     return (
-      <Box
-        className={classes.root}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Box className={classes.root} display="flex" justifyContent="center" alignItems="center">
         <CircularProgress sx={{ color: "#197278" }} />
       </Box>
     );
@@ -124,13 +104,13 @@ const RequestsList: React.FC = () => {
         }}
       >
         <Typography variant="h4" fontWeight={700} color="#197278" mb={4}>
-          Collaboration requests
+          <Trans i18nKey="requests_list_page_title" />
         </Typography>
         <TabsRequestComponent
           titles={[
-            "All requests",
-            "Requests you have answered",
-            "Requests you have submitted",
+            t("requests_list_page_tabs_one"),
+            t("requests_list_page_tabs_two"),
+            t("requests_list_page_tabs_tree"),
           ]}
           requestsList={requestsList}
           usersRequest={usersList}

@@ -15,6 +15,8 @@ import {
   RequestReqInterface,
   RequestResInterface,
 } from "../../../../shared-types/requestData";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../../hooks/useTranslatedEnum";
 
 interface ProjectDetailsProps {
   request: RequestReqInterface | RequestResInterface;
@@ -68,18 +70,27 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
   handleDateChange,
 }) => {
   const classes = useStyles();
+  const { t } = useTranslation();
+
+  const {
+    translatedFieldsEnvironmentalArea,
+    translatedProjectProgressStatus,
+    translatedProjectFunding,
+  } = useTranslatedEnum();
 
   return (
     <Box mb={3}>
       <Typography variant="h5" fontWeight={600}>
-        Describe the project you are working on
+        <Trans i18nKey="create_request_project_detail_title" />
       </Typography>
       <Typography variant="body2" mb={4} color="grey">
-        Explain here the project, and not the request of collaboration needed
+        <Trans i18nKey="create_request_project_detail_subtitle" />
       </Typography>
       <CustomTextField
-        label="Title of your project"
-        placeholder="Title of the project"
+        label={t("create_request_project_detail_title_project_label")}
+        placeholder={t(
+          "create_request_project_detail_title_project_placeholder"
+        )}
         type="text"
         value={request.project.projectTitle}
         onChange={(e) =>
@@ -88,8 +99,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         required
       />
       <CustomTextField
-        label="Summary"
-        placeholder="Enter here a description of the project (context, achievements, goal ...) The more details you provide, the more it will make people want to collaborate with you."
+        label={t("create_request_project_detail_summary")}
+        placeholder={t("create_request_project_detail_summary_placeholder")}
         type="text"
         value={request.project.summary}
         onChange={(e) =>
@@ -99,14 +110,14 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         multiline
       />
       <Typography variant="body2" fontWeight={600} mt={2}>
-        Fields of application *
+        <Trans i18nKey="create_request_project_detail_fields_of_application" />
       </Typography>
       <Box className={classes.chipContainer} mb={2}>
         <Box display="flex" flexWrap="wrap" alignItems="center">
           {Object.values(FieldsEnvironmentalArea).map((label) => (
             <Chip
               key={label}
-              label={label}
+              label={translatedFieldsEnvironmentalArea[label]}
               onClick={() =>
                 handleDoubleNestedChip(
                   "project",
@@ -177,7 +188,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           )}
         </Box>
         <CustomTagInput
-          label="add an environmental area"
+          label={t("research_activity_and_expertise_environmental_area_button")}
           environmental
           customTags={request.project.fieldsEnvironmentalArea.custom ?? []}
           setCustomTags={(newCustomTags) =>
@@ -191,16 +202,15 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         />
       </Box>
       <Typography variant="body2" fontWeight={600} mt={3}>
-        Project&apos;s progress status *
+        <Trans i18nKey="create_request_project_detail_progress_status_title" />
       </Typography>
       <Box className={classes.chipContainer} mb={2}>
         <>
           {Object.values(ProjectProgressStatus)
-            .filter((label) => label !== "")
             .map((label) => (
               <Chip
                 key={label}
-                label={label}
+                label={translatedProjectProgressStatus[label]}
                 onClick={() =>
                   handleNestedChip("project", "projectProgressStatus", label)
                 }
@@ -230,11 +240,11 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         </>
       </Box>
       <Typography variant="body2" fontWeight={600} mt={3}>
-        Could you estimate the start and end dates of the project ?
+        <Trans i18nKey="create_request_project_detail_estimate_date" />
       </Typography>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DateField
-          label="From"
+          label={t("create_request_project_detail_estimate_date_from")}
           size="small"
           value={
             request.project.projectStartEndEstimation[0]
@@ -250,7 +260,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           }}
         />
         <DateField
-          label="To"
+          label={t("create_request_project_detail_estimate_date_to")}
           size="small"
           value={
             request.project.projectStartEndEstimation[1]
@@ -267,16 +277,15 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         />
       </LocalizationProvider>
       <Typography variant="body2" fontWeight={600} mt={3}>
-        Project&apos;s funding
+        <Trans i18nKey="interest_selection_project_funding_title" />
       </Typography>
       <Box className={classes.chipContainer} mb={2}>
         <>
           {Object.values(ProjectFunding)
-            .filter((label) => label !== "")
             .map((label) => (
               <Chip
                 key={label}
-                label={label}
+                label={translatedProjectFunding[label]}
                 onClick={() =>
                   handleNestedChip("project", "projectFunding", label)
                 }

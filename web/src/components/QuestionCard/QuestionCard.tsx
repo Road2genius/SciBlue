@@ -1,13 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Typography,
-  Chip,
-  Box,
-  IconButton,
-  Grid,
-  Button,
-  Divider,
-} from "@mui/material";
+import { Typography, Chip, Box, IconButton, Grid, Button, Divider } from "@mui/material";
 import OpenInNew from "@mui/icons-material/OpenInNew";
 import { DiscussionStatus } from "../../../../shared-types/user";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
@@ -18,18 +10,23 @@ import { truncateText } from "../../utils/utils";
 import { QuestionResInterface } from "../../../../shared-types/questionData";
 import { UserQuestion } from "../../pages/QuestionsList";
 import UserInfo from "../UserInfo/UserInfo";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../../hooks/useTranslatedEnum";
 
 const QuestionCard: React.FC<{
   question: QuestionResInterface;
   usersQuestion: { [key: string]: UserQuestion };
 }> = ({ question, usersQuestion }) => {
   const navigate = useNavigate();
+  useTranslation();
   const handleOpenQuestionDetails = () => {
     navigate(`/question/details/${question._id}`);
   };
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const [lineHeight, setLineHeight] = useState<number>(0);
+
+  const { translatedDiscussionStatus, translatedFieldsEnvironmentalArea } = useTranslatedEnum();
 
   useEffect(() => {
     const updateMeasurements = () => {
@@ -61,22 +58,13 @@ const QuestionCard: React.FC<{
     <>
       <Grid container alignItems="center" spacing={3}>
         <Grid item xs={12} md={1}>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-          >
+          <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
             <Box display="flex" alignItems="center">
               <Box display="flex" alignItems="center">
                 {question.positiveVotes}
                 <ThumbUpOffAltIcon />
               </Box>
-              <Box
-                display="flex"
-                alignItems="center"
-                sx={{ marginLeft: "5px" }}
-              >
+              <Box display="flex" alignItems="center" sx={{ marginLeft: "5px" }}>
                 {question.negativeVotes}
                 <ThumbDownOffAltIcon
                   sx={{
@@ -86,30 +74,22 @@ const QuestionCard: React.FC<{
                 />
               </Box>
             </Box>
-            <Typography
-              variant="subtitle2"
-              sx={{ fontWeight: "bold", color: "#004d40" }}
-            >
-              {question.comments?.length} answers
+            <Typography variant="subtitle2" sx={{ fontWeight: "bold", color: "#004d40" }}>
+              {question.comments?.length} <Trans i18nKey="request_card_answers" />
             </Typography>
             <Chip
               size="small"
-              label={question.discussionStatus}
+              label={translatedDiscussionStatus[question.discussionStatus]}
               icon={
                 question.discussionStatus === DiscussionStatus.closed ? (
-                  <DoneRoundedIcon
-                    sx={{ color: "#197278", marginRight: "2px" }}
-                  />
+                  <DoneRoundedIcon sx={{ color: "#197278", marginRight: "2px" }} />
                 ) : undefined
               }
               sx={{
                 border: "1px solid black",
                 borderRadius: "8px",
                 marginTop: "7px",
-                backgroundColor:
-                  question.discussionStatus === DiscussionStatus.closed
-                    ? "#C8E6C9"
-                    : "transparent",
+                backgroundColor: question.discussionStatus === DiscussionStatus.closed ? "#C8E6C9" : "transparent",
               }}
             />
           </Box>
@@ -125,16 +105,8 @@ const QuestionCard: React.FC<{
             ref={containerRef}
           >
             <Box display="flex" flexDirection="column" width="100%">
-              <Box
-                display="flex"
-                justifyContent="flex-end"
-                alignItems="start"
-                mr={-1}
-              >
-                <IconButton
-                  aria-label="open"
-                  onClick={handleOpenQuestionDetails}
-                >
+              <Box display="flex" justifyContent="flex-end" alignItems="start" mr={-1}>
+                <IconButton aria-label="open" onClick={handleOpenQuestionDetails}>
                   <OpenInNew />
                 </IconButton>
               </Box>
@@ -151,12 +123,7 @@ const QuestionCard: React.FC<{
                 </Typography>
                 <Box display="flex">
                   <Typography variant="body2" paragraph>
-                    {truncateText(
-                      question.body,
-                      3.5,
-                      lineHeight,
-                      containerWidth
-                    )}
+                    {truncateText(question.body, 3.5, lineHeight, containerWidth)}
                     <Button
                       onClick={handleOpenQuestionDetails}
                       sx={{
@@ -172,7 +139,7 @@ const QuestionCard: React.FC<{
                         },
                       }}
                     >
-                      See more
+                      <Trans i18nKey="request_card_see_more" />
                     </Button>
                   </Typography>
                 </Box>
@@ -181,38 +148,34 @@ const QuestionCard: React.FC<{
                 <Grid container spacing={5}>
                   <Grid item xs={12} md={9}>
                     <Box flexWrap="wrap" flexGrow={1}>
-                      {question.fieldsEnvironmentalArea.generic.map(
-                        (genericEnvironmental, index) => (
-                          <Chip
-                            size="small"
-                            key={index}
-                            label={genericEnvironmental}
-                            variant="outlined"
-                            sx={{
-                              border: "1px solid black",
-                              borderRadius: "8px",
-                              marginRight: "10px",
-                              marginTop: "5px",
-                            }}
-                          />
-                        )
-                      )}
-                      {question.fieldsEnvironmentalArea.custom?.map(
-                        (customEnvironmental, index) => (
-                          <Chip
-                            size="small"
-                            key={index}
-                            label={customEnvironmental}
-                            variant="outlined"
-                            sx={{
-                              border: "1px solid black",
-                              borderRadius: "8px",
-                              marginRight: "10px",
-                              marginTop: "5px",
-                            }}
-                          />
-                        )
-                      )}
+                      {question.fieldsEnvironmentalArea.generic.map((genericEnvironmental, index) => (
+                        <Chip
+                          size="small"
+                          key={index}
+                          label={translatedFieldsEnvironmentalArea[genericEnvironmental]}
+                          variant="outlined"
+                          sx={{
+                            border: "1px solid black",
+                            borderRadius: "8px",
+                            marginRight: "10px",
+                            marginTop: "5px",
+                          }}
+                        />
+                      ))}
+                      {question.fieldsEnvironmentalArea.custom?.map((customEnvironmental, index) => (
+                        <Chip
+                          size="small"
+                          key={index}
+                          label={customEnvironmental}
+                          variant="outlined"
+                          sx={{
+                            border: "1px solid black",
+                            borderRadius: "8px",
+                            marginRight: "10px",
+                            marginTop: "5px",
+                          }}
+                        />
+                      ))}
                     </Box>
                   </Grid>
                   <Grid item xs={12} md={3}>

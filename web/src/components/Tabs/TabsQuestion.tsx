@@ -17,11 +17,10 @@ import TuneRoundedIcon from "@mui/icons-material/TuneRounded";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import { QuestionResInterface } from "../../../../shared-types/questionData";
 import { UserQuestion } from "../../pages/QuestionsList";
-import {
-  DiscussionStatus,
-  FieldsEnvironmentalArea,
-} from "../../../../shared-types/user";
+import { DiscussionStatus, FieldsEnvironmentalArea } from "../../../../shared-types/user";
 import QuestionCard from "../QuestionCard/QuestionCard";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../../hooks/useTranslatedEnum";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -30,36 +29,27 @@ interface TabPanelProps {
 }
 
 type FilterSelection = {
-  discussionStatus?: DiscussionStatus;
+  discussionStatus?: DiscussionStatus[];
   fieldsEnvironmentalArea?: FieldsEnvironmentalArea[];
 };
 
 const filterSelectionInitial: FilterSelection = {
-  discussionStatus: undefined,
+  discussionStatus: [],
   fieldsEnvironmentalArea: [],
 };
 
-const applyFilters = (
-  questionList: QuestionResInterface[],
-  filters: FilterSelection
-): QuestionResInterface[] => {
+type FilterSelectionArrays = FieldsEnvironmentalArea | DiscussionStatus;
+
+const applyFilters = (questionList: QuestionResInterface[], filters: FilterSelection): QuestionResInterface[] => {
   return questionList.filter((question) => {
-    if (
-      filters.discussionStatus &&
-      question.discussionStatus !== filters.discussionStatus
-    ) {
-      return false;
+    if (filters.discussionStatus && filters.discussionStatus.length > 0) {
+      if (!filters.discussionStatus.some((field) => question.discussionStatus !== field)) {
+        return false;
+      }
     }
 
-    if (
-      filters.fieldsEnvironmentalArea &&
-      filters.fieldsEnvironmentalArea.length > 0
-    ) {
-      if (
-        !filters.fieldsEnvironmentalArea.some((field) =>
-          question.fieldsEnvironmentalArea.generic.includes(field)
-        )
-      ) {
+    if (filters.fieldsEnvironmentalArea && filters.fieldsEnvironmentalArea.length > 0) {
+      if (!filters.fieldsEnvironmentalArea.some((field) => question.fieldsEnvironmentalArea.generic.includes(field))) {
         return false;
       }
     }
@@ -90,42 +80,22 @@ const TabsQuestionComponent: React.FC<{
   userCommentedQuestions: QuestionResInterface[];
   userSubmittedQuestions: QuestionResInterface[];
   usersQuestion: { [key: string]: UserQuestion };
-}> = ({
-  titles,
-  questionsList,
-  userCommentedQuestions,
-  userSubmittedQuestions,
-  usersQuestion,
-}) => {
+}> = ({ titles, questionsList, userCommentedQuestions, userSubmittedQuestions, usersQuestion }) => {
   const theme = useTheme();
+  useTranslation();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [value, setValue] = useState(0);
   const [openFilterModal, setOpenFilterModal] = useState<boolean>(false);
-  const [filterQuestion, setFilterQuestion] = useState<FilterSelection>(
-    filterSelectionInitial
-  );
-  const [filteredQuestions, setFilteredQuestions] =
-    useState<QuestionResInterface[]>(questionsList);
+  const [filterQuestion, setFilterQuestion] = useState<FilterSelection>(filterSelectionInitial);
+  const [filteredQuestions, setFilteredQuestions] = useState<QuestionResInterface[]>(questionsList);
 
   const handleChange = (_: SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const handleFilterQuestion = <K extends keyof FilterSelection>(
-    field: K,
-    value: FilterSelection[K]
-  ) => {
-    setFilterQuestion({ ...filterQuestion, [field]: value });
-  };
-
-  const handleFilterArrayQuestion = (
-    field: keyof FilterSelection,
-    item: FieldsEnvironmentalArea
-  ) => {
+  const handleFilterArrayQuestion = (field: keyof FilterSelection, item: FilterSelectionArrays) => {
     setFilterQuestion((prevFilterQuestion) => {
-      const currentArray = prevFilterQuestion[
-        field
-      ] as FieldsEnvironmentalArea[];
+      const currentArray = prevFilterQuestion[field] as FilterSelectionArrays[];
 
       if (currentArray.includes(item)) {
         return {
@@ -141,6 +111,8 @@ const TabsQuestionComponent: React.FC<{
     });
   };
 
+  const { translatedDiscussionStatus, translatedFieldsEnvironmentalArea } = useTranslatedEnum();
+
   const onApplyFilters = () => {
     const newFilteredQuestions = applyFilters(questionsList, filterQuestion);
     setFilteredQuestions(newFilteredQuestions);
@@ -150,26 +122,17 @@ const TabsQuestionComponent: React.FC<{
   const memoizedFilteredRequests = useMemo(() => {
     if (value === 1) {
       return filteredQuestions.filter((question) =>
-        userCommentedQuestions.some(
-          (commentedQuestion) => commentedQuestion._id === question._id
-        )
+        userCommentedQuestions.some((commentedQuestion) => commentedQuestion._id === question._id)
       );
     }
     if (value === 2) {
       return filteredQuestions.filter((question) =>
-        userSubmittedQuestions.some(
-          (submittedQuestion) => submittedQuestion._id === question._id
-        )
+        userSubmittedQuestions.some((submittedQuestion) => submittedQuestion._id === question._id)
       );
     }
 
     return filteredQuestions;
-  }, [
-    filteredQuestions,
-    userCommentedQuestions,
-    userSubmittedQuestions,
-    value,
-  ]);
+  }, [filteredQuestions, userCommentedQuestions, userSubmittedQuestions, value]);
 
   return (
     <>
@@ -226,7 +189,7 @@ const TabsQuestionComponent: React.FC<{
                 }}
                 onClick={() => setOpenFilterModal(true)}
               >
-                Filters
+                <Trans i18nKey="tab_request_action_filter_button" />
                 <Box display="flex" alignItems="center" ml={2}>
                   <TuneRoundedIcon />
                 </Box>
@@ -250,7 +213,7 @@ const TabsQuestionComponent: React.FC<{
                   },
                 }}
               >
-                Ask your question
+                <Trans i18nKey="questions_action_button_create" />
               </Button>
             </Box>
           </Box>
@@ -268,28 +231,14 @@ const TabsQuestionComponent: React.FC<{
         maxWidth="md"
         open={openFilterModal}
         onClose={() => setOpenFilterModal(false)}
-        PaperComponent={(props) => (
-          <Paper
-            {...props}
-            elevation={24}
-            sx={{ padding: "30px", borderRadius: "8px" }}
-          />
-        )}
+        PaperComponent={(props) => <Paper {...props} elevation={24} sx={{ padding: "30px", borderRadius: "8px" }} />}
       >
         <Box display="flex" flexDirection="column">
           <Box display="flex" alignItems="center">
-            <Typography
-              variant="body2"
-              fontWeight={600}
-              mt={3}
-              sx={{ flexGrow: 1 }}
-            >
-              Discussion statut
+            <Typography variant="body2" fontWeight={600} mt={3} sx={{ flexGrow: 1 }}>
+              <Trans i18nKey="questions_dialog_discuss_statut" />
             </Typography>
-            <IconButton
-              aria-label="open"
-              onClick={() => setOpenFilterModal(false)}
-            >
+            <IconButton aria-label="open" onClick={() => setOpenFilterModal(false)}>
               <HighlightOffOutlinedIcon />
             </IconButton>
           </Box>
@@ -297,68 +246,52 @@ const TabsQuestionComponent: React.FC<{
             {Object.values(DiscussionStatus).map((label) => (
               <Chip
                 key={label}
-                label={label}
+                label={translatedDiscussionStatus[label]}
                 sx={{
                   marginRight: "10px",
                   marginTop: "10px",
                   border: "1px solid black",
-                  backgroundColor: filterQuestion.discussionStatus?.includes(
-                    label as DiscussionStatus
-                  )
+                  backgroundColor: filterQuestion.discussionStatus?.includes(label as DiscussionStatus)
                     ? "#C8E6C9"
                     : "transparent",
-                  color: filterQuestion.discussionStatus?.includes(
-                    label as DiscussionStatus
-                  )
-                    ? "#000"
-                    : "",
+                  color: filterQuestion.discussionStatus?.includes(label as DiscussionStatus) ? "#000" : "",
                   borderRadius: "8px",
                   "&:hover": {
                     backgroundColor: "#C8E6C9",
                   },
                 }}
-                onClick={() => handleFilterQuestion("discussionStatus", label)}
+                onClick={() => handleFilterArrayQuestion("discussionStatus", label)}
                 clickable
               />
             ))}
           </Box>
 
           <Typography variant="body2" fontWeight={600} mt={3}>
-            Application area
+            <Trans i18nKey="questions_dialog_application_area" />
           </Typography>
           <Box display="flex" sx={{ flexWrap: "wrap" }}>
             {Object.values(FieldsEnvironmentalArea).map((label) => (
               <Chip
                 key={label}
-                label={label}
+                label={translatedFieldsEnvironmentalArea[label]}
                 sx={{
                   marginRight: "10px",
                   marginTop: "10px",
                   border: "1px solid black",
-                  backgroundColor:
-                    filterQuestion.fieldsEnvironmentalArea?.includes(
-                      label as FieldsEnvironmentalArea
-                    )
-                      ? "#C8E6C9"
-                      : "transparent",
-                  color: filterQuestion.fieldsEnvironmentalArea?.includes(
-                    label as FieldsEnvironmentalArea
-                  )
+                  backgroundColor: filterQuestion.fieldsEnvironmentalArea?.includes(label as FieldsEnvironmentalArea)
+                    ? "#C8E6C9"
+                    : "transparent",
+                  color: filterQuestion.fieldsEnvironmentalArea?.includes(label as FieldsEnvironmentalArea)
                     ? "#000"
                     : "",
                   borderRadius: "8px",
                   "&:hover": {
-                    backgroundColor:
-                      filterQuestion.fieldsEnvironmentalArea?.includes(
-                        label as FieldsEnvironmentalArea
-                      )
-                        ? "#C8E6C9"
-                        : "transparent",
+                    backgroundColor: filterQuestion.fieldsEnvironmentalArea?.includes(label as FieldsEnvironmentalArea)
+                      ? "#C8E6C9"
+                      : "transparent",
                   },
                 }}
-                onClick={() =>
-                  handleFilterArrayQuestion("fieldsEnvironmentalArea", label)
-                }
+                onClick={() => handleFilterArrayQuestion("fieldsEnvironmentalArea", label)}
                 clickable
               />
             ))}
@@ -378,7 +311,7 @@ const TabsQuestionComponent: React.FC<{
                 },
               }}
             >
-              Clear all filters
+              <Trans i18nKey="requests_filters_dialog_clear_filters" />
             </Button>
             <Button
               onClick={onApplyFilters}
@@ -398,7 +331,7 @@ const TabsQuestionComponent: React.FC<{
                 marginY: "20px",
               }}
             >
-              Apply filters
+              <Trans i18nKey="requests_filters_dialog_apply_filters" />
             </Button>
           </Box>
         </Box>

@@ -44,8 +44,8 @@ export type UserReq = {
   };
   kindOfCollaborationWanted: {
     typeOfOrganization: TypeOfOrganization[];
-    projectProgressStatus: ProjectProgressStatus;
-    projectFunding: ProjectFunding;
+    projectProgressStatus: ProjectProgressStatus[];
+    projectFunding: ProjectFunding[];
   };
   funder: boolean;
   proDoesResearch: boolean;
@@ -92,8 +92,8 @@ export type UserRes = {
   };
   kindOfCollaborationWanted: {
     typeOfOrganization: TypeOfOrganization[];
-    projectProgressStatus: ProjectProgressStatus;
-    projectFunding: ProjectFunding;
+    projectProgressStatus: ProjectProgressStatus[];
+    projectFunding: ProjectFunding[];
   };
   funder: boolean;
   proDoesResearch: boolean;

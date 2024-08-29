@@ -1,6 +1,8 @@
 import React from "react";
 import { Box, Chip, Typography } from "@mui/material";
 import { RequestResInterface } from "../../../../shared-types/requestData";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../../hooks/useTranslatedEnum";
 
 interface CollaborationDetailsProps {
   kindOfCollaborationWanted: RequestResInterface["kindOfCollaborationWanted"];
@@ -15,10 +17,14 @@ const CollaborationDetails: React.FC<CollaborationDetailsProps> = ({
     new Set(specificsSkills.disciplines.map((discipline) => discipline.primary))
   );
 
+  useTranslation();
+  const { translatedCollaborationsType, translatedOrganizations } =
+    useTranslatedEnum();
+
   return (
     <Box>
       <Typography variant="h6" fontWeight={600}>
-        Concerning the collaboration needed
+        <Trans i18nKey="request_detail_collab_detail_title" />
       </Typography>
       <Box display="flex" gap={1} my={2} flexWrap="wrap" flexGrow={1}>
         {kindOfCollaborationWanted.typeOfCollaboration?.map(
@@ -26,7 +32,7 @@ const CollaborationDetails: React.FC<CollaborationDetailsProps> = ({
             <Chip
               size="small"
               key={index}
-              label={typeOfCollab}
+              label={translatedCollaborationsType[typeOfCollab]}
               variant="outlined"
               sx={{
                 backgroundColor: "#197278",
@@ -50,14 +56,14 @@ const CollaborationDetails: React.FC<CollaborationDetailsProps> = ({
       </Typography>
       <Box display="flex" alignItems="center" my={2}>
         <Typography variant="body2" sx={{ marginRight: "8px" }}>
-          Profile requested:
+          <Trans i18nKey="request_detail_collab_detail_orga_requested" />
         </Typography>
         <Box display="flex" gap={1} flexWrap="wrap">
           {specificsSkills.organizationRequested.map((typeOfOrg, index) => (
             <Chip
               key={index}
               size="small"
-              label={typeOfOrg}
+              label={translatedOrganizations[typeOfOrg]}
               sx={{
                 backgroundColor: "#fff",
                 border: "1px solid black",
@@ -70,7 +76,7 @@ const CollaborationDetails: React.FC<CollaborationDetailsProps> = ({
       </Box>
       <Box display="flex" alignItems="center" my={2}>
         <Typography variant="body2" sx={{ marginRight: "8px" }}>
-          Disciplines:
+          <Trans i18nKey="research_activity_and_expertise_disciplines" />:
         </Typography>
         <Box display="flex" gap={1} flexWrap="wrap">
           {uniquePrimaryDisciplines.map((discipline, index) => (
@@ -91,7 +97,8 @@ const CollaborationDetails: React.FC<CollaborationDetailsProps> = ({
 
       <Box display="flex" alignItems="center" my={2}>
         <Typography variant="body2" sx={{ marginRight: "8px" }}>
-          Skills and expertise:
+          <Trans i18nKey="research_activity_and_expertise_skills_and_expertise_title" />
+          :
         </Typography>
         <Box display="flex" gap={1} flexWrap="wrap">
           {specificsSkills.expertisesAndSkills.map((skill, index) => (

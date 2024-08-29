@@ -10,6 +10,7 @@ import SpecificsDetails from "../components/Request/SpecificsDetail";
 import { RequestResInterface } from "../../../shared-types/requestData";
 import { getRequestByIdAction } from "../actions/request/request";
 import { initialResponseState } from "../types/formData.type";
+import { Trans, useTranslation } from "react-i18next";
 
 const EditRequest: React.FC = () => {
   const { id } = useParams();
@@ -17,6 +18,7 @@ const EditRequest: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const classes = useStyles();
+  useTranslation();
   const [requestDetailsEdit, setRequestDetailsEdit] =
     useState<RequestResInterface>(initialResponseState);
   const {
@@ -26,7 +28,7 @@ const EditRequest: React.FC = () => {
     handleNestedChip,
     handleDoubleNestedChip,
     handleDoubleNestedChange,
-    handleDeleteChipDiscipline
+    handleDeleteChipDiscipline,
   } = useRequestForm({
     onSuccessUpdateRequest: () =>
       enqueueSnackbar("Request edited successful", { variant: "success" }),
@@ -83,7 +85,7 @@ const EditRequest: React.FC = () => {
           }}
         >
           <Typography variant="h4" fontWeight={700} color="#197278" mb={4}>
-            Edit a collaboration request
+            <Trans i18nKey="edit_request_title" />
           </Typography>
           <ProjectDetails
             request={request}
@@ -122,7 +124,7 @@ const EditRequest: React.FC = () => {
                 navigate(`/request/details/${requestDetailsEdit._id}`)
               }
             >
-              Go back
+              <Trans i18nKey="edit_request_button_back" />
             </Button>
             <Button
               variant="contained"
@@ -143,7 +145,7 @@ const EditRequest: React.FC = () => {
               }}
               onClick={() => handleEditRequest()}
             >
-              Edit
+              <Trans i18nKey="edit_request_button_edit" />
             </Button>
           </Box>
         </Box>

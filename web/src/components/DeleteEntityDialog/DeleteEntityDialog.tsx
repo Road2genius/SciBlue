@@ -8,12 +8,13 @@ import {
   Button,
   Paper,
 } from "@mui/material";
+import { Trans, useTranslation } from "react-i18next";
 
 interface DeleteEntityDialogProps {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  entityType: "request" | "question" | "user profile"
+  entityType: "request" | "question" | "user profile";
 }
 
 const DeleteEntityDialog: React.FC<DeleteEntityDialogProps> = ({
@@ -22,6 +23,7 @@ const DeleteEntityDialog: React.FC<DeleteEntityDialogProps> = ({
   onConfirm,
   entityType,
 }) => {
+  useTranslation();
   return (
     <Dialog
       open={open}
@@ -35,17 +37,28 @@ const DeleteEntityDialog: React.FC<DeleteEntityDialogProps> = ({
       )}
     >
       <DialogTitle sx={{ fontWeight: "700", color: "#197278" }}>
-        Delete your {entityType} ?
+        <Trans i18nKey="request_detail_dialog_delete_entity_title" />{" "}
+        {entityType} ?
       </DialogTitle>
       <DialogContent sx={{ marginY: "20px" }}>
         <DialogContentText>
-          Are you sure you want to <b>delete</b> your {entityType}?
+          <Trans
+            i18nKey="request_detail_dialog_delete_entity_subtitle"
+            components={{ 1: <b /> }}
+          />{" "}
+          {entityType}?
         </DialogContentText>
         <DialogContentText>
-          All associated comments will be <b>deleted</b> too.
+          <Trans
+            i18nKey="request_detail_dialog_delete_entity_first_content"
+            components={{ 1: <b /> }}
+          />
         </DialogContentText>
         <DialogContentText>
-          This action is <b>permanent.</b>
+          <Trans
+            i18nKey="request_detail_dialog_delete_entity_second_content"
+            components={{ 1: <b /> }}
+          />
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -65,7 +78,8 @@ const DeleteEntityDialog: React.FC<DeleteEntityDialogProps> = ({
           }}
           onClick={onConfirm}
         >
-          Delete {entityType}
+          <Trans i18nKey="request_detail_dialog_delete_entity_button_delete" />{" "}
+          {entityType}
         </Button>
         <Button
           size="small"
@@ -83,7 +97,7 @@ const DeleteEntityDialog: React.FC<DeleteEntityDialogProps> = ({
           }}
           onClick={onClose}
         >
-          Cancel
+          <Trans i18nKey="request_detail_dialog_delete_entity_button_cancel" />
         </Button>
       </DialogActions>
     </Dialog>
