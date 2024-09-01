@@ -154,9 +154,9 @@ export const getUsersList = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
-const apiInstance = new TransactionalEmailsApi();
 
 export const sendConfirmationEmail = async (email: string, name: string, activationToken: string): Promise<void> => {
+  const apiInstance = new TransactionalEmailsApi();
   const activationUrl = `${process.env.BACKEND_URL}/users/activation/${activationToken}`;
 
   const sendSmtpEmail = new SendSmtpEmail();
@@ -175,7 +175,7 @@ export const sendConfirmationEmail = async (email: string, name: string, activat
   `;
 
   try {
-    const data = await apiInstance.sendTransacEmail(sendSmtpEmail, {
+     await apiInstance.sendTransacEmail(sendSmtpEmail, {
       headers: { "api-key": process.env.BREVO_API_KEY || "" },
     });
     console.log("Email sent successfully:");
@@ -218,7 +218,9 @@ export const activateAccount = async (req: Request, res: Response, next: NextFun
     user.activatedAccountStatus = true;
     await user.save();
 
-    res.redirect(`${process.env.VITE_API_URL}/account-activated`);
+    res.cookie("accountActivated", "true", { maxAge: 10 * 60 * 1000, httpOnly: false });
+
+    res.redirect(`${process.env.VITE_API_URL}/login`);
   } catch (error) {
     next(error);
   }
