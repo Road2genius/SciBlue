@@ -27,6 +27,13 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
     const userId: string = user._id.toString();
     const activationToken = generateActivationToken(userId);
 
+    // dont send email in test mode
+    if (process.env.NODE_ENV?.trim() === "test") {
+      await user.save();
+
+      return successHandler<IUser>(req, res, convertToPlainObject(user), HTTP_STATUS_CODES.CREATED);
+    }
+
     try {
       await sendConfirmationEmail(user.email, user.firstName, activationToken);
 
@@ -154,7 +161,6 @@ export const getUsersList = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
-
 export const sendConfirmationEmail = async (email: string, name: string, activationToken: string): Promise<void> => {
   const apiInstance = new TransactionalEmailsApi();
   const activationUrl = `${process.env.BACKEND_URL}/users/activation/${activationToken}`;
@@ -175,7 +181,7 @@ export const sendConfirmationEmail = async (email: string, name: string, activat
   `;
 
   try {
-     await apiInstance.sendTransacEmail(sendSmtpEmail, {
+    await apiInstance.sendTransacEmail(sendSmtpEmail, {
       headers: { "api-key": process.env.BREVO_API_KEY || "" },
     });
     console.log("Email sent successfully:");
