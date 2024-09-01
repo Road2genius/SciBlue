@@ -4,6 +4,7 @@ import userRoutes from "./routes/user/userRoutes";
 import authRoutes from "./routes/auth/authRoutes";
 import requestRoutes from "./routes/request/requestRoutes";
 import questionRouter from "./routes/question/questionRoutes";
+import feedbackRoutes from "./routes/feedback/feedbackRoutes";
 import cors from "cors";
 import { errorHandler } from "./middleware/responseHandler";
 import bodyParser from "body-parser";
@@ -20,7 +21,7 @@ const nodeEnv = process.env.NODE_ENV?.trim();
 dotenv.config({ path: `.env.${nodeEnv}` });
 
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: process.env.VITE_API_URL || "http://localhost:5174",
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
@@ -35,7 +36,6 @@ app.use(compression({ level: 9 }));
 app.use(cookieParser());
 
 // Avatars
-console.log("Serving avatars from:", path.resolve(__dirname, "../../public/avatars"));
 if (nodeEnv === "development") {
   app.use("/avatars", express.static(path.resolve(__dirname, "../public/avatars")));
 } else {
@@ -52,6 +52,7 @@ app.use(BASE_ROUTE, userRoutes);
 app.use(BASE_ROUTE, authRoutes);
 app.use(BASE_ROUTE, requestRoutes);
 app.use(BASE_ROUTE, questionRouter);
+app.use(BASE_ROUTE, feedbackRoutes);
 
 app.get("/", (req, res) => {
   res.send("");

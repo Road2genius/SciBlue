@@ -7,13 +7,14 @@ export const ENDPOINT = {
     DELETE_USER_PATH: `/users/:id`,
     UPDATE_USER_PATH: `/users/:id`,
     GET_USERS_LIST_PATH: `/users`,
+    ACTIVATE_ACCOUNT_EMAIL: "/users/activation/:token",
   },
   AUTH: {
     LOGIN_PATH: `/login`,
     LOGOUT_PATH: `/logout/:userId`,
     REFRESH_TOKEN_PATH: `/refresh-token`,
     REQUEST_PASSWORD_RESET_PATH: `/request-password-reset`,
-    RESET_PASSWORD_PATH: `/reset-password`,
+    RESET_PASSWORD_PATH: `/reset-password/:token`,
   },
   REQUEST: {
     CREATE_REQUEST_PATH: `/requests`,
@@ -52,5 +53,8 @@ export const ENDPOINT = {
   },
   QUESTION_COMMENT_VOTE: {
     SUBMIT_QUESTION_COMMENT_VOTE_PATH: `/questions/comments/:commentId/votes`,
+  },
+  FEEDBACK: {
+    SUBMIT_FEEDBACK_EMAIL: `/feedback`,
   },
 };

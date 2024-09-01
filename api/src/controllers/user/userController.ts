@@ -8,6 +8,10 @@ import { successHandler } from "../../middleware/responseHandler";
 import { convertToPlainObject } from "../../utils/convertPlainObject";
 import { CommentRequestModel } from "../../models/requests/Comment";
 import { RequestModel } from "../../models/requests/Request";
+import { generateActivationToken } from "../../config/email";
+import { TransactionalEmailsApi, SendSmtpEmail } from "@getbrevo/brevo";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET_KEY } from "../../../src/config/config";
 
 // createUser requests the server to add a new user
 export const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -17,10 +21,28 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
     const user: IUser = new UserModel({
       ...req.body,
       password: hashedPassword,
+      activatedAccountStatus: false,
     });
 
-    await user.save();
-    successHandler<IUser>(req, res, convertToPlainObject(user), HTTP_STATUS_CODES.CREATED);
+    const userId: string = user._id.toString();
+    const activationToken = generateActivationToken(userId);
+
+    // dont send email in test mode
+    if (process.env.NODE_ENV?.trim() === "test") {
+      await user.save();
+
+      return successHandler<IUser>(req, res, convertToPlainObject(user), HTTP_STATUS_CODES.CREATED);
+    }
+
+    try {
+      await sendConfirmationEmail(user.email, user.firstName, activationToken);
+
+      await user.save();
+
+      successHandler<IUser>(req, res, convertToPlainObject(user), HTTP_STATUS_CODES.CREATED);
+    } catch (emailError) {
+      throw emailError;
+    }
   } catch (error) {
     next(error);
   }
@@ -134,6 +156,77 @@ export const getUsersList = async (req: Request, res: Response, next: NextFuncti
   try {
     const users: IUser[] = await UserModel.find();
     successHandler<IUser[]>(req, res, users, HTTP_STATUS_CODES.OK);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const sendConfirmationEmail = async (email: string, name: string, activationToken: string): Promise<void> => {
+  const apiInstance = new TransactionalEmailsApi();
+  const activationUrl = `${process.env.BACKEND_URL}/users/activation/${activationToken}`;
+
+  const sendSmtpEmail = new SendSmtpEmail();
+
+  sendSmtpEmail.to = [{ email, name }];
+  sendSmtpEmail.sender = { email: process.env.EMAIL_FROM, name: "Sciblue" };
+  sendSmtpEmail.subject = "Please Confirm Your Registration";
+  sendSmtpEmail.htmlContent = `
+    <html>
+    <body>
+      <h1>Confirm Your Registration</h1>
+      <p>Click the link below to confirm your registration:</p>
+      <a href="${activationUrl}">Activate Account</a>
+    </body>
+    </html>
+  `;
+
+  try {
+    await apiInstance.sendTransacEmail(sendSmtpEmail, {
+      headers: { "api-key": process.env.BREVO_API_KEY || "" },
+    });
+    console.log("Email sent successfully:");
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
+  }
+};
+
+export const activateAccount = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { token } = req.params;
+
+    if (!JWT_SECRET_KEY) {
+      throw new Error("TOKEN is not defined.");
+    }
+
+    const decoded: any = jwt.verify(token, JWT_SECRET_KEY);
+
+    const user = await UserModel.findById(decoded.userId);
+
+    if (!user) {
+      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
+      error.statusCode = HTTP_STATUS_CODES.NOT_FOUND;
+      error.code = ERROR_CODES.USER_NOT_FOUND;
+      throw error;
+    }
+
+    if (user.activatedAccountStatus) {
+      successHandler<{ message: string }>(
+        req,
+        res,
+        {
+          message: "Account already activated",
+        },
+        HTTP_STATUS_CODES.OK
+      );
+    }
+
+    user.activatedAccountStatus = true;
+    await user.save();
+
+    res.cookie("accountActivated", "true", { maxAge: 10 * 60 * 1000, httpOnly: false });
+
+    res.redirect(`${process.env.VITE_API_URL}/login`);
   } catch (error) {
     next(error);
   }

@@ -1,14 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
-import crypto from "crypto";
 import UserModel, { IUser } from "../../models/user/User";
 import { ERROR_CODES, ERROR_MESSAGES, HTTP_STATUS_CODES } from "../../constants/error/errorCodes";
 import { CustomError } from "../../types/error/customError";
 import jwt from "jsonwebtoken";
 import { successHandler } from "../../middleware/responseHandler";
-import { sendEmail } from "../../config/email";
-import cache from "../../middleware/auth";
 import { JWT_SECRET_KEY, REFRESH_TOKEN } from "../../../src/config/config";
+import { generateActivationToken } from "../../../src/config/email";
+import { TransactionalEmailsApi, SendSmtpEmail } from "@getbrevo/brevo";
 
 export const loginUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -168,41 +167,74 @@ export const requestPasswordReset = async (req: Request, res: Response, next: Ne
       throw error;
     }
 
-    const token = crypto.randomBytes(32).toString("hex");
+    const userId: string = user._id.toString();
+    const resetPasswordToken = generateActivationToken(userId);
 
-    cache.set(email, token);
+    try {
+      await sendResetPasswordEmail(user.email, user.firstName, resetPasswordToken);
 
-    const resetUrl = `${process.env.BASE_URL}/reset-password?token=${token}`;
-    const message = `You requested a password reset. Click this link to reset your password: ${resetUrl}`;
-    await sendEmail(user.email, "Password Reset Request", message);
+      user.resetPasswordToken = resetPasswordToken;
+      user.resetPasswordExpires = Date.now() + 15 * 60 * 1000;
 
-    successHandler<{ message: string }>(
-      req,
-      res,
-      {
-        message: "Email sent",
-      },
-      HTTP_STATUS_CODES.OK
-    );
+      await user.save();
+
+      successHandler<{ message: string }>(
+        req,
+        res,
+        {
+          message: "Email sent",
+        },
+        HTTP_STATUS_CODES.OK
+      );
+    } catch (emailError) {
+      throw emailError;
+    }
   } catch (error) {
     next(error);
   }
 };
 
+export const sendResetPasswordEmail = async (
+  email: string,
+  name: string,
+  resetPasswordToken: string
+): Promise<void> => {
+  const apiInstance = new TransactionalEmailsApi();
+  const resetPasswordUrl = `${process.env.VITE_API_URL}/reset-password/${resetPasswordToken}`;
+
+  const sendSmtpEmail = new SendSmtpEmail();
+
+  sendSmtpEmail.to = [{ email, name }];
+  sendSmtpEmail.sender = { email: process.env.EMAIL_FROM, name: "Sciblue" };
+  sendSmtpEmail.subject = "Reset your password";
+  sendSmtpEmail.htmlContent = `
+    <html>
+    <body>
+      <h1>Reset your password</h1>
+      <p>Click the link below to reset your password:</p>
+      <a href="${resetPasswordUrl}">Activate Account</a>
+      <p><strong>Please note: This link is valid for 15 minutes.</strong></p>
+    </body>
+    </html>
+  `;
+
+  try {
+    await apiInstance.sendTransacEmail(sendSmtpEmail, {
+      headers: { "api-key": process.env.BREVO_API_KEY || "" },
+    });
+    console.log("Email sent successfully:");
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
+  }
+};
+
 export const resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { token, newPassword } = req.body;
-    const email = req.query.email as string | undefined;
+    const { password } = req.body;
+    const { token } = req.params;
 
-    if (!email) {
-      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
-      error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
-      error.code = ERROR_CODES.VALIDATION_ERROR;
-      error.message = "Email is required";
-      throw error;
-    }
-
-    if (!newPassword) {
+    if (!password) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
       error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
       error.code = ERROR_CODES.VALIDATION_ERROR;
@@ -210,17 +242,14 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
       throw error;
     }
 
-    const cachedToken = cache.get(email) as string | undefined;
+    const user = await UserModel.findOne({ resetPasswordToken: token });
 
-    if (!cachedToken || cachedToken !== token) {
-      const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.VALIDATION_ERROR]);
+    if (!user || (user.resetPasswordExpires && user.resetPasswordExpires < Date.now())) {
+      const error: CustomError = new Error("Invalid or expired token.");
       error.statusCode = HTTP_STATUS_CODES.BAD_REQUEST;
-      error.code = ERROR_CODES.VALIDATION_ERROR;
-      error.message = "Invalid or expired token";
+      error.details = [];
       throw error;
     }
-
-    const user = await UserModel.findOne({ email });
 
     if (!user) {
       const error: CustomError = new Error(ERROR_MESSAGES[ERROR_CODES.USER_NOT_FOUND]);
@@ -229,11 +258,11 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
       throw error;
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
     await user.save();
-
-    cache.del(email);
 
     successHandler<{ message: string }>(
       req,

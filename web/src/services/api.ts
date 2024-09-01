@@ -1,3 +1,5 @@
+import { CustomError } from "../utils/handleError";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const api = {
@@ -33,8 +35,11 @@ export const api = {
     });
     const responseData = await response.json();
     if (!response.ok) {
-      throw (
-        responseData.details || responseData.message || "Something went wrong"
+      throw new CustomError(
+        responseData.message,
+        response.status,
+        responseData.code,
+        responseData.details
       );
     }
     return responseData.data;

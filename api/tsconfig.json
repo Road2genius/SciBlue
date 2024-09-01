@@ -17,5 +17,5 @@
     "types": ["jest"]
   },
   "include": ["src/**/*", "tests/**/*", "../shared-types/**/*"],
-  "exclude": ["tests/**/*", "**/*.spec.ts", "node_modules"]
+  "exclude": ["node_modules"]
 }

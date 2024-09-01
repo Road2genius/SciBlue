@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, deleteUser, getUserById, getUsersList, updateUser } from "../../controllers/user/userController";
+import { activateAccount, createUser, deleteUser, getUserById, getUsersList, updateUser } from "../../controllers/user/userController";
 import {
   checkUserExists,
   createUserValidationRules,
@@ -29,5 +29,6 @@ userRouter.patch(
   updateUser
 );
 userRouter.get(ENDPOINT.USER.GET_USERS_LIST_PATH, getUsersList);
+userRouter.get(ENDPOINT.USER.ACTIVATE_ACCOUNT_EMAIL, activateAccount)
 
 export default userRouter;
