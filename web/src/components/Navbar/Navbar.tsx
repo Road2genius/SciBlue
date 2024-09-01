@@ -163,8 +163,6 @@ const Navbar: React.FC = () => {
             </Button>
           ))}
         </Box>
-        {/* <Button onClick={() => i18n.changeLanguage("en")}>En</Button> */}
-        {/* <Button onClick={() => i18n.changeLanguage("fr")}>Fr</Button> */}
         <CustomizedLangSwitch onChange={handleLanguageChange} checked={i18n.language === "en"} />
         <Button
           color="inherit"

@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Checkbox,
-  Container,
-  Divider,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, Checkbox, Container, Divider, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { getTextFieldsConfig } from "../components/CustomTextField/getTextFieldsConfig";
 import useSignupForm from "../hooks/useSignupForm";
@@ -72,21 +63,19 @@ const Signup: React.FC = () => {
         }}
       >
         <Typography variant="h4" fontWeight={700} color="#197278">
-          <Trans i18nKey="signup_title"/>
+          <Trans i18nKey="signup_title" />
         </Typography>
         <Typography variant="body2" mb={4} color="grey">
-          <Trans i18nKey="signup_information"/>
+          <Trans i18nKey="signup_information" />
         </Typography>
         <Grid container>
           <Grid item xs={12} md={11}>
             <Typography variant="h5" fontWeight={600} my={2}>
-              <Trans i18nKey="signup_organization_affiliated_subtitle"/>
+              <Trans i18nKey="signup_organization_affiliated_subtitle" />
             </Typography>
             <OrganizationChips
               selectedOrganizations={user.organizationAffiliated}
-              handleChange={(label) =>
-                handleChangeChip("organizationAffiliated", label)
-              }
+              handleChange={(label) => handleChangeChip("organizationAffiliated", label)}
             />
             <Box mt={8} mb={5} ml={8}>
               <Divider
@@ -107,19 +96,11 @@ const Signup: React.FC = () => {
               <PrivacyLevel
                 privacyMode={user.privacyLevel.mode}
                 username={user.privacyLevel.username}
-                handlePrivacyModeChange={(checked) =>
-                  handleNestedChange("privacyLevel", "mode", checked)
-                }
-                handleUsernameChange={(username) =>
-                  handleNestedChange("privacyLevel", "username", username)
-                }
+                handlePrivacyModeChange={(checked) => handleNestedChange("privacyLevel", "mode", checked)}
+                handleUsernameChange={(username) => handleNestedChange("privacyLevel", "username", username)}
               />
             )}
-            <LoginInformation
-              textFields={textFields}
-              handleChange={handleChange}
-              user={user}
-            />
+            <LoginInformation textFields={textFields} handleChange={handleChange} user={user} />
             <ConditionalTextFields
               user={user}
               handleChange={handleChange}
@@ -127,9 +108,7 @@ const Signup: React.FC = () => {
               handleChangeLanguage={handleChangeLanguage}
               handleDeleteChipLanguage={handleDeleteChipLanguage}
               handleDeleteChipCountry={handleDeleteChipCountry}
-              organizationIsResearcher={organizationIsResearcher(
-                user.organizationAffiliated
-              )}
+              organizationIsResearcher={organizationIsResearcher(user.organizationAffiliated)}
             />
             {organizationIsResearcher(user.organizationAffiliated) ? (
               <ResearchActivity
@@ -151,13 +130,7 @@ const Signup: React.FC = () => {
             )}
             <InterestSelector user={user} handleNestedChip={handleNestedChip} />
           </Grid>
-          <Grid
-            item
-            xs={12}
-            md={1}
-            justifyContent="center"
-            sx={{ display: "flex" }}
-          >
+          <Grid item xs={12} md={1} justifyContent="center" sx={{ display: "flex" }}>
             <Avatar
               variant="square"
               src={getAvatarByOrganization(user.organizationAffiliated)}
@@ -165,20 +138,12 @@ const Signup: React.FC = () => {
             />
           </Grid>
         </Grid>
-        <ConfirmationUserDialog
-          openDialog={openDialog}
-          handleCloseDialog={handleCloseDialog}
-        />
+        <ConfirmationUserDialog openDialog={openDialog} handleCloseDialog={handleCloseDialog} />
         {user.organizationAffiliated && (
           <>
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="flex-end"
-              mr={-1}
-            >
+            <Box display="flex" alignItems="center" justifyContent="flex-end" mr={-1}>
               <Typography variant="body2">
-                <Trans i18nKey="terms_of_service_message" components={{ 1:  <u style={{fontWeight: "bold"}}/> }}/>
+                <Trans i18nKey="terms_of_service_message" components={{ 1: <u style={{ fontWeight: "bold" }} /> }} />
               </Typography>
               <Checkbox
                 onChange={(e) => setTermsOfService(e.target.checked)}
@@ -210,7 +175,7 @@ const Signup: React.FC = () => {
                 }}
                 onClick={() => handleValidate()}
               >
-                <Trans i18nKey="signup_information"/>
+                <Trans i18nKey="signup_validate_button" />
               </Button>
             </Box>
           </>

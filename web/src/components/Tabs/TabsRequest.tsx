@@ -28,6 +28,7 @@ import {
 } from "../../../../shared-types/user";
 import { Trans, useTranslation } from "react-i18next";
 import { useTranslatedEnum } from "../../hooks/useTranslatedEnum";
+import { useI18n } from "../../context/I18nContext";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -134,6 +135,7 @@ const TabsRequestComponent: React.FC<{
 }> = ({ titles, requestsList, userCommentedRequests, userSubmittedRequests, usersRequest }) => {
   const theme = useTheme();
   useTranslation();
+  const i18n = useI18n();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [value, setValue] = useState(0);
   const [openFilterModal, setOpenFilterModal] = useState<boolean>(false);
@@ -263,7 +265,8 @@ const TabsRequestComponent: React.FC<{
                   width: "250px",
                   borderRadius: "8px",
                   textTransform: "none",
-                  height: "45px",
+                  height: i18n.language === "fr" ? "65px" : "45px",
+                  textAlign: "center",
                   fontWeight: 700,
                   backgroundColor: "#008080",
                   "&:hover": {

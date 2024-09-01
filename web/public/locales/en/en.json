@@ -59,6 +59,7 @@
 
   "signup_title": "Sign up",
   "signup_information": "*Required information",
+  "signup_validate_button": "Validate",
   "signup_organization_affiliated_subtitle": "Type of organization you are affiliated with*",
 
   "organization_affiliated_academic_laboratory_and_institute": "Academic laboratory and institute",
