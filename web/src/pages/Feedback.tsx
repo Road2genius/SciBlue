@@ -5,6 +5,7 @@ import { useUserContext } from "../context/UserContext";
 import CustomTextField from "../components/CustomTextField/CustomTextField";
 import OrganizationChips from "../components/OrganizationChips/OrganizationChips";
 import { TypeOfOrganization } from "../../../shared-types/user";
+import { Trans, useTranslation } from "react-i18next";
 
 interface Feedback {
   firstname?: string;
@@ -16,6 +17,7 @@ interface Feedback {
 
 const Feedback: React.FC = () => {
   const classes = useStyles();
+  const { t } = useTranslation();
   const { userContext } = useUserContext();
   const [userFeedback, setUserFeedback] = useState<Feedback>({
     message: "",
@@ -23,22 +25,22 @@ const Feedback: React.FC = () => {
   });
   const textfields = [
     {
-      label: "First name",
-      placeholder: "Enter first name",
+      label: "feedback_page_firstname",
+      placeholder: "feedback_page_firstname_placeholder",
       type: "text",
       value: userFeedback.firstname,
       textfield: "firstname",
     },
     {
-      label: "Last name",
-      placeholder: "Enter last name",
+      label: "feedback_page_lastname",
+      placeholder: "feedback_page_lastname_placeholder",
       type: "text",
       value: userFeedback.lastname,
       textfield: "lastname",
     },
     {
-      label: "Mail address",
-      placeholder: "Enter mail address",
+      label: "feedback_page_mail",
+      placeholder: "feedback_page_mail_placeholder",
       type: "email",
       value: userFeedback.email,
       textfield: "email",
@@ -59,14 +61,8 @@ const Feedback: React.FC = () => {
           },
         }}
       >
-        <Typography
-          variant="h4"
-          fontWeight={700}
-          color="#197278"
-          sx={{ marginBottom: "20px" }}
-        >
-          Contact us or share all your comments and wishes that we
-          <br /> should implement to SciBlue
+        <Typography variant="h4" fontWeight={700} color="#197278" sx={{ marginBottom: "20px" }}>
+          <Trans i18nKey="feedback_page_title" />
         </Typography>
         <Box my={2}>
           {!userContext && (
@@ -75,8 +71,8 @@ const Feedback: React.FC = () => {
                 <React.Fragment key={index}>
                   <CustomTextField
                     key={index}
-                    label={field.label}
-                    placeholder={field.placeholder}
+                    label={t(field.label)}
+                    placeholder={t(field.placeholder)}
                     type={field.type}
                     value={field.value ?? ""}
                     onChange={(e) =>
@@ -90,12 +86,8 @@ const Feedback: React.FC = () => {
                 </React.Fragment>
               ))}
               <Box my={2} mb={4}>
-                <Typography
-                  variant="subtitle2"
-                  fontWeight={600}
-                  sx={{ marginBottom: "5px" }}
-                >
-                  What type of structure are you affiliated with?
+                <Typography variant="subtitle2" fontWeight={600} sx={{ marginBottom: "5px" }}>
+                  <Trans i18nKey="feedback_page_orga_affiliated" />
                 </Typography>
                 <OrganizationChips
                   selectedOrganizations={userFeedback.organizationAffiliated}
@@ -111,8 +103,8 @@ const Feedback: React.FC = () => {
           )}
           <Box my={2}>
             <CustomTextField
-              label="We need your feedback to improve SciBlue"
-              placeholder="What could we do for you :) ?"
+              label={t("feedback_page_label_textfield")}
+              placeholder={t("feedback_page_label_textfield_placeholder")}
               type="text"
               value={userFeedback.message}
               onChange={(e) =>
@@ -143,7 +135,7 @@ const Feedback: React.FC = () => {
               marginY: "20px",
             }}
           >
-            Send feedback
+            <Trans i18nKey="feedback_page_submit" />
           </Button>
         </Box>
       </Box>

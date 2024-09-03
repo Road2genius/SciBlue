@@ -2,9 +2,11 @@ import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import CommunityImage from "../../../assets/images/community.svg";
+import { Trans, useTranslation } from "react-i18next";
 
 const Explications: React.FC = () => {
   const classes = useStyles();
+  useTranslation();
 
   return (
     <Container maxWidth="xl">
@@ -42,15 +44,10 @@ const Explications: React.FC = () => {
           <Grid item xs={12} md={5}>
             <Box display="flex" flexDirection="column" mt={2}>
               <Typography variant="h6" fontWeight={700} paragraph>
-                A community
+                <Trans i18nKey="landing_explantion_title"/>
               </Typography>
               <Typography variant="body1" paragraph>
-                We aspire to a platform where{" "}
-                <strong>all active players</strong> who contribute to or aspire
-                to be part of the environmental solution can{" "}
-                <strong>
-                  easily connect, share ideas, and innovate together.
-                </strong>
+                <Trans i18nKey="landing_explanation_text"/>
               </Typography>
               <Box display="flex" justifyContent="flex-end" mt={2} mb={4}>
                 <Button
@@ -69,9 +66,8 @@ const Explications: React.FC = () => {
                     marginRight: "30px",
                   }}
                 >
-                  Explore our community
+                  <Trans i18nKey="landing_explanation_button_action_community"/>
                 </Button>
-
                 <Button
                   variant="contained"
                   color="primary"
@@ -87,20 +83,17 @@ const Explications: React.FC = () => {
                     },
                   }}
                 >
-                  Create your profile
+                  <Trans i18nKey="landing_button_create_profile"/>
                 </Button>
               </Box>
 
               <Box display="flex" flexDirection="column" mt={2}>
                 <Typography variant="h6" fontWeight={700} paragraph>
-                  Contribute to the interface!
+                  <Trans i18nKey="landing_explantion_second_title"/>
                 </Typography>
 
                 <Typography variant="body1" paragraph>
-                  Our project is resolutely collaborative. Your{" "}
-                  <strong>feedback and suggestions</strong> will be continuously
-                  integrated to improve the platform and make it as useful as
-                  possible for you.
+                  <Trans i18nKey="landing_explanation_second_text"/>
                 </Typography>
               </Box>
             </Box>
@@ -121,7 +114,7 @@ const Explications: React.FC = () => {
                   },
                 }}
               >
-                Help us improve
+                <Trans i18nKey="landing_explanation_button_action_feedback"/>
               </Button>
             </Box>
           </Grid>

@@ -10,6 +10,8 @@ import {
   RequestResInterface,
 } from "../../../../shared-types/requestData";
 import DisciplineSelector from "../DisciplineSelection/DisciplineSelection";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../../hooks/useTranslatedEnum";
 
 interface SpecificsDetailsProps {
   request: RequestReqInterface | RequestResInterface;
@@ -43,20 +45,23 @@ const SpecificsDetails: React.FC<SpecificsDetailsProps> = ({
   handleDeleteChipDiscipline,
 }) => {
   const classes = useStyles();
+  const { t } = useTranslation();
+
+  const { translatedOrganizations } = useTranslatedEnum();
 
   return (
     <>
       <Typography variant="h5" fontWeight={600} my={2}>
-        Are they any specifics you are looking for? (optional)
+        <Trans i18nKey="create_request_specifics_detail_title" />
       </Typography>
       <Typography variant="body2" fontWeight={600} mt={2}>
-        Organization(s) requested
+        <Trans i18nKey="create_request_specifics_detail_organization_requested_title" />
       </Typography>
       <Box className={classes.chipContainer} mb={2}>
         {Object.values(TypeOfOrganization).map((label) => (
           <Chip
             key={label}
-            label={label}
+            label={translatedOrganizations[label]}
             onClick={() =>
               handleNestedChip(
                 "specificsSkills",
@@ -94,7 +99,7 @@ const SpecificsDetails: React.FC<SpecificsDetailsProps> = ({
         ))}
       </Box>
       <Typography variant="body2" fontWeight={600}>
-        Disciplines
+        <Trans i18nKey="create_request_specifics_detail_disciplines_title" />
       </Typography>
       <Box>
         {request.specificsSkills.disciplines.map((discipline, index) => (
@@ -122,10 +127,10 @@ const SpecificsDetails: React.FC<SpecificsDetailsProps> = ({
         />
       </Box>
       <Typography variant="body2" fontWeight={600} mt={2}>
-        Expertises & Skills
+        <Trans i18nKey="create_request_specifics_detail_expertises_and_skills_title" />
       </Typography>
       <CustomTagInput
-        label="add a skill or expertise"
+        label={t("create_request_specifics_detail_expertises_and_skills_label")}
         customTags={request.specificsSkills.expertisesAndSkills ?? []}
         setCustomTags={(newCustomTags) =>
           handleNestedChange(

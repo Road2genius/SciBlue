@@ -11,6 +11,7 @@ import {
   getQuestionListAction,
 } from "../actions/question/question";
 import TabsQuestionComponent from "../components/Tabs/TabsQuestion";
+import { Trans, useTranslation } from "react-i18next";
 
 export interface UserQuestion {
   id: string;
@@ -23,6 +24,7 @@ export interface UserQuestion {
 
 const QuestionsList: React.FC = () => {
   const classes = useStyles();
+  const { t } = useTranslation();
   const [questionsList, setQuestionsList] = useState<QuestionResInterface[]>(
     []
   );
@@ -126,17 +128,16 @@ const QuestionsList: React.FC = () => {
         }}
       >
         <Typography variant="h4" fontWeight={700} color="#197278">
-          Questions and dicussions
+          <Trans i18nKey="questions_list_title" />
         </Typography>
         <Typography variant="subtitle2" color="gray" mb={4}>
-          Put your expertise to good use by taking part to discussions or
-          answering a technical question posted by the community
+          <Trans i18nKey="questions_list_subtitle" />
         </Typography>
         <TabsQuestionComponent
           titles={[
-            "All questions",
-            "Questions you answered",
-            "Questions you asked",
+            t("questions_list_tab_one"),
+            t("questions_list_tab_two"),
+            t("questions_list_tab_tree"),
           ]}
           questionsList={questionsList}
           usersQuestion={usersList}

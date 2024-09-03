@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Divider,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, Container, Divider, Grid, Typography } from "@mui/material";
 import { UserRes } from "../../../shared-types/userData";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import { getUserByIdAction } from "../actions/user/user";
@@ -26,6 +18,7 @@ import { useSnackbar } from "notistack";
 import DeleteEntityDialog from "../components/DeleteEntityDialog/DeleteEntityDialog";
 import { useUserContext } from "../context/UserContext";
 import { getAvatarByOrganization } from "../components/Navbar/avatar";
+import { Trans, useTranslation } from "react-i18next";
 
 const ProfileInformation: React.FC = () => {
   const { userId } = useParams();
@@ -34,8 +27,8 @@ const ProfileInformation: React.FC = () => {
   const classes = useStyles();
   const [profileInformation, setProfileInformation] = useState<UserRes>();
   const { setUserContext } = useUserContext();
-  const [openDialogDeleteUser, setOpenDialogDeleteUser] =
-    useState<boolean>(false);
+  const [openDialogDeleteUser, setOpenDialogDeleteUser] = useState<boolean>(false);
+  useTranslation();
 
   const {
     user,
@@ -94,10 +87,7 @@ const ProfileInformation: React.FC = () => {
       ...user,
       _id: profileInformation!._id,
     };
-    handleUpdateUser(
-      profileInformationToUpdate._id,
-      profileInformationToUpdate
-    );
+    handleUpdateUser(profileInformationToUpdate._id, profileInformationToUpdate);
     setUserContext({
       userId: profileInformationToUpdate._id,
       avatar: profileInformationToUpdate.avatar,
@@ -128,18 +118,16 @@ const ProfileInformation: React.FC = () => {
           }}
         >
           <Typography variant="h4" fontWeight={700} color="#197278" mb={4}>
-            Profile information
+            <Trans i18nKey="profile_information_title" />
           </Typography>
           <Grid container>
             <Grid item xs={12} md={11}>
               <Typography variant="h5" fontWeight={600} my={2}>
-                Type of organization you are affiliated with*
+                <Trans i18nKey="signup_organization_affiliated_subtitle" />
               </Typography>
               <OrganizationChips
                 selectedOrganizations={user.organizationAffiliated}
-                handleChange={(label) =>
-                  handleChangeChip("organizationAffiliated", label)
-                }
+                handleChange={(label) => handleChangeChip("organizationAffiliated", label)}
               />
               <Box mt={8} mb={5} ml={8}>
                 <Divider
@@ -160,12 +148,8 @@ const ProfileInformation: React.FC = () => {
                 <PrivacyLevel
                   privacyMode={user.privacyLevel.mode}
                   username={user.privacyLevel.username}
-                  handlePrivacyModeChange={(checked) =>
-                    handleNestedChange("privacyLevel", "mode", checked)
-                  }
-                  handleUsernameChange={(username) =>
-                    handleNestedChange("privacyLevel", "username", username)
-                  }
+                  handlePrivacyModeChange={(checked) => handleNestedChange("privacyLevel", "mode", checked)}
+                  handleUsernameChange={(username) => handleNestedChange("privacyLevel", "username", username)}
                 />
               )}
               <LoginInformation
@@ -181,9 +165,7 @@ const ProfileInformation: React.FC = () => {
                 handleChangeLanguage={handleChangeLanguage}
                 handleDeleteChipLanguage={handleDeleteChipLanguage}
                 handleDeleteChipCountry={handleDeleteChipCountry}
-                organizationIsResearcher={organizationIsResearcher(
-                  user.organizationAffiliated
-                )}
+                organizationIsResearcher={organizationIsResearcher(user.organizationAffiliated)}
               />
               {organizationIsResearcher(user.organizationAffiliated) ? (
                 <ResearchActivity
@@ -203,18 +185,9 @@ const ProfileInformation: React.FC = () => {
                   handleDoubleNestedChange={handleDoubleNestedChange}
                 />
               )}
-              <InterestSelector
-                user={user}
-                handleNestedChip={handleNestedChip}
-              />
+              <InterestSelector user={user} handleNestedChip={handleNestedChip} />
             </Grid>
-            <Grid
-              item
-              xs={12}
-              md={1}
-              justifyContent="center"
-              sx={{ display: "flex" }}
-            >
+            <Grid item xs={12} md={1} justifyContent="center" sx={{ display: "flex" }}>
               <Avatar
                 variant="square"
                 src={getAvatarByOrganization(user.organizationAffiliated)}
@@ -249,7 +222,7 @@ const ProfileInformation: React.FC = () => {
               }}
               onClick={() => setOpenDialogDeleteUser(true)}
             >
-              Delete profile
+              <Trans i18nKey="profile_information_button_delete_profile" />
             </Button>
             <Button
               variant="contained"
@@ -270,7 +243,7 @@ const ProfileInformation: React.FC = () => {
               }}
               onClick={() => handleEditProfileInformation()}
             >
-              Edit profile
+              <Trans i18nKey="profile_information_button_edit_profile" />
             </Button>
           </Box>
         </Box>

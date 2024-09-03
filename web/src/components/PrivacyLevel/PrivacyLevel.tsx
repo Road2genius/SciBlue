@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, Switch, Divider } from "@mui/material";
 import CustomTextField from "../CustomTextField/CustomTextField";
+import { Trans, useTranslation } from "react-i18next";
 
 interface PrivacyLevelProps {
   privacyMode: boolean;
@@ -15,24 +16,26 @@ const PrivacyLevel: React.FC<PrivacyLevelProps> = ({
   handlePrivacyModeChange,
   handleUsernameChange,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <>
       <Typography variant="h5" fontWeight={600} mb={2}>
-        Privacy level
+        <Trans i18nKey="privacy_level_title"/>
       </Typography>
       <Box display="flex" alignItems="center">
         <Typography variant="body1" fontWeight={600} mr={2}>
-          Privacy mode
+        <Trans i18nKey="privacy_level_subtitle"/>
         </Typography>
         <Typography variant="body1" ml={2}>
-          No
+          <Trans i18nKey="privacy_level_no"/>
         </Typography>
         <Switch
           checked={privacyMode}
           onChange={(event) => handlePrivacyModeChange(event.target.checked)}
         />
         <Typography variant="body1" ml={2}>
-          Yes
+          <Trans i18nKey="privacy_level_yes"/>
         </Typography>
       </Box>
       <Typography
@@ -40,15 +43,12 @@ const PrivacyLevel: React.FC<PrivacyLevelProps> = ({
         color="GrayText"
         sx={{ marginBottom: "20px" }}
       >
-        Information you provide us to verify your profile will be hidden with
-        private mode enabled. Only your username will be shown to the
-        community. Be aware that others won’t be able to see your email address
-        and get in touch with you.
+        <Trans i18nKey="privacy_level_information"/>
       </Typography>
       {privacyMode && (
         <CustomTextField
-          label="Choose your username"
-          placeholder="Choose a username that will not allow others to identify you."
+          label={t("privacy_username")}
+          placeholder={t("privacy_username_placeholder")}
           type="text"
           value={username}
           short={true}

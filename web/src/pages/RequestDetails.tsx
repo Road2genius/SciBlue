@@ -42,6 +42,8 @@ import CommentItem, {
 } from "../components/CommentItem/CommentItem";
 import DeleteCommentDialog from "../components/DeleteCommentDialog/DeleteCommentDialog";
 import DeleteEntityDialog from "../components/DeleteEntityDialog/DeleteEntityDialog";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../hooks/useTranslatedEnum";
 
 const requestCreatorInitial = {
   id: "",
@@ -54,6 +56,7 @@ const requestCreatorInitial = {
 
 const RequestsDetail: React.FC = () => {
   const classes = useStyles();
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const [requestDetails, setRequestDetails] =
@@ -74,6 +77,8 @@ const RequestsDetail: React.FC = () => {
   const [editingComments, setEditingComments] = useState<{
     [key: string]: { isEditing: boolean; editedText: string };
   }>({});
+
+  const { translatedCollabStatus } = useTranslatedEnum();
 
   const { enqueueSnackbar } = useSnackbar();
   const { userContext } = useUserContext();
@@ -398,10 +403,12 @@ const RequestsDetail: React.FC = () => {
             />
           </Box>
           <Box display="flex" my={2} alignItems="center">
-            <Typography variant="body2">This request is</Typography>
+            <Typography variant="body2">
+              <Trans i18nKey="request_detail_request_status_title" />
+            </Typography>
             <Chip
               size="small"
-              label={requestDetails.collaborationStatus}
+              label={translatedCollabStatus[requestDetails.collaborationStatus]}
               icon={
                 requestDetails.collaborationStatus ===
                 CollaborationStatus.closed ? (
@@ -451,7 +458,11 @@ const RequestsDetail: React.FC = () => {
         <Box mb={3}>
           <Typography variant="h6" fontWeight={600}>
             {requestDetails.comments.length}
-            {requestDetails.comments.length <= 1 ? " comment" : " comments"}
+            {requestDetails.comments.length <= 1 ? (
+              <Trans i18nKey="request_detail_comment" />
+            ) : (
+              <Trans i18nKey="request_detail_comments" />
+            )}
           </Typography>
         </Box>
         {commentsList.map((comment: CommentRequestWithUser, index: number) => (
@@ -476,7 +487,7 @@ const RequestsDetail: React.FC = () => {
           />
         ))}
         <CustomTextField
-          label="Post a comment or say that you are interested"
+          label={t("request_detail_comment_label_textfield")}
           placeholder=""
           type="text"
           value={handleComment}
@@ -501,7 +512,7 @@ const RequestsDetail: React.FC = () => {
           }}
           onClick={handleCreateCommentAndClean}
         >
-          Post comment
+          <Trans i18nKey="request_detail_comment_post_button" />
         </Button>
       </Box>
       <DeleteCommentDialog

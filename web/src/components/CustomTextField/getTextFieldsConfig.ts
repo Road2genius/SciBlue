@@ -2,39 +2,39 @@ import { UserReq } from "../../../../shared-types/userData";
 
 export const getTextFieldsConfig = (user: UserReq) => [
   {
-    label: "Mail address",
-    placeholder: "Enter mail address",
+    label: "login_information_mail",
+    placeholder: "loing_mail_placeholder",
     type: "email",
     value: user.email,
     textfield: "email",
     required: true,
   },
   {
-    label: "Password",
-    placeholder: "Enter password",
+    label: "login_password",
+    placeholder: "login_password_placeholder",
     type: "password",
     value: user.password,
     textfield: "password",
     required: true,
   },
   {
-    label: "First name",
-    placeholder: "Enter first name",
+    label: "general_information_first_name",
+    placeholder: "general_information_first_name_placeholder",
     type: "text",
     value: user.firstName,
     textfield: "firstName",
     required: true,
   },
   {
-    label: "Last name",
-    placeholder: "Enter last name",
+    label: "general_information_last_name",
+    placeholder: "general_information_last_name_placeholder",
     type: "text",
     value: user.lastName,
     textfield: "lastName",
     required: true,
   },
   {
-    label: "Organization name",
+    label: "general_information_organization_name",
     placeholder: "",
     type: "text",
     value: user.organizationName,
@@ -43,7 +43,7 @@ export const getTextFieldsConfig = (user: UserReq) => [
     professionalLayout: true,
   },
   {
-    label: "Type of organization",
+    label: "general_information_type_of_organization",
     placeholder: "",
     type: "text",
     value: user.typeOfOrganizationSpecific,
@@ -52,7 +52,7 @@ export const getTextFieldsConfig = (user: UserReq) => [
     professionalLayout: true,
   },
   {
-    label: "Institution (if relevant)",
+    label: "general_information_institution",
     placeholder: "",
     type: "text",
     value: user.institution,
@@ -60,7 +60,7 @@ export const getTextFieldsConfig = (user: UserReq) => [
     researcherLayout: true,
   },
   {
-    label: "Laboratory/department or organization name",
+    label: "general_information_laborayory_name",
     placeholder: "",
     type: "text",
     value: user.typeOfOrganizationSpecific,
@@ -68,9 +68,9 @@ export const getTextFieldsConfig = (user: UserReq) => [
     researcherLayout: true,
   },
   {
-    label: "Give us any information in order to verify your profile",
+    label: "general_information_verify_profile",
     placeholder:
-      "ORCID iD, ResearchGate or LinkedIn account, link to articles published, link to your website laboratory/department where you appear ...",
+      "general_information_verify_profile_placeholder",
     type: "text",
     value: user.profileVerificationInfo,
     textfield: "profileVerificationInfo",

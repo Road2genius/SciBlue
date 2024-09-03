@@ -123,7 +123,7 @@ const CustomTagInput: React.FC<CustomTagInputProps> = ({
           }}
         >
           <Typography variant="h6" mb={4} align="center">
-            Enter your {label?.replace("add a", "")}
+            Enter {label?.replace("add", "")}
           </Typography>
           <TextField
             placeholder={label}

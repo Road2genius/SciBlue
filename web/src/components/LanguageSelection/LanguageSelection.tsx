@@ -14,6 +14,7 @@ import {
   Box,
 } from "@mui/material";
 import { Languages } from "../../../../shared-types/user";
+import { Trans, useTranslation } from "react-i18next";
 
 interface LanguageSelectorProps {
   languages: Languages[];
@@ -32,6 +33,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   handleChangeLanguages,
 }) => {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
   const [inputAutoComplete, setInputAutoComplete] = useState<string>("");
   const [selectedLanguages, setSelectedLanguages] =
     useState<Languages[]>(languages);
@@ -50,7 +52,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   return (
     <>
       <Chip
-        label="+ choose a language"
+        label={`+ ` + t('general_information_language_placeholder')}
         onClick={handleOpen}
         sx={{
           backgroundColor: "#fff",
@@ -75,7 +77,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Language selection</DialogTitle>
+        <DialogTitle><Trans i18nKey="general_information_dialog_language_title"/></DialogTitle>
         <DialogContent>
           <Autocomplete
             value={selectedLanguages}
@@ -98,7 +100,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             renderInput={(params) => (
               <TextField
                 {...params}
-                placeholder="Type a language to add"
+                placeholder={t('general_information_dialog_language_placeholder')}
                 variant="outlined"
                 sx={{
                   ".MuiOutlinedInput-root": {
@@ -124,7 +126,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                 },
               }}
             >
-              Close
+              <Trans i18nKey="general_information_dialog_close"/>
             </Button>
             <Button
               disabled={selectedLanguages.length === 0}
@@ -145,7 +147,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                 marginY: "20px",
               }}
             >
-              Add languages
+              <Trans i18nKey="general_information_dialog_language_submit"/>
             </Button>
           </Box>
         </DialogActions>

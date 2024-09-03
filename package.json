@@ -3,6 +3,7 @@
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.12"
+    "@types/jest": "^29.5.12",
+    "i18next-scanner": "^4.5.0"
   }
 }

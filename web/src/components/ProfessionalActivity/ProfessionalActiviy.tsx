@@ -6,33 +6,23 @@ import { Discipline, NestedKeyOf } from "../../../../shared-types/requestData";
 import CustomTagInput from "../CustomTag/CustomTag";
 import FieldsEnvironmentalAreaSelector from "../FieldsEnvironmentalAreaSelection/FieldsEnvironmentalAreaSelection";
 import ResearchActivity from "../ResearchActivity/ResearchActivity";
+import { Trans, useTranslation } from "react-i18next";
 
 interface ProfessionalActivityProps {
   user: UserReq;
   handleChange: <K extends keyof UserReq>(field: K, value: UserReq[K]) => void;
-  handleNestedChange: <
-    K extends NestedKeyOf<UserReq>,
-    NK extends keyof UserReq[K],
-  >(
+  handleNestedChange: <K extends NestedKeyOf<UserReq>, NK extends keyof UserReq[K]>(
     section: K,
     field: NK,
     value: UserReq[K][NK]
   ) => void;
-  handleDoubleNestedChip: <
-    K extends keyof UserReq,
-    NK extends keyof UserReq[K],
-    NK2 extends keyof UserReq[K][NK],
-  >(
+  handleDoubleNestedChip: <K extends keyof UserReq, NK extends keyof UserReq[K], NK2 extends keyof UserReq[K][NK]>(
     section: K,
     nestedSection: NK,
     field: NK2,
     item: UserReq[K][NK][NK2] extends Array<infer U> ? U : never
   ) => void;
-  handleDoubleNestedChange: <
-    K extends keyof UserReq,
-    NK extends keyof UserReq[K],
-    NK2 extends keyof UserReq[K][NK],
-  >(
+  handleDoubleNestedChange: <K extends keyof UserReq, NK extends keyof UserReq[K], NK2 extends keyof UserReq[K][NK]>(
     section: K,
     nestedSection: NK,
     field: NK2,
@@ -49,6 +39,8 @@ const ProfessionalActivity: React.FC<ProfessionalActivityProps> = ({
   handleDeleteChipDiscipline,
   handleChange,
 }) => {
+  const { t } = useTranslation();
+
   if (!user.organizationAffiliated) {
     return;
   }
@@ -56,14 +48,13 @@ const ProfessionalActivity: React.FC<ProfessionalActivityProps> = ({
   return (
     <Box>
       <Typography variant="h5" fontWeight={600}>
-        Professional activity and expertise
+        <Trans i18nKey="professional_activity_and_expertise_title" />
       </Typography>
       <Typography variant="body2" color="GrayText" mb={2}>
-        Help others understand your work and why your skills can be relevant to
-        the environmental crisis
+        <Trans i18nKey="professional_activity_and_expertise_subtitle" />
       </Typography>
       <Typography variant="subtitle2" fontWeight={600} mt={3}>
-        In which area(s) of environmental crisis are you active ?
+        <Trans i18nKey="professional_activity_and_expertise_environmental_area_title" />
       </Typography>
       <FieldsEnvironmentalAreaSelector
         user={user}
@@ -73,42 +64,31 @@ const ProfessionalActivity: React.FC<ProfessionalActivityProps> = ({
       />
       <Box mt={4}>
         <CustomTextField
-          label="Introduce yourself and your professional activity"
+          label={t("professional_activity_and_expertise_description_label")}
           placeholder=""
           type="text"
           value={user.professionalActivityAndExpertise.description}
           multiline
-          onChange={(e) =>
-            handleNestedChange(
-              "professionalActivityAndExpertise",
-              "description",
-              e.target.value
-            )
-          }
+          onChange={(e) => handleNestedChange("professionalActivityAndExpertise", "description", e.target.value)}
           required={true}
         />
       </Box>
       <Typography variant="subtitle2" fontWeight={600} mt={1} mb={-1}>
-        Skills & Expertise
+        <Trans i18nKey="research_activity_and_expertise_skills_and_expertise_title" />
       </Typography>
       <CustomTagInput
-        label="add a skill or expertise"
+        label={t("research_activity_and_expertise_skills_and_expertise_placeholder")}
         customTags={user.professionalActivityAndExpertise.expertisesAndSkills}
         setCustomTags={(newCustomTags) =>
-          handleNestedChange(
-            "professionalActivityAndExpertise",
-            "expertisesAndSkills",
-            newCustomTags
-          )
+          handleNestedChange("professionalActivityAndExpertise", "expertisesAndSkills", newCustomTags)
         }
       />
       <Box display="flex" alignItems="center" mt={3}>
         <Typography variant="subtitle2" fontWeight={600} mr={2}>
-          Do you, or your organization, offer the possibility to fund research
-          projects?
+          <Trans i18nKey="professional_activity_and_expertise_can_fund_research" />
         </Typography>
         <Typography variant="subtitle2" ml={2}>
-          No
+          <Trans i18nKey="professional_activity_and_expertise_can_fund_research_no" />
         </Typography>
         <Switch
           checked={user.funder}
@@ -123,15 +103,15 @@ const ProfessionalActivity: React.FC<ProfessionalActivityProps> = ({
           }}
         />
         <Typography variant="subtitle2" ml={2}>
-          Yes
+          <Trans i18nKey="professional_activity_and_expertise_can_fund_research_yes" />
         </Typography>
       </Box>
       <Box display="flex" alignItems="center">
         <Typography variant="subtitle2" fontWeight={600} mr={2}>
-          Do you, or your organization, engage in research activities?
+          <Trans i18nKey="professional_activity_and_expertise_can_engage_research" />
         </Typography>
         <Typography variant="subtitle2" ml={2}>
-          No
+          <Trans i18nKey="professional_activity_and_expertise_can_engage_research_no" />
         </Typography>
         <Switch
           checked={user.proDoesResearch}
@@ -146,7 +126,7 @@ const ProfessionalActivity: React.FC<ProfessionalActivityProps> = ({
           }}
         />
         <Typography variant="subtitle2" ml={2}>
-          Yes
+          <Trans i18nKey="professional_activity_and_expertise_can_engage_research_yes" />
         </Typography>
       </Box>
 

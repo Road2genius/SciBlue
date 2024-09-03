@@ -2,16 +2,22 @@ import React from "react";
 import { Box, Chip, Typography } from "@mui/material";
 import { Project } from "../../../../shared-types/requestData";
 import { formatDate } from "../../utils/utils";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../../hooks/useTranslatedEnum";
 
 interface ProjectDetailsProps {
   project: Project;
 }
 
 const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
+  useTranslation();
+  const { translatedFieldsEnvironmentalArea, translatedProjectProgressStatus,translatedProjectFunding } =
+    useTranslatedEnum();
+
   return (
     <Box my={2}>
       <Typography variant="h6" fontWeight={600}>
-        Concerning the project we will be working on
+        <Trans i18nKey="request_detail_project_detail_title" />
       </Typography>
       <Box display="flex" gap={1} my={1} flexWrap="wrap">
         {project.fieldsEnvironmentalArea.custom?.map((customField, index) => (
@@ -31,7 +37,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
           <Chip
             size="small"
             key={index}
-            label={genericField}
+            label={translatedFieldsEnvironmentalArea[genericField]}
             variant="outlined"
             sx={{
               backgroundColor: "#C8E6C9",
@@ -46,7 +52,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
           project.projectStartEndEstimation.length > 1 && (
             <Box display="flex" alignItems="center" mr={5}>
               <Typography variant="body2" sx={{ marginRight: "8px" }}>
-                From
+                <Trans i18nKey="create_request_project_detail_estimate_date_from" />
               </Typography>
               <Chip
                 size="small"
@@ -58,7 +64,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
                 }}
               />
               <Typography variant="body2" sx={{ marginX: "8px" }}>
-                To
+                <Trans i18nKey="create_request_project_detail_estimate_date_to" />
               </Typography>
               <Chip
                 size="small"
@@ -73,11 +79,13 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
           )}
         <Box display="flex" alignItems="center">
           <Typography variant="body2" sx={{ marginRight: "8px" }}>
-            Project&apos;s status:
+            <Trans i18nKey="request_detail_project_status" />
           </Typography>
           <Chip
             size="small"
-            label={project.projectProgressStatus}
+            label={
+              translatedProjectProgressStatus[project.projectProgressStatus]
+            }
             sx={{
               backgroundColor: "#fff",
               border: "1px solid black",
@@ -88,11 +96,11 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
         {project.projectFunding && (
           <Box display="flex" alignItems="center" ml={5}>
             <Typography variant="body2" sx={{ marginX: "8px" }}>
-              Funding:
+              <Trans i18nKey="request_detail_project_funding" />
             </Typography>
             <Chip
               size="small"
-              label={project.projectFunding}
+              label={translatedProjectFunding[project.projectFunding]}
               sx={{
                 backgroundColor: "#fff",
                 border: "1px solid black",

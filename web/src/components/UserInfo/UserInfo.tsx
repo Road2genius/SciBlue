@@ -3,6 +3,9 @@ import { Avatar, Box, Tooltip, Typography } from "@mui/material";
 import { formatDate, getModifiedTimeAgo } from "../../utils/utils";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { getAvatar } from "../Navbar/avatar";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../../hooks/useTranslatedEnum";
+import { TypeOfOrganization } from "../../../../shared-types/user";
 
 interface UserInfoProps {
   listCard?: boolean;
@@ -25,6 +28,10 @@ const UserInfo: React.FC<UserInfoProps> = ({
   createdAt,
   updatedAt,
 }) => {
+  useTranslation();
+
+  const { translatedOrganizations } = useTranslatedEnum();
+
   return (
     <Box display="flex" flexDirection="column">
       <Box display="flex" alignItems="center">
@@ -40,7 +47,8 @@ const UserInfo: React.FC<UserInfoProps> = ({
         />
         <Box display="flex" flexDirection="column">
           <Typography variant="subtitle2" color="grey">
-            Posted {formatDate(createdAt)} by
+            <Trans i18nKey="request_card_posted" /> {formatDate(createdAt)}{" "}
+            <Trans i18nKey="request_card_by" />
           </Typography>
           {!privacyLevel?.mode ? (
             <Typography variant="body2" sx={{ color: "#197278" }}>
@@ -64,7 +72,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
             </Box>
           )}
           <Typography variant="caption" flexWrap="wrap" width="100%">
-            {organization}
+            {translatedOrganizations[organization as TypeOfOrganization]}
           </Typography>
         </Box>
       </Box>
@@ -74,7 +82,8 @@ const UserInfo: React.FC<UserInfoProps> = ({
           color="grey"
           sx={{ marginLeft: "4px", marginTop: "4px" }}
         >
-          Modified {getModifiedTimeAgo(updatedAt)} ago
+          <Trans i18nKey="request_card_modified" />{" "}
+          {getModifiedTimeAgo(updatedAt)} <Trans i18nKey="request_card_ago" />
         </Typography>
       )}
     </Box>

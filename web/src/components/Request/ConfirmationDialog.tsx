@@ -10,6 +10,7 @@ import {
   Box,
 } from "@mui/material";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
+import { Trans, useTranslation } from "react-i18next";
 
 interface ConfirmationDialogProps {
   entity: string;
@@ -22,6 +23,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   openDialog,
   handleCloseDialog,
 }) => {
+  useTranslation();
   return (
     <Dialog
       open={openDialog}
@@ -35,19 +37,21 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
       )}
     >
       <DialogTitle sx={{ fontWeight: "700", color: "#197278" }}>
-        Thank you for posting!
+        <Trans i18nKey="create_request_confirmation_dialog_title" />
       </DialogTitle>
       <DialogContent sx={{ marginLeft: "30px", marginY: "20px" }}>
         <DialogContentText>
           <Box display="flex" my={2}>
             <DoneRoundedIcon sx={{ color: "#197278", marginRight: "2px" }} />{" "}
-            You will receive an e-mail if someone posts an answer.
+            <Trans i18nKey="create_request_confirmation_dialog_content" />
           </Box>
         </DialogContentText>
         <DialogContentText>
           <Box display="flex" my={1}>
             <DoneRoundedIcon sx={{ color: "#197278", marginRight: "2px" }} />{" "}
-            You can edit, close, or delete your {entity} at any time.
+            <Trans i18nKey="create_request_confirmation_dialog_first_part_sub_content" />{" "}
+            {entity}{" "}
+            <Trans i18nKey="create_request_confirmation_dialog_second_part_sub_content" />
           </Box>
         </DialogContentText>
       </DialogContent>
@@ -70,7 +74,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
           }}
           onClick={handleCloseDialog}
         >
-          Close
+          <Trans i18nKey="create_request_confirmation_dialog_close" />
         </Button>
       </DialogActions>
     </Dialog>

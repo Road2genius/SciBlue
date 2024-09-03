@@ -6,9 +6,10 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import CustomTextField from "../../components/CustomTextField/CustomTextField";
 import { CollaborationVote } from "../../../../shared-types/user";
-import { RequestResComment } from "../../../../shared-types/requestData"; // Ou autre type pour les commentaires
+import { RequestResComment } from "../../../../shared-types/requestData";
 import UserInfo from "../UserInfo/UserInfo";
 import { QuestionResComment } from "../../../../shared-types/questionData";
+import { Trans, useTranslation } from "react-i18next";
 
 export interface CommentRequestWithUser extends RequestResComment {
   user: {
@@ -62,6 +63,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
   cancelEditComment,
   setOpenDialogDeleteComment,
 }) => {
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       <Box display="flex" alignItems="center" mb={2}>
@@ -142,7 +144,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
           <Grid item xs={12} md={11} mt={2}>
             {editingComment.isEditing ? (
               <CustomTextField
-                label="Update your comment"
+                label={t("request_detail_edit_comment")}
                 placeholder=""
                 type="text"
                 value={editingComment.editedText}
@@ -172,7 +174,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
               },
             }}
           >
-            Cancel edit
+            <Trans i18nKey="request_detail_cancel_edit_comment" />
           </Button>
           <Button
             size="small"
@@ -192,7 +194,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
               marginY: "20px",
             }}
           >
-            Save edit
+            <Trans i18nKey="request_detail_save_edit_comment" />
           </Button>
         </Box>
       )}
@@ -201,7 +203,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
           {comment.userId === userContextId && (
             <Box display="flex" mr={2}>
               <Button
-                title="Edit Comment"
+                title={t("request_detail_button_edit_comment")}
                 size="small"
                 variant="outlined"
                 sx={{
@@ -226,7 +228,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
               </Button>
 
               <Button
-                title="Delete Comment"
+                title={t("request_detail_button_delete_comment")}
                 size="small"
                 variant="outlined"
                 sx={{

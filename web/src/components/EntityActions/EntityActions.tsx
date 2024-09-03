@@ -5,7 +5,11 @@ import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import UnarchiveOutlinedIcon from "@mui/icons-material/UnarchiveOutlined";
 import { useNavigate } from "react-router-dom";
-import { CollaborationStatus, DiscussionStatus } from "../../../../shared-types/user";
+import {
+  CollaborationStatus,
+  DiscussionStatus,
+} from "../../../../shared-types/user";
+import { useTranslation } from "react-i18next";
 
 interface EntityActionsProps {
   entityId: string;
@@ -27,6 +31,7 @@ const EntityActions: React.FC<EntityActionsProps> = ({
   setOpenDialogDelete,
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (userId !== currentUserId) {
     return null;
@@ -35,7 +40,7 @@ const EntityActions: React.FC<EntityActionsProps> = ({
   return (
     <Box display="flex" justifyContent="flex-end">
       <Button
-        title={`Edit ${entityType}`}
+        title={t("request_detail_entity_actions_edit") + entityType}
         size="small"
         variant="outlined"
         sx={{
@@ -59,7 +64,7 @@ const EntityActions: React.FC<EntityActionsProps> = ({
         <EditOutlinedIcon />
       </Button>
       <Button
-        title={`Delete ${entityType}`}
+        title={t("request_detail_entity_actions_delete") + entityType}
         size="small"
         variant="outlined"
         sx={{
@@ -82,9 +87,10 @@ const EntityActions: React.FC<EntityActionsProps> = ({
       >
         <DeleteForeverOutlinedIcon />
       </Button>
-      {(status === CollaborationStatus.open || status === DiscussionStatus.open) ? (
+      {status === CollaborationStatus.open ||
+      status === DiscussionStatus.open ? (
         <Button
-          title={`Close ${entityType}`}
+          title={t("request_detail_entity_actions_close") + entityType}
           size="small"
           variant="outlined"
           sx={{
@@ -111,7 +117,7 @@ const EntityActions: React.FC<EntityActionsProps> = ({
         <Button
           size="small"
           variant="outlined"
-          title={`Open ${entityType}`}
+          title={t("request_detail_entity_actions_open") + entityType}
           sx={{
             minWidth: 0,
             width: "50px",

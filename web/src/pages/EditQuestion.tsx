@@ -10,25 +10,20 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getQuestionByIdAction } from "../actions/question/question";
 import { QuestionResInterface } from "../../../shared-types/questionData";
 import { initialQuestionResponseState } from "../types/formData.type";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../hooks/useTranslatedEnum";
 
 const EditQuestion: React.FC = () => {
   const { questionId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const classes = useStyles();
-  const [questionDetailsEdit, setQuestionDetailsEdit] =
-    useState<QuestionResInterface>(initialQuestionResponseState);
-  const {
-    question,
-    handleChange,
-    handleNestedChange,
-    handleNestedChip,
-    handleUpdateQuestion,
-  } = useQuestionForm({
-    onSuccessUpdateQuestion: () =>
-      enqueueSnackbar("Question edited successful", { variant: "success" }),
-    onErrorUpdateQuestion: () =>
-      enqueueSnackbar("Failed to edit the question", { variant: "error" }),
+  const { t } = useTranslation();
+  const { translatedFieldsEnvironmentalArea } = useTranslatedEnum();
+  const [questionDetailsEdit, setQuestionDetailsEdit] = useState<QuestionResInterface>(initialQuestionResponseState);
+  const { question, handleChange, handleNestedChange, handleNestedChip, handleUpdateQuestion } = useQuestionForm({
+    onSuccessUpdateQuestion: () => enqueueSnackbar("Question edited successful", { variant: "success" }),
+    onErrorUpdateQuestion: () => enqueueSnackbar("Failed to edit the question", { variant: "error" }),
     editQuestion: questionDetailsEdit,
   });
 
@@ -71,12 +66,12 @@ const EditQuestion: React.FC = () => {
           }}
         >
           <Typography variant="h4" fontWeight={700} color="#197278" mb={4}>
-            Edit your question
+            <Trans i18nKey="edit_questions_title" />
           </Typography>
           <Box my={2}>
             <CustomTextField
-              label="Title"
-              placeholder="Be specific and imagine you’re asking a question to another person"
+              label={t("create_question_title")}
+              placeholder={t("create_question_title_placeholder")}
               type="text"
               value={question.title}
               onChange={(e) => handleChange("title", e.target.value)}
@@ -85,8 +80,8 @@ const EditQuestion: React.FC = () => {
           </Box>
           <Box my={2}>
             <CustomTextField
-              label="Body"
-              placeholder="Include all the information someone would need to answer your question"
+              label={t("create_question_body")}
+              placeholder={t("create_question_body_placeholder")}
               type="text"
               value={question.body}
               onChange={(e) => handleChange("body", e.target.value)}
@@ -95,34 +90,22 @@ const EditQuestion: React.FC = () => {
             />
           </Box>
           <Typography variant="subtitle2" fontWeight={600} mt={2}>
-            Do you already apply your expertise to area(s) related to the
-            environmental crisis?
+            <Trans i18nKey="create_question_application_area" />
           </Typography>
           <Box className={classes.chipContainer} mb={2}>
             <>
               {Object.values(FieldsEnvironmentalArea).map((label) => (
                 <Chip
                   key={label}
-                  label={label}
-                  onClick={() =>
-                    handleNestedChip(
-                      "fieldsEnvironmentalArea",
-                      "generic",
-                      label
-                    )
-                  }
+                  label={translatedFieldsEnvironmentalArea[label]}
+                  onClick={() => handleNestedChip("fieldsEnvironmentalArea", "generic", label)}
                   sx={{
                     marginRight: "10px",
                     marginTop: "10px",
-                    backgroundColor:
-                      question.fieldsEnvironmentalArea.generic.includes(
-                        label as FieldsEnvironmentalArea
-                      )
-                        ? "#C8E6C9"
-                        : "transparent",
-                    color: question.fieldsEnvironmentalArea.generic.includes(
-                      label as FieldsEnvironmentalArea
-                    )
+                    backgroundColor: question.fieldsEnvironmentalArea.generic.includes(label as FieldsEnvironmentalArea)
+                      ? "#C8E6C9"
+                      : "transparent",
+                    color: question.fieldsEnvironmentalArea.generic.includes(label as FieldsEnvironmentalArea)
                       ? "#000"
                       : "",
                     border: "1px solid black",
@@ -135,14 +118,10 @@ const EditQuestion: React.FC = () => {
                 />
               ))}
               <CustomTagInput
-                label="add an environmental area"
+                label={t("research_activity_and_expertise_environmental_area_button")}
                 customTags={question.fieldsEnvironmentalArea.custom}
                 setCustomTags={(newCustomTags) =>
-                  handleNestedChange(
-                    "fieldsEnvironmentalArea",
-                    "custom",
-                    newCustomTags
-                  )
+                  handleNestedChange("fieldsEnvironmentalArea", "custom", newCustomTags)
                 }
               />
             </>
@@ -165,7 +144,7 @@ const EditQuestion: React.FC = () => {
             }}
             onClick={() => handleEditQuestion()}
           >
-            Edit your question
+            <Trans i18nKey="edit_questions_title" />
           </Button>
         </Box>
       </Container>

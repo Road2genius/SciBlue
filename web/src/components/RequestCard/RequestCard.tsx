@@ -1,32 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Card,
-  Typography,
-  Chip,
-  Box,
-  Avatar,
-  IconButton,
-  Grid,
-  Paper,
-  Button,
-  Tooltip,
-} from "@mui/material";
+import { Card, Typography, Chip, Box, Avatar, IconButton, Grid, Paper, Button, Tooltip } from "@mui/material";
 import OpenInNew from "@mui/icons-material/OpenInNew";
-import {
-  CollaborationStatus,
-  FieldsEnvironmentalArea,
-  TypeOfCollaboration,
-} from "../../../../shared-types/user";
+import { CollaborationStatus, FieldsEnvironmentalArea, TypeOfCollaboration } from "../../../../shared-types/user";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import { UserRequest } from "../../pages/RequestsList";
-// import { avatars, getAvatarKey } from "../Navbar/avatar";
 import { useNavigate } from "react-router-dom";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { formatDate, truncateText } from "../../utils/utils";
 import { getAvatar } from "../Navbar/avatar";
-// import { getAvatar } from "../Navbar/avatar";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../../hooks/useTranslatedEnum";
 
 const RequestCard: React.FC<{
   requestId: string;
@@ -58,6 +43,7 @@ const RequestCard: React.FC<{
   createdAt,
 }) => {
   const navigate = useNavigate();
+  useTranslation();
   const handleOpenRequestDetails = () => {
     navigate(`/request/details/${requestId}`);
   };
@@ -91,26 +77,24 @@ const RequestCard: React.FC<{
     };
   }, []);
 
+  const {
+    translatedCollabStatus,
+    translatedCollaborationsType,
+    translatedFieldsEnvironmentalArea,
+    translatedOrganizations,
+  } = useTranslatedEnum();
+
   return (
     <Box display="flex" alignItems="center">
       <Grid container alignItems="center" spacing={3}>
         <Grid item xs={12} md={1}>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-          >
+          <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
             <Box display="flex" alignItems="center">
               <Box display="flex" alignItems="center">
                 {positiveVotes}
                 <ThumbUpOffAltIcon />
               </Box>
-              <Box
-                display="flex"
-                alignItems="center"
-                sx={{ marginLeft: "5px" }}
-              >
+              <Box display="flex" alignItems="center" sx={{ marginLeft: "5px" }}>
                 {negativeVotes}
                 <ThumbDownOffAltIcon
                   sx={{
@@ -120,30 +104,22 @@ const RequestCard: React.FC<{
                 />
               </Box>
             </Box>
-            <Typography
-              variant="subtitle2"
-              sx={{ fontWeight: "bold", color: "#004d40" }}
-            >
-              {comments?.length} answers
+            <Typography variant="subtitle2" sx={{ fontWeight: "bold", color: "#004d40" }}>
+              {comments?.length} <Trans i18nKey="request_card_answers" />
             </Typography>
             <Chip
               size="small"
-              label={collaborationStatus}
+              label={translatedCollabStatus[collaborationStatus]}
               icon={
                 collaborationStatus === CollaborationStatus.closed ? (
-                  <DoneRoundedIcon
-                    sx={{ color: "#197278", marginRight: "2px" }}
-                  />
+                  <DoneRoundedIcon sx={{ color: "#197278", marginRight: "2px" }} />
                 ) : undefined
               }
               sx={{
                 border: "1px solid black",
                 borderRadius: "8px",
                 marginTop: "7px",
-                backgroundColor:
-                  collaborationStatus === CollaborationStatus.closed
-                    ? "#C8E6C9"
-                    : "transparent",
+                backgroundColor: collaborationStatus === CollaborationStatus.closed ? "#C8E6C9" : "transparent",
               }}
             />
           </Box>
@@ -165,18 +141,12 @@ const RequestCard: React.FC<{
             >
               <Box display="flex" flexDirection="column">
                 <Box display="flex">
-                  <Box
-                    display="flex"
-                    gap={1}
-                    mb={1}
-                    flexWrap="wrap"
-                    flexGrow={1}
-                  >
+                  <Box display="flex" gap={1} mb={1} flexWrap="wrap" flexGrow={1}>
                     {typeOfCollaboration.map((typeCollab, index) => (
                       <Chip
                         size="small"
                         key={index}
-                        label={typeCollab}
+                        label={translatedCollaborationsType[typeCollab]}
                         variant="outlined"
                         sx={{
                           backgroundColor: "#197278",
@@ -186,57 +156,40 @@ const RequestCard: React.FC<{
                         }}
                       />
                     ))}
-                    {fieldsEnvironmentalAreaCustom?.map(
-                      (customEnvironmental, index) => (
-                        <Chip
-                          size="small"
-                          key={index}
-                          label={customEnvironmental}
-                          variant="outlined"
-                          sx={{
-                            backgroundColor: "#C8E6C9",
-                            border: "1px solid black",
-                            borderRadius: "8px",
-                          }}
-                        />
-                      )
-                    )}
-                    {fieldsEnvironmentalAreaGeneric?.map(
-                      (genericEnvironmental, index) => (
-                        <Chip
-                          size="small"
-                          key={index}
-                          label={genericEnvironmental}
-                          variant="outlined"
-                          sx={{
-                            backgroundColor: "#C8E6C9",
-                            border: "1px solid black",
-                            borderRadius: "8px",
-                          }}
-                        />
-                      )
-                    )}
+                    {fieldsEnvironmentalAreaCustom?.map((customEnvironmental, index) => (
+                      <Chip
+                        size="small"
+                        key={index}
+                        label={customEnvironmental}
+                        variant="outlined"
+                        sx={{
+                          backgroundColor: "#C8E6C9",
+                          border: "1px solid black",
+                          borderRadius: "8px",
+                        }}
+                      />
+                    ))}
+                    {fieldsEnvironmentalAreaGeneric?.map((genericEnvironmental, index) => (
+                      <Chip
+                        size="small"
+                        key={index}
+                        label={translatedFieldsEnvironmentalArea[genericEnvironmental]}
+                        variant="outlined"
+                        sx={{
+                          backgroundColor: "#C8E6C9",
+                          border: "1px solid black",
+                          borderRadius: "8px",
+                        }}
+                      />
+                    ))}
                   </Box>
-                  <Box
-                    display="flex"
-                    justifyContent="flex-end"
-                    alignItems="start"
-                    mt={-1}
-                    mr={-2}
-                  >
-                    <IconButton
-                      aria-label="open"
-                      onClick={handleOpenRequestDetails}
-                    >
+                  <Box display="flex" justifyContent="flex-end" alignItems="start" mt={-1} mr={-2}>
+                    <IconButton aria-label="open" onClick={handleOpenRequestDetails}>
                       <OpenInNew />
                     </IconButton>
                   </Box>
                 </Box>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  sx={{ height: "145px" }}
-                >
+                <Box display="flex" flexDirection="column" sx={{ height: "145px" }}>
                   <Typography
                     variant="h6"
                     sx={{
@@ -249,13 +202,8 @@ const RequestCard: React.FC<{
                   </Typography>
                   <Box display="flex">
                     <Typography variant="body2" paragraph>
-                      Request description:{" "}
-                      {truncateText(
-                        description,
-                        3.5,
-                        lineHeight,
-                        containerWidth
-                      )}
+                      <Trans i18nKey="request_card_description" />
+                      {truncateText(description, 3.5, lineHeight, containerWidth)}
                       <Button
                         onClick={handleOpenRequestDetails}
                         sx={{
@@ -271,54 +219,43 @@ const RequestCard: React.FC<{
                           },
                         }}
                       >
-                        See more
+                        <Trans i18nKey="request_card_see_more" />
                       </Button>
                     </Typography>
                   </Box>
                 </Box>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="flex-end"
-                >
+                <Box display="flex" justifyContent="space-between" alignItems="flex-end">
                   <Box>
-                    {projectStartEndEstimation &&
-                      projectStartEndEstimation.length > 1 && (
-                        <Box display="flex" alignItems="center">
-                          <Typography
-                            variant="body2"
-                            sx={{ marginRight: "8px", marginTop: "5px" }}
-                          >
-                            From
-                          </Typography>
-                          <Chip
-                            size="small"
-                            label={formatDate(projectStartEndEstimation[0])}
-                            sx={{
-                              backgroundColor: "#fff",
-                              border: "1px solid black",
-                              borderRadius: "8px",
-                              marginTop: "5px",
-                            }}
-                          />
-                          <Typography
-                            variant="body2"
-                            sx={{ marginX: "8px", marginTop: "5px" }}
-                          >
-                            To
-                          </Typography>
-                          <Chip
-                            size="small"
-                            label={formatDate(projectStartEndEstimation[1])}
-                            sx={{
-                              backgroundColor: "#fff",
-                              border: "1px solid black",
-                              borderRadius: "8px",
-                              marginTop: "5px",
-                            }}
-                          />
-                        </Box>
-                      )}
+                    {projectStartEndEstimation && projectStartEndEstimation.length > 1 && (
+                      <Box display="flex" alignItems="center">
+                        <Typography variant="body2" sx={{ marginRight: "8px", marginTop: "5px" }}>
+                          <Trans i18nKey="create_request_project_detail_estimate_date_from" />
+                        </Typography>
+                        <Chip
+                          size="small"
+                          label={formatDate(projectStartEndEstimation[0])}
+                          sx={{
+                            backgroundColor: "#fff",
+                            border: "1px solid black",
+                            borderRadius: "8px",
+                            marginTop: "5px",
+                          }}
+                        />
+                        <Typography variant="body2" sx={{ marginX: "8px", marginTop: "5px" }}>
+                          <Trans i18nKey="create_request_project_detail_estimate_date_to" />
+                        </Typography>
+                        <Chip
+                          size="small"
+                          label={formatDate(projectStartEndEstimation[1])}
+                          sx={{
+                            backgroundColor: "#fff",
+                            border: "1px solid black",
+                            borderRadius: "8px",
+                            marginTop: "5px",
+                          }}
+                        />
+                      </Box>
+                    )}
                   </Box>
                   <Box display="flex" alignItems="center">
                     <Avatar
@@ -328,25 +265,17 @@ const RequestCard: React.FC<{
                     />
                     <Box display="flex" flexDirection="column">
                       <Typography variant="body2">
-                        Posted{" "}
-                        {new Date(createdAt).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "2-digit",
-                        })}{" "}
-                        by
+                        <Trans i18nKey="request_card_posted" />
+                        {formatDate(createdAt)}
+                        <Trans i18nKey="request_card_by" />
                       </Typography>
                       {!usersRequest[requestId].privacyLevel.mode ? (
                         <Typography variant="body2" sx={{ color: "#197278" }}>
-                          {usersRequest[requestId]?.firstName} -
-                          {usersRequest[requestId]?.lastName}
+                          {usersRequest[requestId]?.firstName} -{usersRequest[requestId]?.lastName}
                         </Typography>
                       ) : (
                         <Box display="flex" alignItems="center">
-                          <Typography
-                            variant="subtitle2"
-                            sx={{ marginBottom: "5px" }}
-                          >
+                          <Typography variant="subtitle2" sx={{ marginBottom: "5px" }}>
                             {usersRequest[requestId]?.privacyLevel.username}
                           </Typography>
                           <Tooltip title="This user has activated private mode">
@@ -362,7 +291,8 @@ const RequestCard: React.FC<{
                         </Box>
                       )}
                       <Typography variant="caption" flexWrap="wrap" width="80%">
-                        {usersRequest[requestId]?.organization}
+                        {usersRequest[requestId]?.organization &&
+                          translatedOrganizations[usersRequest[requestId]?.organization]}
                       </Typography>
                     </Box>
                   </Box>

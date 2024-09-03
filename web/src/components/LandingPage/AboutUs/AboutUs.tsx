@@ -3,9 +3,11 @@ import { makeStyles } from "@mui/styles";
 import React from "react";
 import Antoine from "../../../assets/images/antoine.svg";
 import Caroline from "../../../assets/images/caroline.svg";
+import { Trans, useTranslation } from "react-i18next";
 
 const AboutUs: React.FC = () => {
   const classes = useStyles();
+  useTranslation();
 
   const teamArray: {
     avatar: string;
@@ -14,13 +16,13 @@ const AboutUs: React.FC = () => {
   }[] = [
     {
       avatar: Antoine,
-      name: "Antoine de Zélicourt",
-      bio: "Antoine has a biology PhD from Paris-Saclay University, followed by a postdoc experience. His passion for science and his concern about environmental crisis are at the heart of our collaborative approach.",
+      name: "landing_team_antoine_name",
+      bio: "landing_team_antoine_bio",
     },
     {
       avatar: Caroline,
-      name: "Caroline de Kerhor",
-      bio: "Caroline is a pharmacist, she has a master degree in biological an medical science. Her expertise and passion for developing digital solutions with societal impact guide our developments.",
+      name: "landing_team_caroline_name",
+      bio: "landing_team_caroline_bio",
     },
    
   ];
@@ -41,15 +43,11 @@ const AboutUs: React.FC = () => {
           }}
         >
           <Typography variant="h6" fontWeight={600}>
-            Who are we?
+            <Trans i18nKey="landing_about_us_title"/>
           </Typography>
 
           <Typography variant="body1">
-            Our team has extensive experience in working with the public sector,
-            particularly in developing innovative and impactful solutions up to
-            ministry level. <br /> by creating community to ally together
-            administration and all actors together (associations, patient
-            community, health practitioners, administration ...)
+            <Trans i18nKey="landing_about_us_text"/>
           </Typography>
 
           <Box display="flex" mt={2}>
@@ -63,10 +61,10 @@ const AboutUs: React.FC = () => {
                     />
                     <Box display="flex" flexDirection="column">
                       <Typography variant="h6" fontStyle="italic">
-                        {team.name}
+                        <Trans i18nKey={team.name} />
                       </Typography>
                       <Typography variant="body1" fontStyle="italic">
-                        {team.bio}
+                        <Trans i18nKey={team.bio} />
                       </Typography>
                     </Box>
                   </Box>

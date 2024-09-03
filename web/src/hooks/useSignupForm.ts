@@ -9,8 +9,6 @@ import { getErrorMessage } from "../utils/handleError";
 import { useSnackbar } from "notistack";
 import {
   CountryNames,
-  ProjectFunding,
-  ProjectProgressStatus,
   TypeOfOrganization,
 } from "../../../shared-types/user";
 import { Discipline, NestedKeyOf } from "../../../shared-types/requestData";
@@ -52,8 +50,8 @@ const initialUserState: UserReq = {
   },
   kindOfCollaborationWanted: {
     typeOfOrganization: [],
-    projectProgressStatus: "" as ProjectProgressStatus,
-    projectFunding: "" as ProjectFunding,
+    projectProgressStatus: [],
+    projectFunding: [],
   },
   funder: false,
   proDoesResearch: false,

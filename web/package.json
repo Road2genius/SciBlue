@@ -14,6 +14,9 @@
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
   },
   "dependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/parser": "^7.25.4",
+    "@babel/traverse": "^7.25.4",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.20",
@@ -23,10 +26,17 @@
     "@types/node": "^22.4.0",
     "country-flag-icons": "^1.5.13",
     "date-fns": "^3.6.0",
+    "fast-glob": "^3.3.2",
+    "fs": "0.0.1-security",
+    "glob": "^11.0.0",
     "http-status-codes": "^2.3.0",
+    "i18next": "^23.14.0",
+    "i18next-browser-languagedetector": "^8.0.0",
+    "i18next-http-backend": "^2.6.1",
     "notistack": "^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^15.0.1",
     "react-router-dom": "^6.23.1",
     "socket.io-client": "^4.7.5"
   },

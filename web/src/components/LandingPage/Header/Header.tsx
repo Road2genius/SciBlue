@@ -5,9 +5,11 @@ import { makeStyles } from "@mui/styles";
 import CollaborationScientistImage from "../../../assets/images/collaboration-scientist.svg";
 import EnvironmentalImage from "../../../assets/images/header.svg";
 import Sphere from "../../../assets/images/sphere.svg";
+import { Trans, useTranslation } from "react-i18next";
 
 const Header: React.FC = () => {
   const classes = useStyles();
+  useTranslation();
 
   const headerArray: {
     icon: JSX.Element;
@@ -16,25 +18,25 @@ const Header: React.FC = () => {
   }[] = [
     {
       icon: <DoneRoundedIcon />,
-      text: "Reliable profiles: ",
-      subtitle: "all profiles are verified",
+      text: "landing_header_reliable_profiles",
+      subtitle: "landing_header_reliable_profiles_subtitle",
     },
     {
       icon: <DoneRoundedIcon />,
-      text: "Privacy mode for scientists: ",
-      subtitle: "if you want, you can stay anonymous on the platform",
+      text: "landing_header_privacy_mode",
+      subtitle: "landing_header_privacy_mode_subtitle",
     },
     {
       icon: <DoneRoundedIcon />,
-      text: "Free of charge and no data reuse: ",
+      text: "landing_header_free_of_charge",
       subtitle:
-        "we want to make a free for all platform, this is why you have adds on the site. Those are carefully chosen",
+        "landing_header_free_of_charge_subtitle",
     },
     {
       icon: <DoneRoundedIcon />,
-      text: "Scientists speak for themselves: ",
+      text: "landing_header_scientists_speak_for_themselves",
       subtitle:
-        "researchers on this platform create a personal profile. Their statements do not represent the view of their institution",
+        "landing_header_scientists_speak_for_themselves_subtitle",
     },
   ];
 
@@ -60,8 +62,7 @@ const Header: React.FC = () => {
           fontWeight={600}
           align="center"
         >
-          SciBlue facilitates collaboration between all active players in <br />
-          environmental crisis
+          <Trans i18nKey="landing_main_title"/>
         </Typography>
         <Box>
           <Grid container spacing={5} alignItems="center">
@@ -100,7 +101,7 @@ const Header: React.FC = () => {
                       },
                     }}
                   >
-                    Create your profile
+                    <Trans i18nKey="landing_button_create_profile"/>
                   </Button>
                 </Box>
               </Box>
@@ -108,28 +109,22 @@ const Header: React.FC = () => {
             <Grid item md={1} />
             <Grid item xs={12} md={5}>
               <Typography variant="h6" mb={4}>
-                Scientists, NGOs and associations, governmental agencies,
-                private researchers organization, ... all around the world can:
+                <Trans i18nKey="landing_title_header_section"/>
               </Typography>
               <Box component="span" fontWeight="bold" display="flex" mt={2}>
                 <img src={Sphere} alt="Sphere" style={{ marginRight: "5px" }} />
-
                 <Typography variant="body1">
-                  start an <strong>open discussion or ask a question</strong>
+                  <Trans i18nKey="landing_first_bullet_point_text"/>
                 </Typography>
               </Box>
               <Box component="span" fontWeight="bold" display="flex" mb={2}>
                 <img src={Sphere} alt="Sphere" style={{ marginRight: "5px" }} />
-
                 <Typography variant="body1" mt={2.5}>
-                  <strong>submit a collaboration request</strong> (for a new
-                  project, a single
-                  <br /> experiment to conduct, a partnership for a funding,
-                  ...)
+                  <Trans i18nKey="landing_second_bullet_point_text"/>
                 </Typography>
               </Box>
               <Typography variant="h6" fontWeight="bold" gutterBottom>
-                ... to the SciBlue community.
+                <Trans i18nKey="landing_subtitle_header"/>
               </Typography>
               <Box
                 mt={8}
@@ -155,7 +150,7 @@ const Header: React.FC = () => {
                     marginRight: "8px",
                   }}
                 >
-                  Discussions & Questions
+                  <Trans i18nKey="landing_button_action_questions"/>
                 </Button>
                 <Button
                   variant="contained"
@@ -173,7 +168,7 @@ const Header: React.FC = () => {
                     marginRight: "50px",
                   }}
                 >
-                  Requests
+                  <Trans i18nKey="landing_button_action_request"/>
                 </Button>
               </Box>
             </Grid>
@@ -188,14 +183,14 @@ const Header: React.FC = () => {
                 justifyContent="center"
               >
                 <Typography variant="h5" fontWeight={600} paragraph>
-                  Our commitments
+                  <Trans i18nKey="landing_header_commitments_title"/>
                 </Typography>
                 {headerArray.map((header) => (
                   <Box key={header.text} display="flex" gap={1} mb={1}>
                     <DoneRoundedIcon color="success" />
                     <Typography variant="body1">
-                      <strong>{header.text}</strong>
-                      {header.subtitle}
+                      <Trans i18nKey={header.text}/>
+                      <Trans i18nKey={header.subtitle}/>
                     </Typography>
                   </Box>
                 ))}

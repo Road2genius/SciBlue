@@ -10,6 +10,7 @@ import CustomTextField from "../CustomTextField/CustomTextField";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { UserReq } from "../../../../shared-types/userData";
+import { Trans, useTranslation } from "react-i18next";
 
 interface LoginField {
   label: string;
@@ -35,31 +36,33 @@ const LoginInformation: React.FC<LoginInformationProps> = ({
   fromProfileInformation,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const { t } = useTranslation();
 
   if (!user.organizationAffiliated) {
     return;
   }
 
   const getGoodLabel = (field: LoginField) => {
-    if (field.label === "Password") {
+    let labelToReturn: string = field.label
+    if (field.label === t("login_password")) {
       if (fromProfileInformation) {
         field.value = "";
-        return "New Password";
-      } else return "Password";
+        return labelToReturn = t('login_information_new_password');
+      } 
     }
-    return field.label;
+    return t(labelToReturn);
   };
 
   return (
     <>
       <Typography variant="h5" fontWeight={600} mb={2}>
-        Login information
+        <Trans i18nKey="login_information_title"/>
       </Typography>
       {textFields.slice(0, 2).map((field, index) => (
         <CustomTextField
           key={index + 4}
           label={getGoodLabel(field)}
-          placeholder={field.placeholder}
+          placeholder={t(field.placeholder)}
           type={
             field.type === "password" && !showPassword ? "password" : "text"
           }

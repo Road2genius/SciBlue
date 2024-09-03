@@ -1,29 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Chip,
-  Container,
-  Divider,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Chip, Container, Divider, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useNavigate, useParams } from "react-router-dom";
 import VoteButtons from "../components/VoteButtons/VoteButtons";
-import {
-  getQuestionByIdAction,
-  getQuestionCommentListAction,
-} from "../actions/question/question";
-import {
-  QuestionResComment,
-  QuestionResInterface,
-  Vote,
-} from "../../../shared-types/questionData";
+import { getQuestionByIdAction, getQuestionCommentListAction } from "../actions/question/question";
+import { QuestionResComment, QuestionResInterface, Vote } from "../../../shared-types/questionData";
 import { initialQuestionResponseState } from "../types/formData.type";
-import {
-  CollaborationVote,
-  DiscussionStatus,
-} from "../../../shared-types/user";
+import { CollaborationVote, DiscussionStatus } from "../../../shared-types/user";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import socket from "../services/socket";
 import { useUserContext } from "../context/UserContext";
@@ -34,11 +17,11 @@ import { UserQuestion } from "./QuestionsList";
 import { getUserByIdAction } from "../actions/user/user";
 import EntityActions from "../components/EntityActions/EntityActions";
 import DeleteEntityDialog from "../components/DeleteEntityDialog/DeleteEntityDialog";
-import CommentItem, {
-  CommentQuestionWithUser,
-} from "../components/CommentItem/CommentItem";
+import CommentItem, { CommentQuestionWithUser } from "../components/CommentItem/CommentItem";
 import DeleteCommentDialog from "../components/DeleteCommentDialog/DeleteCommentDialog";
 import CustomTextField from "../components/CustomTextField/CustomTextField";
+import { Trans, useTranslation } from "react-i18next";
+import { useTranslatedEnum } from "../hooks/useTranslatedEnum";
 
 const questionCreatorInitial = {
   id: "",
@@ -51,25 +34,20 @@ const questionCreatorInitial = {
 
 const QuestionDetail: React.FC = () => {
   const classes = useStyles();
+  const { t } = useTranslation();
+  const { translatedDiscussionStatus, translatedFieldsEnvironmentalArea } = useTranslatedEnum();
   const { questionId } = useParams();
   const { userContext } = useUserContext();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [commentsList, setCommentsList] = useState<CommentQuestionWithUser[]>(
-    []
-  );
+  const [commentsList, setCommentsList] = useState<CommentQuestionWithUser[]>([]);
   const [openDialogDeleteComment, setOpenDialogDeleteComment] = useState<{
     open: boolean;
     commentId: string;
   }>({ open: false, commentId: "" });
-  const [questionDetails, setQuestionDetails] = useState<QuestionResInterface>(
-    initialQuestionResponseState
-  );
-  const [questionCreator, setQuestionCreator] = useState<UserQuestion>(
-    questionCreatorInitial
-  );
-  const [openDialogDeleteQuestion, setOpenDialogDeleteQuestion] =
-    useState<boolean>(false);
+  const [questionDetails, setQuestionDetails] = useState<QuestionResInterface>(initialQuestionResponseState);
+  const [questionCreator, setQuestionCreator] = useState<UserQuestion>(questionCreatorInitial);
+  const [openDialogDeleteQuestion, setOpenDialogDeleteQuestion] = useState<boolean>(false);
   const [editingComments, setEditingComments] = useState<{
     [key: string]: { isEditing: boolean; editedText: string };
   }>({});
@@ -158,9 +136,7 @@ const QuestionDetail: React.FC = () => {
 
     fetchQuestionDetails();
 
-    const handleQuestionUpdated = (data: {
-      updatedQuestion: QuestionResInterface;
-    }) => {
+    const handleQuestionUpdated = (data: { updatedQuestion: QuestionResInterface }) => {
       if (data.updatedQuestion._id === questionId) {
         setQuestionDetails(data.updatedQuestion);
       }
@@ -199,9 +175,7 @@ const QuestionDetail: React.FC = () => {
     const fetchQuestionCommentsWithUserDetails = async () => {
       try {
         if (questionDetails._id) {
-          const comments = await getQuestionCommentListAction(
-            questionDetails._id
-          );
+          const comments = await getQuestionCommentListAction(questionDetails._id);
 
           const userCache = new Map();
 
@@ -228,38 +202,25 @@ const QuestionDetail: React.FC = () => {
 
     fetchQuestionCommentsWithUserDetails();
 
-    const handleCommentCreated = (data: {
-      questionId: string;
-      comment: CommentQuestionWithUser;
-    }) => {
+    const handleCommentCreated = (data: { questionId: string; comment: CommentQuestionWithUser }) => {
       if (data.questionId === questionDetails._id) {
         setCommentsList((prevComments) => [...prevComments, data.comment]);
       }
     };
 
-    const handleCommentUpdated = (data: {
-      comment: CommentQuestionWithUser;
-    }) => {
+    const handleCommentUpdated = (data: { comment: CommentQuestionWithUser }) => {
       setCommentsList((prevComments) =>
-        prevComments.map((comment) =>
-          comment._id === data.comment._id ? data.comment : comment
-        )
+        prevComments.map((comment) => (comment._id === data.comment._id ? data.comment : comment))
       );
     };
 
     const handleCommentDeleted = (data: { commentId: string }) => {
-      setCommentsList((prevComments) =>
-        prevComments.filter((comment) => comment._id !== data.commentId)
-      );
+      setCommentsList((prevComments) => prevComments.filter((comment) => comment._id !== data.commentId));
     };
 
-    const handleVoteCommentUpdate = (data: {
-      comment: CommentQuestionWithUser;
-    }) => {
+    const handleVoteCommentUpdate = (data: { comment: CommentQuestionWithUser }) => {
       setCommentsList((prevComments) =>
-        prevComments.map((comment) =>
-          comment._id === data.comment._id ? data.comment : comment
-        )
+        prevComments.map((comment) => (comment._id === data.comment._id ? data.comment : comment))
       );
     };
 
@@ -277,34 +238,22 @@ const QuestionDetail: React.FC = () => {
   }, [questionDetails._id]);
 
   const userHasVotedPositiveOnQuestion: boolean = questionDetails.votes.some(
-    (vote: Vote) =>
-      vote.userId === userContext?.userId &&
-      vote.vote === CollaborationVote.positive
+    (vote: Vote) => vote.userId === userContext?.userId && vote.vote === CollaborationVote.positive
   );
 
   const userHasVotedNegativeOnQuestion: boolean = questionDetails.votes.some(
-    (vote: Vote) =>
-      vote.userId === userContext?.userId &&
-      vote.vote === CollaborationVote.negative
+    (vote: Vote) => vote.userId === userContext?.userId && vote.vote === CollaborationVote.negative
   );
 
-  const userHasVotedPositiveOnComment = (
-    comment: QuestionResComment
-  ): boolean => {
+  const userHasVotedPositiveOnComment = (comment: QuestionResComment): boolean => {
     return comment.votes.some(
-      (vote: Vote) =>
-        vote.userId === userContext?.userId &&
-        vote.vote === CollaborationVote.positive
+      (vote: Vote) => vote.userId === userContext?.userId && vote.vote === CollaborationVote.positive
     );
   };
 
-  const userHasVotedNegativeOnComment = (
-    comment: QuestionResComment
-  ): boolean => {
+  const userHasVotedNegativeOnComment = (comment: QuestionResComment): boolean => {
     return comment.votes.some(
-      (vote: Vote) =>
-        vote.userId === userContext?.userId &&
-        vote.vote === CollaborationVote.negative
+      (vote: Vote) => vote.userId === userContext?.userId && vote.vote === CollaborationVote.negative
     );
   };
 
@@ -368,22 +317,20 @@ const QuestionDetail: React.FC = () => {
             />
           </Box>
           <Box display="flex" my={2} alignItems="center">
-            <Typography variant="body2">This question is</Typography>
+            <Typography variant="body2">
+              <Trans i18nKey="questions_detail_statut" />
+            </Typography>
             <Chip
               size="small"
-              label={questionDetails.discussionStatus}
+              label={translatedDiscussionStatus[questionDetails.discussionStatus]}
               icon={
                 questionDetails.discussionStatus === DiscussionStatus.closed ? (
-                  <DoneRoundedIcon
-                    sx={{ color: "#197278", marginRight: "2px" }}
-                  />
+                  <DoneRoundedIcon sx={{ color: "#197278", marginRight: "2px" }} />
                 ) : undefined
               }
               sx={{
                 backgroundColor:
-                  questionDetails.discussionStatus === DiscussionStatus.closed
-                    ? "#C8E6C9"
-                    : "transparent",
+                  questionDetails.discussionStatus === DiscussionStatus.closed ? "#C8E6C9" : "transparent",
                 border: "1px solid black",
                 borderRadius: "8px",
                 marginLeft: "5px",
@@ -391,44 +338,36 @@ const QuestionDetail: React.FC = () => {
             />
           </Box>
           <Box my={4}>
-            <Typography
-              variant="h5"
-              fontWeight={600}
-              sx={{ marginBottom: "15px" }}
-            >
+            <Typography variant="h5" fontWeight={600} sx={{ marginBottom: "15px" }}>
               {questionDetails.title}
             </Typography>
             <Box display="flex" gap={1} my={1} flexWrap="wrap" mb={8}>
-              {questionDetails.fieldsEnvironmentalArea.generic?.map(
-                (genericField, index) => (
-                  <Chip
-                    size="small"
-                    key={index}
-                    label={genericField}
-                    variant="outlined"
-                    sx={{
-                      backgroundColor: "#C8E6C9",
-                      border: "1px solid black",
-                      borderRadius: "8px",
-                    }}
-                  />
-                )
-              )}
-              {questionDetails.fieldsEnvironmentalArea.custom?.map(
-                (customField, index) => (
-                  <Chip
-                    size="small"
-                    key={index}
-                    label={customField}
-                    variant="outlined"
-                    sx={{
-                      backgroundColor: "#C8E6C9",
-                      border: "1px solid black",
-                      borderRadius: "8px",
-                    }}
-                  />
-                )
-              )}
+              {questionDetails.fieldsEnvironmentalArea.generic?.map((genericField, index) => (
+                <Chip
+                  size="small"
+                  key={index}
+                  label={translatedFieldsEnvironmentalArea[genericField]}
+                  variant="outlined"
+                  sx={{
+                    backgroundColor: "#C8E6C9",
+                    border: "1px solid black",
+                    borderRadius: "8px",
+                  }}
+                />
+              ))}
+              {questionDetails.fieldsEnvironmentalArea.custom?.map((customField, index) => (
+                <Chip
+                  size="small"
+                  key={index}
+                  label={customField}
+                  variant="outlined"
+                  sx={{
+                    backgroundColor: "#C8E6C9",
+                    border: "1px solid black",
+                    borderRadius: "8px",
+                  }}
+                />
+              ))}
             </Box>
             <Typography variant="subtitle2" paragraph>
               {questionDetails.body}
@@ -454,7 +393,11 @@ const QuestionDetail: React.FC = () => {
         <Box mb={3}>
           <Typography variant="h6" fontWeight={600}>
             {questionDetails.comments.length}
-            {questionDetails.comments.length <= 1 ? " answer" : " answers"}
+            {questionDetails.comments.length <= 1 ? (
+              <Trans i18nKey="questions_detail_answer" />
+            ) : (
+              <Trans i18nKey="questions_detail_answers" />
+            )}
           </Typography>
         </Box>
         {commentsList.map((comment: CommentQuestionWithUser, index: number) => (
@@ -479,7 +422,7 @@ const QuestionDetail: React.FC = () => {
           />
         ))}
         <CustomTextField
-          label="Post a comment or say that you are interested"
+          label={t("questions_detail_comment_label_textfield")}
           placeholder=""
           type="text"
           value={handleComment}
@@ -504,14 +447,12 @@ const QuestionDetail: React.FC = () => {
           }}
           onClick={handleCreateQuestionCommentAndClean}
         >
-          Post comment
+          <Trans i18nKey="questions_detail_button_post_comment" />
         </Button>
       </Box>
       <DeleteCommentDialog
         open={openDialogDeleteComment.open}
-        onClose={() =>
-          setOpenDialogDeleteComment({ open: false, commentId: "" })
-        }
+        onClose={() => setOpenDialogDeleteComment({ open: false, commentId: "" })}
         onConfirm={handleDeleteCommentDialog}
       />
       <DeleteEntityDialog
