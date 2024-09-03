@@ -170,7 +170,8 @@ const Navbar: React.FC = () => {
           onClick={() => handleNavigateNavBar("/feedback")}
           sx={{
             textTransform: "none",
-            mx: 2,
+            mr: 2,
+            ml: -10,
             fontWeight: "bold",
             color: activePage === "/feedback" ? "#008080" : "primary",
           }}
