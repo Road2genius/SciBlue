@@ -12,6 +12,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Switch,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -25,7 +26,7 @@ import { logoutUser } from "../../actions/auth/auth";
 import { getAvatar } from "./avatar";
 import { useI18n } from "../../context/I18nContext";
 import { Trans, useTranslation } from "react-i18next";
-import CustomizedLangSwitch from "../LangSwitch/LangSwitch";
+import FlagComponent from "../FlagComponent/FlagComponent";
 
 const Navbar: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -120,7 +121,7 @@ const Navbar: React.FC = () => {
   };
 
   const handleLanguageChange = (checked: boolean) => {
-    const newLanguage = checked ? "en" : "fr";
+    const newLanguage = checked ? "fr" : "en";
     i18n.changeLanguage(newLanguage);
   };
 
@@ -141,6 +142,7 @@ const Navbar: React.FC = () => {
           </Typography>
         </Box>
         <Box
+          ml={1}
           sx={{
             display: { xs: "none", md: "flex" },
             flexGrow: 1,
@@ -163,7 +165,6 @@ const Navbar: React.FC = () => {
             </Button>
           ))}
         </Box>
-        <CustomizedLangSwitch onChange={handleLanguageChange} checked={i18n.language === "en"} />
         <Button
           color="inherit"
           onClick={() => handleNavigateNavBar("/feedback")}
@@ -176,6 +177,22 @@ const Navbar: React.FC = () => {
         >
           <Trans i18nKey="navbar_feedback" />
         </Button>
+        <Box display="flex" mr={2} alignItems="center">
+          <FlagComponent langI18n countryCode="GB" />
+          <Switch
+            checked={i18n.language === "fr"}
+            onChange={(e) => handleLanguageChange(e.target.checked)}
+            sx={{
+              "& .MuiSwitch-switchBase.Mui-checked": {
+                color: "#008080",
+              },
+              "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                backgroundColor: "#008080",
+              },
+            }}
+          />
+          <FlagComponent langI18n countryCode="FR" />
+        </Box>
         {userContext ? (
           <>
             <Avatar
